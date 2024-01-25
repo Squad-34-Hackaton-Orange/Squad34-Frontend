@@ -8,8 +8,13 @@ const roboto = Roboto({
   display: 'swap',
 });
 
+const themeColors = {
+  colorSecondary100: '#FF5522'
+}
+
 const theme = createTheme({
   palette: {
+    ...themeColors,
     mode: 'light',
   },
   typography: {

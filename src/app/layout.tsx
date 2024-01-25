@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from '@/theme';
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+
   return (
     <html lang="pt-br">
       <body>
