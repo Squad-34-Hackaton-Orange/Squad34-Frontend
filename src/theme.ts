@@ -1,4 +1,5 @@
-'use client';
+"use client";
+
 import { Roboto } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
 
@@ -9,6 +10,9 @@ const roboto = Roboto({
 });
 
 const theme = createTheme({
+  status: {
+    danger: '#e53e3e',
+  },
   palette: {
     mode: 'light',
   },
