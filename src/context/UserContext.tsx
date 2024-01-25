@@ -54,16 +54,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
     setIsLogged(false);
   };
 
-  // LOGADO
-  useEffect(() => {
-    if (user !== null) {
-      setIsLogged(true);
-    }
-
-    if (user === null) {
-      setIsLogged(false);
-    }
-  }, [user]);
+  
 
   return (
     <LoginContext.Provider value={{ user, login, logout, isLogged }}>
