@@ -19,7 +19,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Google } from '@/components/Icons/Google';
 import Image from 'next/image';
 
-export default function Login() {
+export default function SignUp() {
   const [showPassword, setShowPassword] = React.useState(false);
   const theme = useTheme();
 
@@ -42,9 +42,9 @@ export default function Login() {
           minHeight="100vh"
         >
           <Image
-            src="/login.svg"
+            src="/signup.svg"
             alt="Orange Portfólio"
-            width={525} height={832}
+            width={549} height={832}
           />
         </Box>
       </Grid>
@@ -53,6 +53,7 @@ export default function Login() {
         item
         sx={{
           width: '40%',
+          paddingRight: "1rem",
           [theme.breakpoints.down("lg")]: {
             width: "100%",
           }
@@ -84,42 +85,37 @@ export default function Login() {
                 },
               }}
             >
-              Entre no Orange Portfólio
+              Cadastre-se
             </Typography>
 
-            <Button startIcon={<Google />}
-              sx={{
-                display: "flex",
-                gap: "1.5rem",
-                padding: "0.6875rem",
-                borderRadius: "0.125rem",
-                textTransform: "none",
-                boxShadow: " 0px 1px 1px 0px rgba(0, 0, 0, 0.17), 0px 0px 1px 0px rgba(0, 0, 0, 0.08)",
-                color: theme.colors.neutral100
-              }}
-            >
-              Entrar com Google
-            </Button>
-
             <Box>
-              <Typography
-                variant="subtitle1"
-                color={theme.colors.neutral110}
-                sx={{
-                  [theme.breakpoints.up("lg")]: {
-                    typography: "h5",
-                  },
-                }}
-              >
-                Faça login com email
-              </Typography>
 
-              <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="email" />
+              <Box display='flex' gap={1} margin="normal" sx={{
+                [theme.breakpoints.down("sm")]: {
+                  flexDirection: "column",
+                  gap: 2
+                }
+              }}>
+                <FormControl fullWidth>
+                  <TextField id="name" aria-label="name" label="Nome" />
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <TextField id="lastName" aria-label="lastName" label="Sobrenome" />
+                </FormControl>
+              </Box>
+
+              <FormControl fullWidth 
+              sx={{
+                marginTop: "1rem"
+              }}>
                 <TextField id="email" aria-label="email" label="Email address" />
               </FormControl>
 
-              <FormControl variant="outlined" fullWidth margin="normal">
+              <FormControl variant="outlined" fullWidth               
+              sx={{
+                marginTop: "1rem"
+              }}>
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <OutlinedInput
                   id="password"
@@ -143,15 +139,11 @@ export default function Login() {
                 sx={{
                   color: theme.colors.neutral60,
                   backgroundColor: theme.colors.secondary100,
-                  margin: "1rem 0",
+                  marginTop: "1rem",
                 }}
               >
-                Entrar
+                Cadastrar
               </Button>
-
-              <Typography variant="subtitle1" color={theme.colors.neutral100}>
-                Cadastre-se
-              </Typography>
             </Box>
           </Box>
         </Container>
@@ -159,4 +151,5 @@ export default function Login() {
     </Grid>
   )
 };
+
 
