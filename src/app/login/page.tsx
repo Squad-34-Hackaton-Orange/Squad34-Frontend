@@ -25,7 +25,7 @@ export default function Login() {
   const theme = useTheme();
 
   return (
-    <Grid container columns={16} sx={{ minHeight: "100vh", width: "100%" }}>
+    <Grid container columns={16}>
       <Grid
         item
         xs={6}
