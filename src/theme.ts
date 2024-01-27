@@ -90,6 +90,14 @@ const theme = createTheme({
         }
       },
     },
+    MuiTextField: {
+      styleOverrides: {        
+        root: {
+          fontSize: "60px",
+        } 
+
+      }
+    }
   }
 });
 
