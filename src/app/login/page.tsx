@@ -34,7 +34,7 @@ export default function Login() {
         }}
       >
         <img
-          src="./login.svg"
+          src="./images/login.svg"
           alt="Imagem de login com três pessoas e um computador"
           style={{
             minHeight: "100vh",
