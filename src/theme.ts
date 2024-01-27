@@ -13,10 +13,10 @@ const theme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
+      sm: 600, //tablet
+      md: 900, // notebook
+      lg: 1200, // small desktop
+      xl: 1536, // desktop 
     },
   },
   colors: {
@@ -86,7 +86,8 @@ const theme = createTheme({
         html: {
           width: "100%",
           minHeight: "100vh",
-        },
+          // TODO: RESETAR O TAMANHO PARA 10 PX OU 62,75%
+        }
       },
     },
   }
