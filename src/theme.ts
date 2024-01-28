@@ -17,8 +17,8 @@ const theme = createTheme({
       md: 900, // notebook
       lg: 1200, // small desktop
       xl: 1536, // desktop 
-    },
-  },
+    },    
+  },  
   colors: {
     primary70: "#EDEFF2",
     primary80: "#444466",
