@@ -77,7 +77,7 @@ export default function Header() {
           gap: '20px'
         }}>
 
-          <AvatarButton />
+          <AvatarButton width={40} height={40} menu={true} />
           <NotificationButton />
 
         </Box>
