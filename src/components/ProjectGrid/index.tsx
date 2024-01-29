@@ -3,11 +3,33 @@ import React from "react";
 import { Box, useTheme } from "@mui/material";
 import ProjectCard from "../Cards/ProjectCard";
 
+type ProjectsType = {
+  date_post: Date     ,
+  title :string,
+  description: string,
+  link: string,
+  image: string,
+  id_user: number  ,
+  tag: string[]
+}
+
 
 const ProjectsGrid = () => {
   //const user = useContext() < ----- CHAMAR contexto do usuário e depois chamar os projetos desse usuário para renderizar usando o map
 
-  const projects = []
+  // APAGAR DEPOIS APENAS PARA TESTE -------->
+  const projects:ProjectsType[] = [{      
+    date_post: new Date(),
+    title: "Ecommerce One Page",
+    description: "Descrição do projeto teste",
+    link: "https://github.com/camilasoares",
+    image: '/project-camila.jpg',
+    id_user: 1,
+    tag: ['UX', 'Web']
+  }]
+
+  //const projects:ProjectsType[] = []
+  //  <--------- APAGAR DEPOIS APENAS PARA TESTE 
 
   if (!projects.length) {
     return (
@@ -39,6 +61,9 @@ const ProjectsGrid = () => {
         rowGap: {xs: '16px', sm: '24px'}, 
         gap: {xs: '16px', sm: '24px'},
       }}>
+        {projects.map((project) => (
+          <ProjectCard key={project.id_user} project={project} />
+        ))}
         {/* map dos cards do projeto */}
       </Box>
     );
