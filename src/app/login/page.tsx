@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
@@ -15,14 +16,74 @@ import {
   Typography
 } from '@mui/material';
 
-import { useTheme } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-
+import { object, string, InferType } from 'yup';
 import { Google } from '@/components/Icons/Google';
+import * as yup from 'yup';
 
-export default function Login() {
+// Defina os tipos para os valores do formulário e erros
+interface FormValues {
+  email: string;
+  password: string;
+}
+
+interface FormErrors {
+  email?: string;
+  password?: string;
+}
+
+// Defina os tipos para as props do componente
+interface LoginProps {
+  // Adicione qualquer prop específica, se necessário
+}
+//PERGUNTAR SE VAI PRECISAR MUDAR PASSWORD INVÁDIDA COM OS CARACTERES DE PARÂMETRO OU SE VAI COMPARAR COM O BANCO DE DADOS
+const userSchema = object({
+  email: string().required().email(),
+  password: string()
+    .required()
+    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/, 'A senha deve conter ao menos um número, uma letra maiúscula, no mínimo oito dígitos e um caracter especial.Exemplo:@, *, &, !, etc.'),
+});
+
+const Login: React.FC<LoginProps> = () => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
+
+  // Estados locais para armazenar valores dos campos e erros
+  const [formValues, setFormValues] = React.useState<FormValues>({
+    email: '',
+    password: '',
+  });  
+
+  const [formErrors, setFormErrors] = React.useState<FormErrors>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await userSchema.validate(formValues, { abortEarly: false });
+      setFormErrors({});
+      console.log('Formulário enviado com valores:', formValues);
+    } catch (errors) {
+      if (errors instanceof yup.ValidationError) {
+        const validationErrors: { [key: string]: string } = {};
+        errors.inner.forEach((error: yup.ValidationError) => {
+          if (error.path) {
+            validationErrors[error.path] = error.message;
+          }
+        });
+        setFormErrors(validationErrors);
+        console.error('Erro de validação:', errors);
+      }
+    }
+  };
 
   return (
     <Grid container columns={16}>
@@ -109,12 +170,18 @@ export default function Login() {
                 htmlFor="email"
                 style={{ visibility: "hidden" }}
               >
-                Email address
+                Endereço de email
               </InputLabel>
               <TextField
+                required
                 id="email"
+                name="email"
                 aria-label="email"
-                label="Email address"
+                label="Email Address"
+                value={formValues.email}
+                onChange={handleChange}
+                error={!!formErrors.email}
+                helperText={formErrors.email}
               />
             </FormControl>
 
@@ -127,6 +194,7 @@ export default function Login() {
               <OutlinedInput
                 label="Password"
                 id="password"
+                name="password"
                 type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position="end">
@@ -139,7 +207,15 @@ export default function Login() {
                     </IconButton>
                   </InputAdornment>
                 }
+                value={formValues.password}
+                onChange={handleChange}
+                error={!!formErrors.password}
               />
+              {formErrors.password && (
+                <Typography variant="caption" color="error">
+                  {formErrors.password}
+                </Typography>
+              )}
             </FormControl>
 
             <Button
@@ -151,6 +227,7 @@ export default function Login() {
                 backgroundColor: theme.colors.secondary100,
                 margin: ".8rem 0",
               }}
+              onClick={handleSubmit}
             >
               Entrar
             </Button>
@@ -170,3 +247,4 @@ export default function Login() {
   )
 };
 
+export default Login;
