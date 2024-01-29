@@ -3,7 +3,14 @@ import React, { useContext, useState } from 'react'
 import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material'
 
 
-const AvatarButton = () => {
+type AvatarProps = {
+  width: number,
+  height: number,
+  menu?: boolean
+}
+
+
+const AvatarButton = ({width, height, menu}:AvatarProps) => {
 
   //const user = useContext() <----- CHAMAR O CONTEXTO DE USUÁRIO PARA PEGAR A IMAGEM
   // const {profile} = user
@@ -18,8 +25,10 @@ const AvatarButton = () => {
     setAnchorEl(null);
   };
 
-  return (
-    <Box>
+  if(menu){
+
+    return( 
+      <Box>
       <Button
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -32,7 +41,7 @@ const AvatarButton = () => {
 
         }}
       >
-      <Avatar alt="Remy Sharp" src="/hero.svg" sx={{ width: 40, height: 40 }} />
+      <Avatar alt="Remy Sharp" src="/hero.svg" sx={{ width: width, height: height }} />
       </Button>
       <Menu
         id="basic-menu"
@@ -49,7 +58,17 @@ const AvatarButton = () => {
         <MenuItem onClick={handleClose}>Logout</MenuItem>
       </Menu>
     </Box>
+    )
+
+  }
+
+  if(!menu){
+  return (
+    <Box>      
+      <Avatar alt="Remy Sharp" src="/hero.svg" sx={{ width: width, height: height }} />      
+    </Box>
   )
+}
 }
 
 export default AvatarButton
