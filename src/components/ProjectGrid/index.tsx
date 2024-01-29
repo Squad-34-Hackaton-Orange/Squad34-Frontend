@@ -10,7 +10,7 @@ type ProjectsType = {
   link: string,
   image: string,
   id_user: number  ,
-  tag: string[]
+  tags: string[]
 }
 
 
@@ -23,9 +23,18 @@ const ProjectsGrid = () => {
     title: "Ecommerce One Page",
     description: "Descrição do projeto teste",
     link: "https://github.com/camilasoares",
-    image: '/project-camila.jpg',
+    image: '/project-camila.svg',
     id_user: 1,
-    tag: ['UX', 'Web']
+    tags: ['UX', 'Web']
+  }, 
+  {      
+    date_post: new Date(),
+    title: "Ecommerce One Page",
+    description: "Descrição do projeto teste",
+    link: "https://github.com/camilasoares",
+    image: '/project-camila.svg',
+    id_user: 1,
+    tags: ['UX', 'Web']
   }]
 
   //const projects:ProjectsType[] = []
@@ -54,12 +63,15 @@ const ProjectsGrid = () => {
   if (projects.length) {
     return (
       <Box sx={{
+        width: '100%',
         mt: {xs: '24px', sm: '40px'},
         display: 'grid',
-        gridTemplateColumns: {xs: '1fr', md: '1fr 1fr',
-        lg: '1fr 1fr 1fr 1fr'},
+        gridTemplateColumns: {xs: '312px', sm: '389px',md: 'repeat(2, 389px)',
+        lg: 'repeat(3, 389px)', xl: 'repeat(4, 389px)'},
         rowGap: {xs: '16px', sm: '24px'}, 
         gap: {xs: '16px', sm: '24px'},
+        justifyContent: {xs: 'center', md: 'flex-start'},
+        pb: '40px'
       }}>
         {projects.map((project) => (
           <ProjectCard key={project.id_user} project={project} />
