@@ -7,10 +7,7 @@ type ModalContentProps = {
 
 export const ModalContent = ({ children, ...props }: ModalContentProps) => {
   return (
-    <Box
-      component="div"
-      {...props}
-    >
+    <Box {...props}>
       {children}
     </Box>
   )

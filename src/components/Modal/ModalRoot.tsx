@@ -13,36 +13,34 @@ type ModalRootProps = {
 export const ModalRoot = ({ children, onClose, open = false, ...props }: ModalRootProps) => {
   const theme = useTheme();
   return (
-    <>
-      <Modal
-        open={open}
-        onClose={onClose}
+    <Modal
+      open={open}
+      onClose={onClose}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 2,
+      }}
+      {...props}
+    >
+      <Box
         sx={{
+          maxWidth: 350,
+          width: "100%",
+
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 2,
+          flexDirection: "column",
+          gap: 3,
+
+          bgcolor: theme.colors.neutral60,
+          boxShadow: 4,
+          px: 3,
+          py: 4,
         }}
-        {...props}
       >
-        <Box
-          sx={{
-            maxWidth: 350,
-            width: "100%",
-
-            display: "flex",
-            flexDirection: "column",
-            gap: 3,
-
-            bgcolor: theme.colors.neutral60,
-            boxShadow: 4,
-            px: 3,
-            py: 4,
-          }}
-        >
-          {children}
-        </Box>
-      </Modal>
-    </>
+        {children}
+      </Box>
+    </Modal>
   );
 };

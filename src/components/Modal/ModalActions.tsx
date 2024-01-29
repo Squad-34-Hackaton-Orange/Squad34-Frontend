@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
 
-type ModalActionProps = {
+type ModalActionsProps = {
   children: ReactNode;
 };
 
-export const ModalActions = ({ children, ...props }: ModalActionProps) => {
+export const ModalActions = ({ children, ...props }: ModalActionsProps) => {
   return (
-    <Box component="div"
+    <Box
       sx={{
         display: "flex",
         gap: 2

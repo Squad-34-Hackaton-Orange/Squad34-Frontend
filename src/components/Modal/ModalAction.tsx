@@ -16,21 +16,19 @@ export const ModalAction = (
   }: ModalActionProps) => {
   const theme = useTheme();
 
+  const buttonStyle = {
+    width: action === "success" ? "100%" : "auto",
+    backgroundColor: color === "primary" ? theme.colors.secondary100
+      : "rgba(0, 0, 0, 0.12)",
+    color: color === "primary" ? "#fff"
+      : "rgba(0, 0, 0, 0.38)",
+  };
+
   return (
     <Button
       size='large'
       variant="contained"
-      sx={{
-        width: action === "success" ? "100%" : "auto",
-
-        backgroundColor:
-          color === "primary" ?
-            theme.colors.secondary100
-            : "rgba(0, 0, 0, 0.12)",
-
-        color: color === "primary" ? "#fff"
-          : "rgba(0, 0, 0, 0.38)",
-      }}
+      sx={buttonStyle}
       {...props}
     >
       {text}
