@@ -36,36 +36,7 @@ export default function Login() {
         backgroundSize: { md: "contain" },
         justifyContent: { md: "flex-end" },
       }}
-    >
-      {/* <Grid
-        item
-        xs={6}
-        md={8}
-        alignItems="flex-start"
-        sx={{
-          display: { xs: "none", md: "flex" }, //mudei do LG para o MD
-        }}
-      >
-        {/* <img
-          src="./login.svg"
-          alt="Imagem de login com três pessoas e um computador"
-          style={{                  
-            
-            minHeight: "100vh",                      
-            height: "100vh",
-            width: "100%",  //82.03125%
-            maxWidth: "525px",
-            objectFit: "cover",
-            objectPosition: "left 0"
-            
-            
-            // backgroundRepeat: "no-repeat",
-            // backgroundSize: "cover",
-            // backgroundPosition: "center",            
-          }}
-        /> 
-      </Grid> */}
-
+    >      
       <Grid
         item
         xs={16}

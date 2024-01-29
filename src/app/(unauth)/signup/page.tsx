@@ -33,25 +33,7 @@ export default function SignUp() {
         backgroundSize: { md: "contain" },
         justifyContent: { md: "flex-end" },
       }}
-    >
-      {/* <Grid
-        item
-        xs={6}
-        sx={{
-          display: { xs: "none", lg: "block" }
-        }}
-      >
-        <img
-          src="./signup.svg"
-          alt="Imagem de login com três pessoas e um computador"
-          style={{
-            minHeight: "100vh",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-      </Grid> */}
+    >      
 
       <Grid item xs={16} md={8} xl={10}>
         <Box
