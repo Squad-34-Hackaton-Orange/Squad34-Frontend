@@ -42,7 +42,7 @@ export default function SignUp() {
         }}
       >
         <img
-          src="./signup.svg"
+          src="./images/signup.svg"
           alt="Imagem de login com três pessoas e um computador"
           style={{
             minHeight: "100vh",
