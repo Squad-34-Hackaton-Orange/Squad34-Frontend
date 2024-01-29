@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
+import * as React from "react";
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -12,18 +12,29 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
-  Typography
-} from '@mui/material';
+  Typography,
+} from "@mui/material";
 
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = React.useState(false);
   const theme = useTheme();
 
   return (
-    <Grid container columns={16}>
-      <Grid
+    <Grid
+      container
+      columns={16}
+      sx={{
+        overflow: "hidden",
+        backgroundImage: { md: "url('./signup.svg')" },
+        backgroundRepeat: { md: "no-repeat" },
+        backgroundPosition: { md: "left" },
+        backgroundSize: { md: "contain" },
+        justifyContent: { md: "flex-end" },
+      }}
+    >
+      {/* <Grid
         item
         xs={6}
         sx={{
@@ -40,21 +51,18 @@ export default function SignUp() {
             backgroundPosition: "center",
           }}
         />
-      </Grid>
+      </Grid> */}
 
-      <Grid
-        item
-        xs={16}
-        lg={10}
-      >
+      <Grid item xs={16} md={8} xl={10}>
         <Box
           sx={{
             minHeight: "100vh",
+            maxWidth: "80.78125%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            padding: { xs: "0 1rem" }
+            margin: "0 auto",
           }}
         >
           <Typography
@@ -63,8 +71,9 @@ export default function SignUp() {
               textAlign: "center",
               color: theme.colors.primary90,
               typography: {
-                xs: "h5",
-                lg: "h3",
+                xs: "h4",
+                sm: "h3",
+                xl: "h2",
               },
             }}
           >
@@ -72,27 +81,32 @@ export default function SignUp() {
           </Typography>
 
           <Box>
-            <Box display="flex" gap={1}>
-              <FormControl fullWidth margin="normal">
-                <InputLabel
-                  htmlFor="name"
-                  style={{ visibility: "hidden" }}
-                >
+            <Box
+              display="flex"
+              gap={1}
+              sx={{
+                flexDirection: { xs: "column", sm: "row" },
+              }}
+            >
+              <FormControl
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                sx={{ backgroundColor: "#fff" }}
+              >
+                <InputLabel htmlFor="name" style={{ visibility: "hidden" }}>
                   Nome
                 </InputLabel>
-                <TextField
-                  required
-                  id="name"
-                  aria-label="name"
-                  label="Nome"
-                />
+                <TextField required id="name" aria-label="name" label="Nome" />
               </FormControl>
 
-              <FormControl fullWidth margin="normal">
-                <InputLabel
-                  htmlFor="lastName"
-                  style={{ visibility: "hidden" }}
-                >
+              <FormControl
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                sx={{ backgroundColor: "#fff" }}
+              >
+                <InputLabel htmlFor="lastName" style={{ visibility: "hidden" }}>
                   Sobrenome
                 </InputLabel>
                 <TextField
@@ -104,11 +118,13 @@ export default function SignUp() {
               </FormControl>
             </Box>
 
-            <FormControl fullWidth margin="normal">
-              <InputLabel
-                htmlFor="email"
-                style={{ visibility: "hidden" }}
-              >
+            <FormControl
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "#fff" }}
+            >
+              <InputLabel htmlFor="email" style={{ visibility: "hidden" }}>
                 Email
               </InputLabel>
               <TextField
@@ -119,17 +135,19 @@ export default function SignUp() {
               />
             </FormControl>
 
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel
-                required
-                htmlFor="password"
-              >
+            <FormControl
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "#fff" }}
+            >
+              <InputLabel required htmlFor="password">
                 Password
               </InputLabel>
               <OutlinedInput
                 label="Password"
                 id="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -160,7 +178,5 @@ export default function SignUp() {
         </Box>
       </Grid>
     </Grid>
-  )
-};
-
-
+  );
+}
