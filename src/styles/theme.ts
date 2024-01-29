@@ -18,7 +18,7 @@ const theme = createTheme({
       lg: 1200, // small desktop
       xl: 1536, // desktop 
     },
-  },
+  },  
   colors: {
     primary70: "#EDEFF2",
     primary80: "#444466",
@@ -75,6 +75,11 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
+    label: {
+      fontSize: '4rem',
+      color: 'red',
+    },
+
   },
   components: {
     MuiCssBaseline: {
@@ -86,18 +91,103 @@ const theme = createTheme({
         html: {
           width: "100%",
           minHeight: "100vh",
+          fontSize: '10px'
           // TODO: RESETAR O TAMANHO PARA 10 PX OU 62,75%
-        }
+        }        
+      },      
+    },   
+    MuiTypography:{
+      defaultProps: {
+        variantMapping: {
+          // Map the new variant to render a <body1> by default
+          label: 'body1',
+        },
       },
-    },
-    MuiTextField: {
-      styleOverrides: {        
-        root: {
-          fontSize: "60px",
-        } 
-
+      styleOverrides:{
+        h1: {
+          fontSize: "9.6rem",
+          fontWeight: 300,
+          lineHeight: "4rem",
+          letterSpacing: "-0.15rem",
+        },
+        h2: {
+          fontSize: "6rem",
+          fontWeight: 300,
+          lineHeight: "5rem",
+          letterSpacing: "0.05rem",
+        },
+        h3: {
+          fontSize: "4.8rem",
+          fontWeight: 400,
+          lineHeight: "4rem",
+        },
+        h4: {
+          fontSize: "3.4rem",
+          lineHeight: "3.4rem",
+          fontWeight: 400,
+          letterSpacing: "0.025rem",
+        },
+        h5: {
+          fontSize: "2.4rem",
+          fontWeight: 400,
+          lineHeight: "2.4rem",
+        },
+        h6: {
+          fontSize: "2rem",
+          lineHeight: "2rem",
+          fontWeight: 500,
+          letterSpacing: "0.015rem",
+        },
+        subtitle1: {
+          fontSize: "1.6rem",
+          lineHeight: "1.6rem",
+          fontWeight: 400,
+          letterSpacing: "0.015rem",
+        },
+        subtitle2: {
+          fontSize: "1.4rem",
+          lineHeight: "1.4rem",
+          fontWeight: 500,
+          letterSpacing: "0.015rem",
+        },
+        body1:{
+          fontSize: "1.6rem",
+          lineHeight: "1.6rem",
+          fontWeight: 400,
+          letterSpacing: "0.05rem",
+        },
+        body2: {
+          fontSize: "1.4rem",
+          lineHeight: "1.4rem",
+          fontWeight: 400,
+          letterSpacing: "0.025rem",
+        },
+        caption:{
+          fontSize: "1.2rem",
+          lineHeight: "1.6rem",
+          fontWeight: 400,
+          letterSpacing: "0.04rem",
+        },
+        overline:{
+          fontSize: "1rem",
+          lineHeight: "1rem",
+          fontWeight: 400,
+          letterSpacing: "0.015rem",
+        },
+        button: {
+          fontSize: "1.5rem",
+          lineHeight: "2.6rem",
+          fontWeight: 500,
+          letterSpacing: "0.046rem",
+        },  
+        label:{
+          fontSize: "1.6rem",
+          lineHeight: "1.6rem",
+          fontWeight: 500,
+          letterSpacing: "0.01rem",
+        },
       }
-    }
+    } 
   }
 });
 
