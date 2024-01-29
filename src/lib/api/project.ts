@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+import { Tag } from "./tag"
+
+export type Project = Partial<{
+  id: number
+  date_post: Date
+  title: string
+  description: string
+  link: string
+  id_user: number
+  tag_id: number[]
+  tag: Tag[]
+  updated_at: Date
+  deleted_at: Date
+}>
+=======
 import { api } from ".";
 import { Id } from "./id";
 import { ProjectTag } from "./project-tag";
@@ -75,3 +91,4 @@ export const update = async ({ id, ...data }: GetByIdParams & Project): Promise<
 export const remove = async ({ id }: GetByIdParams): Promise<void> => {
   return (await api.delete(`/project/${id}`)).data;
 }
+>>>>>>> develop
