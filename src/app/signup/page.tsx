@@ -46,7 +46,7 @@ const userSchema = object({
   email: string().required().email(),
   password: string()
     .required()
-    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/, 'A senha deve conter ao menos um número, uma letra maiúscula, no mínimo oito dígitos e um caracter especial.Exemplo:@, *, &, !, etc.'),
+    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/, 'Deve conter ao menos um número, uma letra maiúscula, no mínimo oito dígitos e um caracter especial.'),
 });
 
 const SignUp: React.FC<SignUpProps> = () => {
@@ -93,7 +93,7 @@ const SignUp: React.FC<SignUpProps> = () => {
   };
 
   return (
-    <Grid container columns={16}>
+    <Grid container columns={16} sx={{width:"100%"}}>
       <Grid
         item
         xs={6}
