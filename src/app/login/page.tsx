@@ -30,7 +30,7 @@ export default function Login() {
       columns={16}
       sx={{
         overflow: "hidden",
-        backgroundImage: { md: "url('./login.svg')" },
+        backgroundImage: { md: "url('/images/login.svg')" },
         backgroundRepeat: { md: "no-repeat" },
         backgroundPosition: { md: "left" },
         backgroundSize: { md: "contain" },
