@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Project } from "./project"
 
 export type Tag = Partial<{
@@ -9,3 +10,13 @@ export type Tag = Partial<{
   updated_at: Date
   deleted_at: Date
 }>
+=======
+import { Id } from "./id";
+import { ProjectTag } from "./project-tag";
+
+export type Tag = Partial<{
+  id: Id;
+  name: string;
+  ProjectTag: ProjectTag[];
+}>;  
+>>>>>>> develop
