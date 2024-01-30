@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
@@ -13,8 +13,8 @@ import {
   Link,
   OutlinedInput,
   TextField,
-  Typography
-} from '@mui/material';
+  Typography,
+} from "@mui/material";
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { object, string, InferType } from 'yup';
@@ -86,39 +86,36 @@ const Login: React.FC<LoginProps> = () => {
   };
 
   return (
-    <Grid container columns={16}>
-      <Grid
-        item
-        xs={6}
-        sx={{
-          display: { xs: "none", lg: "block" }
-        }}
-      >
-        <img
-          src="./images/login.svg"
-          alt="Imagem de login com três pessoas e um computador"
-          style={{
-            minHeight: "100vh",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-      </Grid>
-
+    <Grid
+      container
+      columns={16}
+      sx={{
+        overflow: "hidden",
+        backgroundImage: { md: "url('/images/login.svg')" },
+        backgroundRepeat: { md: "no-repeat" },
+        backgroundPosition: { md: "left" },
+        backgroundSize: { md: "contain" },
+        justifyContent: { md: "flex-end" },
+      }}
+    >      
       <Grid
         item
         xs={16}
-        lg={10}
+        md={8}
+        xl={10}
+        sx={{
+          backgroundColor: "#ffffff00",
+        }}
       >
         <Box
           sx={{
             minHeight: "100vh",
+            maxWidth: "80.78125%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            padding: { xs: "0 1rem" }
+            margin: "0 auto",
           }}
         >
           <Box
@@ -131,21 +128,26 @@ const Login: React.FC<LoginProps> = () => {
               sx={{
                 marginBottom: 4,
                 color: theme.colors.primary90,
+                whiteSpace: "nowrap",
                 typography: {
-                  xs: "h5",
-                  lg: "h3",
+                  xs: "h4",
+                  sm: "h3",
+                  xl: "h2",
                 },
               }}
             >
               Entre no Orange Portfólio
             </Typography>
 
-            <Button startIcon={<Google />}
+            <Button
+              startIcon={<Google />}
+              size="large"
               sx={{
                 gap: 2,
                 textTransform: "none",
-                boxShadow: "0px 1px 1px 0px rgba(0, 0, 0, 0.17), 0px 0px 1px 0px rgba(0, 0, 0, 0.08)",
-                color: theme.colors.neutral100
+                boxShadow:
+                  "0px 1px 1px 0px rgba(0, 0, 0, 0.17), 0px 0px 1px 0px rgba(0, 0, 0, 0.08)",
+                color: theme.colors.neutral100,
               }}
             >
               Entrar com Google
@@ -158,17 +160,26 @@ const Login: React.FC<LoginProps> = () => {
               sx={{
                 typography: {
                   xs: "subtitle1",
-                  lg: "h5",
+                  sm: "h5",
+                  xl: "h4",
                 },
               }}
             >
               Faça login com email
             </Typography>
 
-            <FormControl fullWidth margin="normal">
+            <FormControl
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "#fff" }}
+              required
+            >
               <InputLabel
                 htmlFor="email"
-                style={{ visibility: "hidden" }}
+                style={{
+                  visibility: "hidden",
+                }}
               >
                 Endereço de email
               </InputLabel>
@@ -185,12 +196,14 @@ const Login: React.FC<LoginProps> = () => {
               />
             </FormControl>
 
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel
-                htmlFor="password"
-              >
-                Password
-              </InputLabel>
+            <FormControl
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "#fff" }}
+              required
+            >
+              <InputLabel htmlFor="password">Password</InputLabel>
               <OutlinedInput
                 label="Password"
                 id="password"
