@@ -66,7 +66,6 @@ export default function Login() {
           <Box
             sx={{
               textAlign: "center",
-              marginBottom: 5,
             }}
           >
             <Typography
@@ -83,7 +82,16 @@ export default function Login() {
             >
               Entre no Orange Portfólio
             </Typography>
+          </Box>
 
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 5,
+            }}
+          >
             <GoogleOAuthProvider
               clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}>
               <GoogleLogin
