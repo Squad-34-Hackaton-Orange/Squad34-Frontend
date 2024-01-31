@@ -1,30 +1,22 @@
 "use client";
 
-import React, { ReactNode, createContext, useEffect, useState } from "react";
-import { User } from "@/lib/api/user";
-import axios from "axios";
-
-const usuarioLogin = {
-  name: "Jhoe",
-  last_name: "Doe",
-  email: "jhoedoe@in.com",
-  password: "123",
-};
-
+import React, { ReactNode, createContext, useState } from "react";
+import { User, create, login } from "@/lib/api/user";
 interface LoginContextProps {
   isLogged: boolean;
   user: User | null;
-  login: (email: string, senha: string) => Promise<void>;
+  signin: (email: string, senha: string) => Promise<any>;
   logout: () => void;
+  signup: (name: string, last_name: string, email: string, password: string) => Promise<void>;
 }
 
 export const LoginContext = createContext<LoginContextProps>({
   isLogged: false,
   user: null,
-  login: async () => {},
-  logout: () => {},
+  signin: async () => { },
+  logout: () => { },
+  signup: async () => { },
 });
-
 interface LoginProviderProps {
   children: ReactNode;
 }
@@ -33,20 +25,14 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const login = async (email: string, senha: string) => {
-    // chamada da api
-    // define o usuário
-    //
-    /*const getUser = await axios.post('', {
-      email: email,
-      password: senha
-    })*/
+  const auth = async (email: string, senha: string) => {
+    const getUser = await login({ email: email, password: senha });
 
-    setUser(usuarioLogin);
-
-    // if (getUser) {
-    //   setIsLogged(true);
-    // }
+    if (getUser) {
+      setUser(getUser);
+      setIsLogged(true);
+    }
+    return getUser;
   };
 
   const logout = () => {
@@ -54,10 +40,12 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
     setIsLogged(false);
   };
 
-  
+  const signup = async (name: string, last_name: string, email: string, password: string) => {
+    await create({ name, last_name, email, password });
+  };
 
   return (
-    <LoginContext.Provider value={{ user, login, logout, isLogged }}>
+    <LoginContext.Provider value={{ user, signin: auth, logout, isLogged, signup }}>
       {children}
     </LoginContext.Provider>
   );

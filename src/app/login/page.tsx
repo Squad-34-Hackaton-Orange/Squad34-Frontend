@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -10,19 +10,26 @@ import {
   InputAdornment,
   InputLabel,
   Link,
-  OutlinedInput,
-  TextField,
   Typography,
 } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
-import { Google } from "@/components/Icons/Google";
+// import { Google } from "@/components/Icons/Google";
+import { jwtDecode } from "jwt-decode";
+import { LoginContext } from "@/context/UserContext";
+import { Form } from "@unform/web";
+import { VTextField } from "@/forms/VTextField";
+import { VOutlinedInput } from "@/forms/VOutlinedInput";
 
 export default function Login() {
+  const { signin, user } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
+
+  console.log(user);
 
   return (
     <Grid
@@ -36,7 +43,7 @@ export default function Login() {
         backgroundSize: { md: "contain" },
         justifyContent: { md: "flex-end" },
       }}
-    >      
+    >
       <Grid
         item
         xs={16}
@@ -78,19 +85,16 @@ export default function Login() {
               Entre no Orange Portfólio
             </Typography>
 
-            <Button
-              startIcon={<Google />}
-              size="large"
-              sx={{
-                gap: 2,
-                textTransform: "none",
-                boxShadow:
-                  "0px 1px 1px 0px rgba(0, 0, 0, 0.17), 0px 0px 1px 0px rgba(0, 0, 0, 0.08)",
-                color: theme.colors.neutral100,
-              }}
-            >
-              Entrar com Google
-            </Button>
+            <GoogleOAuthProvider
+              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}>
+              <GoogleLogin
+                onSuccess={(response) => {
+                  let decode = jwtDecode(response.credential as string);
+                  console.log(decode);
+                }}
+                onError={() => console.log("Failed")}
+              />
+            </GoogleOAuthProvider>
           </Box>
 
           <Box>
@@ -107,62 +111,65 @@ export default function Login() {
               Faça login com email
             </Typography>
 
-            <FormControl
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              sx={{ backgroundColor: "#fff" }}
-              required
-            >
-              <InputLabel
-                htmlFor="email"
-                style={{
-                  visibility: "hidden",
+            <Form onSubmit={(data) => signin(data.email, data.password)} placeholder="Login">
+              <FormControl
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                sx={{ backgroundColor: "#fff" }}
+                required
+              >
+                <InputLabel
+                  htmlFor="email"
+                  style={{
+                    visibility: "hidden",
+                  }}
+                >
+                  Email Address
+                </InputLabel>
+                <VTextField name="email" id="email" aria-label="email" label="Email Address" />
+              </FormControl>
+
+              <FormControl
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                sx={{ backgroundColor: "#fff" }}
+                required
+              >
+                <VOutlinedInput
+                  name="password"
+                  label="Password"
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="Password"
+                        onClick={() => setShowPassword((show) => !show)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                sx={{
+                  color: theme.colors.neutral60,
+                  backgroundColor: theme.colors.secondary100,
+                  margin: ".8rem 0",
                 }}
               >
-                Email Address
-              </InputLabel>
-              <TextField id="email" aria-label="email" label="Email Address" />
-            </FormControl>
-
-            <FormControl
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              sx={{ backgroundColor: "#fff" }}
-              required
-            >
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <OutlinedInput
-                label="Password"
-                id="password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="Password"
-                      onClick={() => setShowPassword((show) => !show)}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              sx={{
-                color: theme.colors.neutral60,
-                backgroundColor: theme.colors.secondary100,
-                margin: ".8rem 0",
-              }}
-            >
-              Entrar
-            </Button>
+                Entrar
+              </Button>
+            </Form>
 
             <Link
               variant="subtitle1"
