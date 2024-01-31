@@ -64,6 +64,6 @@ export const remove = async ({ id }: GetByIdParams): Promise<void> => {
  * @param data User data
  * @returns A promise of a user
  */
-export const login = async ({ email, password }: User): Promise<User> => {
+export const login = async (email: string, password: string): Promise<User> => {
   return (await api.post(`/user/login`, { email, password })).data;
 }

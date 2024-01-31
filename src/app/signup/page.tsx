@@ -2,16 +2,15 @@
 
 import React, { useContext, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
+  Alert,
   Box,
-  Button,
   FormControl,
   Grid,
   IconButton,
   InputAdornment,
   InputLabel,
-  OutlinedInput,
-  TextField,
   Typography,
 } from "@mui/material";
 
@@ -20,11 +19,41 @@ import { LoginContext } from "@/context/UserContext";
 import { Form } from "@unform/web";
 import { VTextField } from "@/forms/VTextField";
 import { VOutlinedInput } from "@/forms/VOutlinedInput";
+import { useRouter } from "next/navigation";
+import { User } from "@/lib/api/user";
 
 export default function SignUp() {
   const { signup } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
+  const [notification, setNotification] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
   const theme = useTheme();
+
+  const handleSubmit = async (data: User) => {
+    if (!data.name || !data.last_name || !data.email || !data.password) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const createdUser = await signup(data.name, data.last_name, data.email, data.password);
+
+      if (createdUser) {
+        setNotification(true);
+
+        setTimeout(() => {
+          setNotification(false);
+          setIsLoading(false);
+          router.push("/login");
+        }, 6000);
+      }
+    } catch (error) {
+      console.error("Erro ao criar usuário:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Grid
@@ -52,6 +81,25 @@ export default function SignUp() {
             margin: "0 auto",
           }}
         >
+
+          <Box sx={{
+            position: "absolute",
+            top: "6rem",
+            padding: "1rem",
+            gap: 1,
+          }}>
+            {notification ? (
+              <Alert variant="filled" severity="success"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Cadastro feito com sucesso. Você será redirecionado para o login.
+              </Alert>
+            ) : null}
+          </Box>
+
           <Typography
             sx={{
               marginBottom: 2,
@@ -68,9 +116,7 @@ export default function SignUp() {
           </Typography>
 
           <Form
-            onSubmit={(data) =>
-              signup(data.name, data.lastName, data.email, data.password)
-            }
+            onSubmit={(data) => handleSubmit(data)}
             placeholder="Cadastro">
             <Box>
               <Box
@@ -98,13 +144,13 @@ export default function SignUp() {
                   margin="normal"
                   sx={{ backgroundColor: "#fff" }}
                 >
-                  <InputLabel htmlFor="lastName" style={{ visibility: "hidden" }}>
+                  <InputLabel htmlFor="last_name" style={{ visibility: "hidden" }}>
                     Sobrenome
                   </InputLabel>
                   <VTextField
                     required
-                    name="lastName"
-                    id="lastName"
+                    name="last_name"
+                    id="last_name"
                     aria-label="name"
                     label="Sobrenome"
                   />
@@ -139,6 +185,7 @@ export default function SignUp() {
                   name="password"
                   label="Password"
                   id="password"
+                  autoComplete="password"
                   type={showPassword ? "text" : "password"}
                   endAdornment={
                     <InputAdornment position="end">
@@ -154,7 +201,8 @@ export default function SignUp() {
                 />
               </FormControl>
 
-              <Button
+              <LoadingButton
+                loading={isLoading}
                 type="submit"
                 variant="contained"
                 fullWidth
@@ -166,7 +214,7 @@ export default function SignUp() {
                 }}
               >
                 Cadastrar
-              </Button>
+              </LoadingButton>
             </Box>
           </Form>
         </Box>

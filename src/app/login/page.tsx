@@ -17,7 +17,6 @@ import { useTheme } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
-// import { Google } from "@/components/Icons/Google";
 import { jwtDecode } from "jwt-decode";
 import { LoginContext } from "@/context/UserContext";
 import { Form } from "@unform/web";
@@ -141,6 +140,7 @@ export default function Login() {
                   name="password"
                   label="Password"
                   id="password"
+                  autoComplete="password"
                   type={showPassword ? "text" : "password"}
                   endAdornment={
                     <InputAdornment position="end">
