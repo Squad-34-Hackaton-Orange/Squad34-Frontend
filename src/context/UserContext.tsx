@@ -25,13 +25,14 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const auth = async (email: string, senha: string) => {
-    const getUser = await login({ email: email, password: senha });
+  const auth = async (email: string, password: string) => {
+    const getUser = await login({ email, password });
 
     if (getUser) {
       setUser(getUser);
       setIsLogged(true);
     }
+
     return getUser;
   };
 

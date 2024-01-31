@@ -31,8 +31,13 @@ export const get = async ({ id }: GetByIdParams): Promise<User> => {
  * @param data User data
  * @returns A promise of a user
  */
-export const create = async (data: User): Promise<User> => {
-  return (await api.post(`/user/sign`, data)).data;
+export const create = async ({ name, last_name, email, password }: User): Promise<User> => {
+  return (await api.post(`/user/sign`, {
+    name,
+    last_name,
+    email,
+    password
+  })).data;
 }
 
 /**
