@@ -3,7 +3,6 @@
 import React, { useContext, useState } from "react";
 import {
   Box,
-  Button,
   FormControl,
   Grid,
   IconButton,
@@ -22,13 +21,39 @@ import { LoginContext } from "@/context/UserContext";
 import { Form } from "@unform/web";
 import { VTextField } from "@/forms/VTextField";
 import { VOutlinedInput } from "@/forms/VOutlinedInput";
+import { User } from "@/lib/api/user";
+import { useRouter } from "next/navigation";
+import { LoadingButton } from "@mui/lab";
 
 export default function Login() {
   const { signin, user } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
   const theme = useTheme();
 
   console.log(user);
+
+  const handleSubmit = async (data: User) => {
+    if (!data.email || !data.password) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const userExist = await signin(data.email, data.password);
+
+      if (userExist) {
+        setIsLoading(false);
+        router.push("/portifolio")
+      };
+
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Grid
@@ -118,7 +143,7 @@ export default function Login() {
               Faça login com email
             </Typography>
 
-            <Form onSubmit={(data) => signin(data.email, data.password)} placeholder="Login">
+            <Form onSubmit={(data) => handleSubmit(data)} placeholder="Login">
               <FormControl
                 variant="outlined"
                 fullWidth
@@ -164,7 +189,8 @@ export default function Login() {
                 />
               </FormControl>
 
-              <Button
+              <LoadingButton
+                loading={isLoading}
                 type="submit"
                 variant="contained"
                 fullWidth
@@ -176,7 +202,7 @@ export default function Login() {
                 }}
               >
                 Entrar
-              </Button>
+              </LoadingButton>
             </Form>
 
             <Link
