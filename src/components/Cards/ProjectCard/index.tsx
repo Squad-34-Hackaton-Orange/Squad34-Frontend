@@ -1,6 +1,5 @@
 import EditButton from "@/components/buttons/EditButton";
 import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
-import Image from "next/image";
 import React from "react";
 
 interface Projects {
@@ -12,10 +11,11 @@ interface Projects {
     image: string;
     id_user: number;
     tags: string[];
-  };
+  },
+  hasTag: boolean;
 }
 
-export default function ProjectCard({ project }: Projects) {
+export default function ProjectCard({ project, hasTag = true }: Projects) {
   const theme = useTheme();
 
   console.log(project);
@@ -138,7 +138,7 @@ export default function ProjectCard({ project }: Projects) {
               }}>
                 <Avatar
                   alt="Remy Sharp"
-                  src="/static/images/avatar/1.jpg"
+                  src="/hero.svg"
                   sx={{ width: 24, height: 24 }}
                 />
                 <Typography variant="subtitle1" color={theme.colors.neutral120}>
@@ -157,19 +157,21 @@ export default function ProjectCard({ project }: Projects) {
                   {handleDate(project.date_post)}
                 </Typography>
               </Box>
-              <Box sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                gap: { xs: '8px' }
-              }}>
-                {project.tags.map((tag) => (
-                  <Chip label={tag} sx={{
-                    fontSize: '1.3rem',
-                    fontWeight: 400,
-                  }} />
-                ))}
-              </Box>
+              {hasTag ? (
+                <Box sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: { xs: '8px' }
+                }}>
+                  {project.tags.map((tag) => (
+                    <Chip label={tag} sx={{
+                      fontSize: '1.3rem',
+                      fontWeight: 400,
+                    }} />
+                  ))}
+                </Box>
+              ) : null}
             </Box>
           </Box>
         </Button>

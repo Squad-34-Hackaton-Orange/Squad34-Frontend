@@ -8,32 +8,27 @@ import AvatarButton from "../buttons/AvatarButton";
 import NotificationButton from "../buttons/notificationButton";
 
 
-export default function Header() {  
-
+export default function Header() {
   const theme = useTheme();
 
   return (
-    <Box sx={{ backgroundColor: theme.colors.primary100, boxShadow: {xs: '0 1px 10px #000000BB', sm: 'none'} }}>
+    <Box sx={{ backgroundColor: theme.colors.primary100, boxShadow: { xs: '0 1px 10px #000000BB', sm: 'none' } }}>
       <Box
         sx={{
-          width: { xs: "83.6111111%", sm: '95%'  },
+          width: { xs: "83.6111111%", sm: '95%' },
           margin: "0 auto",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           padding: "12px 0",
         }}
-      >      
-
-        {/* LOGO && MENU */}
+      >
         <Box sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
         }}>
-          {/* MENU MOBILE */}
-          <ButtonHambuerguer />           
-          {/* <Image src={Logo} width={83} height={31} alt="orange-logo" sizes="(min-width: 900px) 111px, 41px" /> */}
+          <ButtonHambuerguer />
           <Logo alt={"orange-logo"} />
           <Box
             sx={{
@@ -44,19 +39,19 @@ export default function Header() {
           >
             <Link
               variant="subtitle1"
-              href="/descobrir"
+              href="/portifolio"
               underline="none"
               sx={{ color: theme.colors.neutral60 }}
             >
               <Typography
-                sx={{ fontSize: { xs: "16px", sm: '20px' }, lineHeight: { xs: "16px" , sm: '20px' }, fontWeight: 'bold' }}
+                sx={{ fontSize: { xs: "16px", sm: '20px' }, lineHeight: { xs: "16px", sm: '20px' }, fontWeight: 'bold' }}
               >
                 Meus Projetos
               </Typography>
             </Link>
             <Link
               variant="subtitle1"
-              href="/portifolio"
+              href="/discover"
               underline="none"
               sx={{ color: theme.colors.neutral60 }}
             >
@@ -69,7 +64,6 @@ export default function Header() {
           </Box>
         </Box>
 
-        {/* AVATAR && NOTIFICATIONS */}
         <Box sx={{
           display: "flex",
           alignItems: "center",

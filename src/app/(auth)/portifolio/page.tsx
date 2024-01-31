@@ -6,9 +6,41 @@ import { useTheme } from "@mui/material/styles";
 import ProfileCard from "@/components/Cards/UserProfileCard";
 import ProjectsGrid from "@/components/ProjectGrid";
 import TagSearch from "@/components/Input/TagSearch";
+import ProjectCard from "@/components/Cards/ProjectCard";
+
+type ProjectsType = {
+  date_post: Date,
+  title: string,
+  description: string,
+  link: string,
+  image: string,
+  id_user: number,
+  tags: string[]
+}
+
 
 export default function PortifolioView() {
   const theme = useTheme();
+
+  const projects: ProjectsType[] = [{
+    date_post: new Date(),
+    title: "Ecommerce One Page",
+    description: "Descrição do projeto teste",
+    link: "https://github.com/camilasoares",
+    image: '/project-camila.svg',
+    id_user: 1,
+    tags: ['UX', 'Web']
+  },
+  {
+    date_post: new Date(),
+    title: "Ecommerce One Page",
+    description: "Descrição do projeto teste",
+    link: "https://github.com/camilasoares",
+    image: '/project-camila.svg',
+    id_user: 1,
+    tags: ['UX', 'Web']
+  }];
+
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -49,7 +81,11 @@ export default function PortifolioView() {
             Meus projetos
           </Typography>
           <TagSearch />
-          <ProjectsGrid />
+          <ProjectsGrid>
+            {projects?.map((project) => (
+              <ProjectCard key={project.id_user} project={project} hasTag={true} />
+            ))}
+          </ProjectsGrid>
         </Box>
       </Box>
     </section>
