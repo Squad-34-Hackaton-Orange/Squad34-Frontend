@@ -1,5 +1,5 @@
 import EditButton from "@/components/buttons/EditButton";
-import { Box, Typography, Button, useTheme, Chip } from "@mui/material";
+import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 
@@ -15,22 +15,16 @@ interface Projects {
   };
 }
 
-const ProjectCard = ({ project }: Projects) => {
+export default function ProjectCard({ project }: Projects) {
   const theme = useTheme();
-
-  //Pegar do useContext as informações do usuário
 
   console.log(project);
   console.log(project?.image);
 
   const handleDate = (dateString: Date) => {
-    // Converter a string para um objeto Date
-
-    // Extrair o dia e o mês
     const dia = dateString.getUTCDate();
-    const mes = dateString.getUTCMonth() + 1; // Os meses começam do zero, por isso é adicionado 1
+    const mes = dateString.getUTCMonth() + 1;
 
-    // Formatar o resultado
     const diaMesFormatado = `${dia.toString().padStart(2, "0")}/${mes
       .toString()
       .padStart(2, "0")}`;
@@ -40,7 +34,6 @@ const ProjectCard = ({ project }: Projects) => {
 
   if (!project) {
     return (
-      //BOTAR A CHAMADA PARA ABRIR O MODAL DE CRIAÇÃO DE PROJETOS
       <>
         <Button
           sx={{
@@ -100,7 +93,7 @@ const ProjectCard = ({ project }: Projects) => {
       <Box
         sx={{
           width: "100%",
-          height: {xs: '316px', sm: "298px"},
+          height: { xs: '316px', sm: "298px" },
           justifySelf: "center",
           display: "flex",
           flexDirection: "column",
@@ -114,12 +107,12 @@ const ProjectCard = ({ project }: Projects) => {
           }}
         >
           <Box sx={{
-            width: "100%" ,
+            width: "100%",
             height: "258px",
           }}>
             <Box
               sx={{
-                width: "100%" ,
+                width: "100%",
                 height: "100%",
                 backgroundImage: `url('${project.image}')`,
                 backgroundRepeat: "no-repeat",
@@ -131,30 +124,35 @@ const ProjectCard = ({ project }: Projects) => {
             ></Box>
 
             <Box sx={{
-              mt: {xs: '13px'},
+              mt: { xs: '13px' },
 
               display: 'flex',
               justifyContent: 'space-between'
             }}>
               <Box sx={{
                 display: 'flex',
-                flexDirection: {xs: 'column', sm: 'row'},                
-                alignItems: {xs: 'flex-start', sm: 'center'},
-                rowGap: {xs: '8px'},
-                gap: {sm: '8px'}
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { xs: 'flex-start', sm: 'center' },
+                rowGap: { xs: '8px' },
+                gap: { sm: '8px' }
               }}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src="/static/images/avatar/1.jpg"
+                  sx={{ width: 24, height: 24 }}
+                />
                 <Typography variant="subtitle1" color={theme.colors.neutral120}>
                   Camila Soares
                 </Typography>
                 <Typography variant="subtitle1" color={theme.colors.neutral120} sx={{
-                  display: {xs:'none', sm: 'flex'},
+                  display: { xs: 'none', sm: 'flex' },
                 }}>
-                •
+                  •
                 </Typography>
-                <Typography variant="subtitle1" 
-                sx={{
-                  color: {xs:theme.colors.neutral110 ,sm:theme.colors.neutral120 }
-                }}
+                <Typography variant="subtitle1"
+                  sx={{
+                    color: { xs: theme.colors.neutral110, sm: theme.colors.neutral120 }
+                  }}
                 >
                   {handleDate(project.date_post)}
                 </Typography>
@@ -163,13 +161,13 @@ const ProjectCard = ({ project }: Projects) => {
                 display: 'flex',
                 justifyContent: 'flex-end',
                 alignItems: 'center',
-                gap: {xs: '8px'}
+                gap: { xs: '8px' }
               }}>
-                {project.tags.map((tag)=> (
+                {project.tags.map((tag) => (
                   <Chip label={tag} sx={{
-                    fontSize:'1.3rem',
+                    fontSize: '1.3rem',
                     fontWeight: 400,
-                  }}  />
+                  }} />
                 ))}
               </Box>
             </Box>
@@ -180,19 +178,3 @@ const ProjectCard = ({ project }: Projects) => {
     );
   }
 };
-
-export default ProjectCard;
-
-/*
-<Button>
-    <Box sx={{
-      backgroundImage: `url('${/project.image}')`
-    }}>
-     
- <Box>
- <Box></Box>
- <Box></Box>
-</Box>
-</Box>
-</Button>
-*/

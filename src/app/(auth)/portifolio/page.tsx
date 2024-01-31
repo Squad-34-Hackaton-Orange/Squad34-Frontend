@@ -1,19 +1,17 @@
 "use client";
+
 import React from "react";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import ProfileCard from "@/components/Cards/UserProfileCard";
 import ProjectsGrid from "@/components/ProjectGrid";
 import TagSearch from "@/components/Input/TagSearch";
 
-
-
-const PortifolioView = () => {
-  //const user = useContext() <-- CHAMA O USER CONTEXT PARA PEGAR OS DADOS
-
+export default function PortifolioView() {
   const theme = useTheme();
 
   return (
-    <section style={{ height: "100%", width: "100vw" }}>      
+    <section style={{ height: "100%", width: "100vw" }}>
       <Box
         sx={{
           height: "100%",
@@ -28,12 +26,9 @@ const PortifolioView = () => {
           rowGap: { xs: "40px", md: "56px" },
         }}
       >
-        {/* USER CONTAINER */}
         <Box sx={{ mt: "56px" }}>
-          {/* USER CARD */}
           <ProfileCard />
         </Box>
-        {/* PROJECTS CONTAINER */}
         <Box
           sx={{
             display: "flex",
@@ -54,12 +49,9 @@ const PortifolioView = () => {
             Meus projetos
           </Typography>
           <TagSearch />
-          {/* PROJECTS GRID */}
-            <ProjectsGrid />
+          <ProjectsGrid />
         </Box>
       </Box>
     </section>
   );
 };
-
-export default PortifolioView;
