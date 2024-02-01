@@ -1,10 +1,11 @@
 "use client";
 
-import * as React from "react";
+import React, { useContext, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
+  Alert,
   Box,
-  Button,
   FormControl,
   Grid,
   IconButton,
@@ -19,6 +20,9 @@ import { FormHandles } from '@unform/core';
 import { VTextField } from "@/forms/VTextField";
 import { VOutlinedInput } from "@/forms/VOutlinedInput";
 import * as yup from 'yup';
+        import { LoginContext } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
+import { User } from "@/lib/api/user";
 
 interface IFormData {
   name: string;
@@ -92,8 +96,14 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
     ),
 });
 
+
 export default function SignUp() {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const { signup } = useContext(LoginContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [notification, setNotification] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
   const theme = useTheme();
   const formRef = React.useRef<FormHandles>(null);
 
@@ -114,6 +124,30 @@ export default function SignUp() {
     }
   };
 
+  const handleSubmit = async (data: User) => {
+    if (!data.name || !data.last_name || !data.email || !data.password) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const createdUser = await signup(data.name, data.last_name, data.email, data.password);
+
+      if (createdUser) {
+        setNotification(true);
+
+        setTimeout(() => {
+          setNotification(false);
+          setIsLoading(false);
+          router.push("/login");
+        }, 6000);
+      }
+    } catch (error) {
+      console.error("Erro ao criar usuário:", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Grid
       container
@@ -127,6 +161,7 @@ export default function SignUp() {
         justifyContent: { md: "flex-end" },
       }}
     >
+
       <Grid item xs={16} md={8} xl={10}>
         <Box
           sx={{
@@ -139,6 +174,25 @@ export default function SignUp() {
             margin: "0 auto",
           }}
         >
+
+          <Box sx={{
+            position: "absolute",
+            top: "6rem",
+            padding: "1rem",
+            gap: 1,
+          }}>
+            {notification ? (
+              <Alert variant="filled" severity="success"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Cadastro feito com sucesso. Você será redirecionado para o login.
+              </Alert>
+            ) : null}
+          </Box>
+
           <Typography
             sx={{
               marginBottom: 2,
@@ -154,8 +208,13 @@ export default function SignUp() {
             Cadastre-se
           </Typography>
 
-          <Box>
-            <Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>
+        {/*<Box>
+            <Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>}*/}
+
+          <Form
+            onSubmit={(data) => handleSubmit(data)}
+            placeholder="Cadastro">
+            <Box>
               <Box
                 display="flex"
                 gap={1}
@@ -174,6 +233,7 @@ export default function SignUp() {
                   </InputLabel>
 
                   <VTextField required id="name" name="name" aria-label="name" label="Nome" />
+
                 </FormControl>
 
                 <FormControl
@@ -182,6 +242,7 @@ export default function SignUp() {
                   margin="normal"
                   sx={{ backgroundColor: "#fff" }}
                 >
+
                   <InputLabel htmlFor="lastName" style={{ visibility: "hidden" }}>
                     Sobrenome
                   </InputLabel>
@@ -205,8 +266,9 @@ export default function SignUp() {
                 <InputLabel htmlFor="email" style={{ visibility: "hidden" }}>
                   Email
                 </InputLabel>
-                {/* Substitua o TextField pelo VTextField */}
+                
                 <VTextField required id="email" name="email" aria-label="email" label="Email Address" />
+
               </FormControl>
 
               <FormControl
@@ -215,7 +277,8 @@ export default function SignUp() {
                 margin="normal"
                 sx={{ backgroundColor: "#fff" }}
               >
-                <div style={{ position: "relative" }}>
+
+        {/*<div style={{ position: "relative" }}>
                   <VOutlinedInput
                     name="password"
                     label="Password"
@@ -238,9 +301,31 @@ export default function SignUp() {
                   A senha deve conter entre 8 e 16 caracteres, e no mínimo: uma letra maiúscula, um número e um caractere especial.
                 </Typography>
               </FormControl>
+              
+              <Button*/}
 
+                <VOutlinedInput
+                  name="password"
+                  label="Password"
+                  id="password"
+                  autoComplete="password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="Password"
+                        onClick={() => setShowPassword((show) => !show)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
 
-              <Button
+              <LoadingButton
+                loading={isLoading}
                 type="submit"
                 variant="contained"
                 fullWidth
@@ -252,11 +337,16 @@ export default function SignUp() {
                 }}
               >
                 Cadastrar
+                {/*
               </Button>
             </Form>
           </Box>
+          */}
+              </LoadingButton>
+            </Box>
+          </Form>
         </Box>
       </Grid>
-    </Grid>
+    </Grid >
   );
 }

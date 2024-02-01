@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-import { Project } from "./project"
-
-export type User = Partial<{
-  id: number
-  name: string
-  last_name: string
-  email: string
-  password: string
-  country: string | undefined
-  project_id: number[]
-  project: Project[]
-  created_at: Date
-  updated_at: Date
-  deleted_at: Date
-}>
-=======
 import { api } from ".";
 import { Id } from "./id";
 import { Project } from "./project";
@@ -48,8 +31,13 @@ export const get = async ({ id }: GetByIdParams): Promise<User> => {
  * @param data User data
  * @returns A promise of a user
  */
-export const create = async (data: User): Promise<User> => {
-  return (await api.post(`/user/sign`, data)).data;
+export const create = async ({ name, last_name, email, password }: User): Promise<User> => {
+  return (await api.post(`/user/sign`, {
+    name,
+    last_name,
+    email,
+    password
+  })).data;
 }
 
 /**
@@ -76,7 +64,6 @@ export const remove = async ({ id }: GetByIdParams): Promise<void> => {
  * @param data User data
  * @returns A promise of a user
  */
-export const login = async ({ email, password }: User): Promise<User> => {
+export const login = async (email: string, password: string): Promise<User> => {
   return (await api.post(`/user/login`, { email, password })).data;
 }
->>>>>>> develop

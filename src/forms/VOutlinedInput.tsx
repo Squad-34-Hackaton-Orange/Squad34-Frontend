@@ -25,6 +25,7 @@ export const VOutlinedInput = ({ name, label, ...rest }: VOutlinedInputProps) =>
     });
   }, [registerField, fieldName, value]);
 
+
   const handleKeyDown = () => {
     if (error) {
       clearError();

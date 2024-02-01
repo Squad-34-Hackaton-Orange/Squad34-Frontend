@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useContext, useState, useRef } from "react";
+
 import {
   Box,
-  Button,
   FormControl,
   Grid,
   IconButton,
@@ -24,6 +24,10 @@ import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
 import { VTextField } from "@/forms/VTextField";
 import { VOutlinedInput } from "@/forms/VOutlinedInput";
+        import { jwtDecode } from "jwt-decode";
+import { User } from "@/lib/api/user";
+import { useRouter } from "next/navigation";
+import { LoadingButton } from "@mui/lab";
 
 import * as yup from 'yup';
 
@@ -64,9 +68,13 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
 export default function Login() {
   const { signin, user } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
   const theme = useTheme();
 
-  const formRef = useRef<FormHandles>(null);
+
+  /*const formRef = useRef<FormHandles>(null);
 
   //TRATAR ESSES DADOS NO BANCO DE DADOS console.log(dados);
   const handleSubmit = (dados: IFormData) => {
@@ -87,7 +95,28 @@ export default function Login() {
       formRef.current?.setErrors(validationErrors);
     })
     
-  }
+  }*/
+
+
+  const handleSubmit = async (data: User) => {
+    if (!data.email || !data.password) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const userExist = await signin(data.email, data.password);
+
+      if (userExist) {
+        setIsLoading(false);
+        router.push("/portifolio")
+      };
+
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Grid
@@ -125,7 +154,6 @@ export default function Login() {
           <Box
             sx={{
               textAlign: "center",
-              marginBottom: 5,
             }}
           >
             <Typography
@@ -142,7 +170,16 @@ export default function Login() {
             >
               Entre no Orange Portfólio
             </Typography>
+          </Box>
 
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 5,
+            }}
+          >
             <GoogleOAuthProvider
               clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}>
               <GoogleLogin
@@ -169,10 +206,12 @@ export default function Login() {
               Faça login com email
             </Typography>
 
-            <Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>
+        {/*<Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>*/}
 
             
 
+
+            <Form onSubmit={(data) => handleSubmit(data)} placeholder="Login">
               <FormControl
                 variant="outlined"
                 fullWidth
@@ -202,6 +241,7 @@ export default function Login() {
                   name="password"
                   label="Password"
                   id="password"
+                  autoComplete="password"
                   type={showPassword ? "text" : "password"}
                   endAdornment={
                     <InputAdornment position="end">
@@ -217,7 +257,9 @@ export default function Login() {
                 />
               </FormControl>
 
-              <Button
+
+              <LoadingButton
+                loading={isLoading}
                 type="submit"
                 variant="contained"
                 fullWidth
@@ -229,7 +271,8 @@ export default function Login() {
                 }}
               >
                 Entrar
-              </Button>
+
+              </LoadingButton>
             </Form>
 
             <Link
