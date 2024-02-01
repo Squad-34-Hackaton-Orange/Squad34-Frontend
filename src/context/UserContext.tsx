@@ -3,7 +3,6 @@
 import React, { ReactNode, createContext, useEffect, useState } from "react";
 import { User, create, login } from "@/lib/api/user";
 import { jwtDecode } from "jwt-decode";
-import { Token } from "@/lib/api/token";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
 interface LoginContextProps {
@@ -36,8 +35,6 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
 
       if (validateLogin) {
         const token = validateLogin.token;
-
-        console.log({ token });
 
         if (token) {
           Cookies.set("AccessToken", token, {
@@ -76,7 +73,9 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   }, []);
 
   useEffect(() => {
-    if (!isLogged) {
+    const token = Cookies.get("AccessToken");
+
+    if (!isLogged && !token) {
       router.push("/login");
     }
   }, [isLogged]);

@@ -18,9 +18,6 @@ interface Projects {
 export default function ProjectCard({ project, hasTag = true }: Projects) {
   const theme = useTheme();
 
-  console.log(project);
-  console.log(project?.image);
-
   const handleDate = (dateString: Date) => {
     const dia = dateString.getUTCDate();
     const mes = dateString.getUTCMonth() + 1;

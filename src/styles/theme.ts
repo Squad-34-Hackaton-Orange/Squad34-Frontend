@@ -18,7 +18,7 @@ const theme = createTheme({
       lg: 1200, // small desktop
       xl: 1536, // desktop 
     },
-  },  
+  },
   colors: {
     primary70: "#EDEFF2",
     primary80: "#444466",
@@ -93,17 +93,17 @@ const theme = createTheme({
           minHeight: "100vh",
           fontSize: '10px'
           // TODO: RESETAR O TAMANHO PARA 10 PX OU 62,75%
-        }        
-      },      
-    },   
-    MuiTypography:{
+        }
+      },
+    },
+    MuiTypography: {
       defaultProps: {
         variantMapping: {
           // Map the new variant to render a <body1> by default
           label: 'body1',
         },
       },
-      styleOverrides:{
+      styleOverrides: {
         h1: {
           fontSize: "9.6rem",
           fontWeight: 300,
@@ -150,7 +150,7 @@ const theme = createTheme({
           fontWeight: 500,
           letterSpacing: "0.015rem",
         },
-        body1:{
+        body1: {
           fontSize: "1.6rem",
           lineHeight: "1.6rem",
           fontWeight: 400,
@@ -162,13 +162,13 @@ const theme = createTheme({
           fontWeight: 400,
           letterSpacing: "0.025rem",
         },
-        caption:{
+        caption: {
           fontSize: "1.2rem",
           lineHeight: "1.6rem",
           fontWeight: 400,
           letterSpacing: "0.04rem",
         },
-        overline:{
+        overline: {
           fontSize: "1rem",
           lineHeight: "1rem",
           fontWeight: 400,
@@ -179,15 +179,9 @@ const theme = createTheme({
           lineHeight: "2.6rem",
           fontWeight: 500,
           letterSpacing: "0.046rem",
-        },  
-        label:{
-          fontSize: "1.6rem",
-          lineHeight: "1.6rem",
-          fontWeight: 500,
-          letterSpacing: "0.01rem",
         },
       }
-    } 
+    }
   }
 });
 

@@ -32,9 +32,6 @@ export default function Login() {
   const router = useRouter();
   const theme = useTheme();
 
-  console.log({ isLogged });
-  console.log({ user });
-
   const handleSubmit = async (data: User) => {
     if (!data) {
       return;
