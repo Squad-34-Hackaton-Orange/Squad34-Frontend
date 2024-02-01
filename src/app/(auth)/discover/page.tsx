@@ -3,6 +3,7 @@
 import ProjectCard from "@/components/Cards/ProjectCard";
 import TagSearch from "@/components/Input/TagSearch";
 import ProjectsGrid from "@/components/ProjectGrid";
+import isAuth from "@/components/isAuth";
 import { Box, Typography } from "@mui/material";
 
 type ProjectsType = {
@@ -16,7 +17,7 @@ type ProjectsType = {
 }
 
 
-export default function DiscoverView() {
+function DiscoverView() {
 
   const projects: ProjectsType[] = [{
     date_post: new Date(),
@@ -80,3 +81,5 @@ export default function DiscoverView() {
     </section>
   );
 };
+
+export default isAuth(DiscoverView);
