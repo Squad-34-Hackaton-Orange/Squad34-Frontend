@@ -1,12 +1,9 @@
-"use client";
+"use client"
 
-import React from "react";
-import { Box, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import ProfileCard from "@/components/Cards/UserProfileCard";
-import ProjectsGrid from "@/components/ProjectGrid";
-import TagSearch from "@/components/Input/TagSearch";
 import ProjectCard from "@/components/Cards/ProjectCard";
+import TagSearch from "@/components/Input/TagSearch";
+import ProjectsGrid from "@/components/ProjectGrid";
+import { Box, Typography } from "@mui/material";
 
 type ProjectsType = {
   date_post: Date,
@@ -19,8 +16,7 @@ type ProjectsType = {
 }
 
 
-export default function PortifolioView() {
-  const theme = useTheme();
+export default function DiscoverView() {
 
   const projects: ProjectsType[] = [{
     date_post: new Date(),
@@ -41,7 +37,6 @@ export default function PortifolioView() {
     tags: ['UX', 'Web']
   }];
 
-
   return (
     <section style={{ height: "100%", width: "100vw" }}>
       <Box
@@ -59,8 +54,11 @@ export default function PortifolioView() {
         }}
       >
         <Box sx={{ mt: "56px" }}>
-          <ProfileCard />
+          <Typography variant="h4" textAlign="center">
+            Junte-se à comunidade de inovação, inspiração e descobertas, transformando experiências em conexões inesquecíveis
+          </Typography>
         </Box>
+
         <Box
           sx={{
             display: "flex",
@@ -68,22 +66,13 @@ export default function PortifolioView() {
             alignItems: "flex-start",
             justifyContent: "center",
             width: "100%",
+            marginTop: 6,
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              color: theme.colors.neutral130,
-              mb: "16px",
-              opacity: "0.6",
-            }}
-          >
-            Meus projetos
-          </Typography>
           <TagSearch />
           <ProjectsGrid>
             {projects?.map((project) => (
-              <ProjectCard key={project.id_user} project={project} hasTag={true} />
+              <ProjectCard key={project.id_user} project={project} hasTag={false} />
             ))}
           </ProjectsGrid>
         </Box>
