@@ -189,9 +189,9 @@ export default function Login() {
                     visibility: "hidden",
                   }}
                 >
-                  Email Address
+                  Email
                 </InputLabel>
-                <VTextField name="email" id="email" aria-label="email" label="Email Address" />
+                <VTextField required name="email" id="email" aria-label="email" label="Email" />
               </FormControl>
 
               <FormControl
@@ -203,7 +203,7 @@ export default function Login() {
               >
                 <VOutlinedInput
                   name="password"
-                  label="Password"
+                  label="Senha"
                   id="password"
                   autoComplete="password"
                   type={showPassword ? "text" : "password"}

@@ -11,6 +11,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   Typography,
 } from "@mui/material";
 
@@ -261,9 +262,13 @@ export default function SignUp() {
                 <InputLabel htmlFor="email" style={{ visibility: "hidden" }}>
                   Email
                 </InputLabel>
-
-                <VTextField required id="email" name="email" aria-label="email" label="Email Address" />
-
+                <VTextField
+                  required
+                  name="email"
+                  id="email"
+                  aria-label="email"
+                  label="Email"
+                />
               </FormControl>
 
               <FormControl
@@ -275,7 +280,7 @@ export default function SignUp() {
 
                 <VOutlinedInput
                   name="password"
-                  label="Password"
+                  label="Senha"
                   id="password"
                   autoComplete="password"
                   type={showPassword ? "text" : "password"}
@@ -308,6 +313,14 @@ export default function SignUp() {
                 Cadastrar
               </LoadingButton>
             </Box>
+            <Link
+              variant="subtitle1"
+              href="/login"
+              underline="none"
+              sx={{ color: theme.colors.neutral100 }}
+            >
+              Já tem uma conta? Faça login
+            </Link>
           </Form>
         </Box>
       </Grid>
