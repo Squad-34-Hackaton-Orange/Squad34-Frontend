@@ -3,6 +3,7 @@
 import ProjectCard from "@/components/Cards/ProjectCard";
 import TagSearch from "@/components/Input/TagSearch";
 import ProjectsGrid from "@/components/ProjectGrid";
+import isAuth from "@/components/isAuth";
 import { Box, Typography } from "@mui/material";
 
 type ProjectsType = {
@@ -15,8 +16,7 @@ type ProjectsType = {
   tags: string[]
 }
 
-
-export default function DiscoverView() {
+function DiscoverView() {
 
   const projects: ProjectsType[] = [{
     date_post: new Date(),
@@ -33,7 +33,7 @@ export default function DiscoverView() {
     description: "Descrição do projeto teste",
     link: "https://github.com/camilasoares",
     image: '/project-camila.svg',
-    id_user: 1,
+    id_user: 2,
     tags: ['UX', 'Web']
   }];
 
@@ -80,3 +80,5 @@ export default function DiscoverView() {
     </section>
   );
 };
+
+export default isAuth(DiscoverView);

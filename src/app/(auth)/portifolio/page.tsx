@@ -6,6 +6,7 @@ import ProfileCard from "@/components/Cards/UserProfileCard";
 import ProjectsGrid from "@/components/ProjectGrid";
 import TagSearch from "@/components/Input/TagSearch";
 import ProjectCard from "@/components/Cards/ProjectCard";
+import isAuth from "@/components/isAuth";
 
 type ProjectsType = {
   date_post: Date,
@@ -18,7 +19,7 @@ type ProjectsType = {
 }
 
 
-export default function PortifolioView() {
+function PortifolioView() {
   const theme = useTheme();
 
   const projects: ProjectsType[] = [{
@@ -36,7 +37,7 @@ export default function PortifolioView() {
     description: "Descrição do projeto teste",
     link: "https://github.com/camilasoares",
     image: '/project-camila.svg',
-    id_user: 1,
+    id_user: 2,
     tags: ['UX', 'Web']
   }];
 
@@ -90,3 +91,5 @@ export default function PortifolioView() {
     </section>
   );
 };
+
+export default isAuth(PortifolioView);

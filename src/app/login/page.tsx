@@ -17,24 +17,16 @@ import { useTheme } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
-// import { Google } from "@/components/Icons/Google";
 import { jwtDecode } from "jwt-decode";
 import { LoginContext } from "@/context/UserContext";
 import { Form } from "@unform/web";
-import { FormHandles } from '@unform/core';
-import { VTextField } from "@/forms/VTextField";
-import { VOutlinedInput } from "@/forms/VOutlinedInput";
-        import { jwtDecode } from "jwt-decode";
 import { User } from "@/lib/api/user";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "@mui/lab";
+import { VTextField } from "@/components/forms/VTextField";
+import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 
 import * as yup from 'yup';
-
-interface IFormData {
-  email: string;
-  password: string;
-}
 
 const formValidationSchema: yup.Schema<any> = yup.object().shape({
   email: yup.string().transform((originalValue) => {
@@ -66,34 +58,11 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
 });
 
 export default function Login() {
-  const { signin, user, isLogged } = useContext(LoginContext);
+  const { signin, isLogged } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const theme = useTheme();
-
-  /*const formRef = useRef<FormHandles>(null);
-
-  //TRATAR ESSES DADOS NO BANCO DE DADOS console.log(dados);
-  const handleSubmit = (dados: IFormData) => {
-
-    formValidationSchema.validate(dados, {abortEarly: false })
-    .then((dadosValidados) =>{
-      console.log(dados);
-    })
-    .catch((errors: yup.ValidationError) => {
-      const validationErrors: {[key: string]: string} = {};
-
-      errors.inner.forEach(error => {
-        if (!error.path) return;
-
-        validationErrors[error.path] = error.message;
-      });
-      console.log(errors.inner);
-      formRef.current?.setErrors(validationErrors);
-    })
-    
-  }*/
 
   const handleSubmit = async (data: User) => {
     if (!data) {
@@ -206,11 +175,6 @@ export default function Login() {
               Faça login com email
             </Typography>
 
-        {/*<Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>*/}
-
-            
-
-
             <Form onSubmit={(data) => handleSubmit(data)} placeholder="Login">
               <FormControl
                 variant="outlined"
@@ -225,9 +189,9 @@ export default function Login() {
                     visibility: "hidden",
                   }}
                 >
-                  Email Address
+                  Email
                 </InputLabel>
-                <VTextField name="email" id="email" aria-label="email" label="Email Address" />
+                <VTextField required name="email" id="email" aria-label="email" label="Email" />
               </FormControl>
 
               <FormControl
@@ -239,7 +203,7 @@ export default function Login() {
               >
                 <VOutlinedInput
                   name="password"
-                  label="Password"
+                  label="Senha"
                   id="password"
                   autoComplete="password"
                   type={showPassword ? "text" : "password"}
@@ -256,7 +220,6 @@ export default function Login() {
                   }
                 />
               </FormControl>
-
 
               <LoadingButton
                 loading={isLoading}

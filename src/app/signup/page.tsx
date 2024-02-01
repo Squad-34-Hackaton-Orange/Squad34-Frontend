@@ -11,18 +11,19 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   Typography,
 } from "@mui/material";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
-import { VTextField } from "@/forms/VTextField";
-import { VOutlinedInput } from "@/forms/VOutlinedInput";
 import * as yup from 'yup';
-        import { LoginContext } from "@/context/UserContext";
+import { LoginContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { User } from "@/lib/api/user";
+import { VTextField } from "@/components/forms/VTextField";
+import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 
 interface IFormData {
   name: string;
@@ -107,41 +108,39 @@ export default function SignUp() {
   const theme = useTheme();
   const formRef = React.useRef<FormHandles>(null);
 
-  const handleSubmit = async (data: IFormData) => {
-    try {
-      await formValidationSchema.validate(data, { abortEarly: false });
-      console.log("Dados válidos:", data);
-    } catch (errors: yup.ValidationError | any) {
-      const validationErrors: { [key: string]: string } = {};
+  // Validação de formulário com yup
+  // const handleSubmit = async (data: IFormData) => {
+  //   try {
+  //     await formValidationSchema.validate(data, { abortEarly: false });
+  //     console.log("Dados válidos:", data);
+  //   } catch (errors: yup.ValidationError | any) {
+  //     const validationErrors: { [key: string]: string } = {};
 
-      errors.inner.forEach((error: any) => {
-        if (!error.path) return;
+  //     errors.inner.forEach((error: any) => {
+  //       if (!error.path) return;
 
-        validationErrors[error.path] = error.message;
-      });
+  //       validationErrors[error.path] = error.message;
+  //     });
 
-      formRef.current?.setErrors(validationErrors);
-    }
-  };
+  //     formRef.current?.setErrors(validationErrors);
+  //   }
+  // };
 
   const handleSubmit = async (data: User) => {
-    if (!data.name || !data.last_name || !data.email || !data.password) {
+    if (!data) {
       return;
     }
 
     try {
       setIsLoading(true);
-      const createdUser = await signup(data.name, data.last_name, data.email, data.password);
+      await signup(data);
+      setNotification(true);
 
-      if (createdUser) {
-        setNotification(true);
-
-        setTimeout(() => {
-          setNotification(false);
-          setIsLoading(false);
-          router.push("/login");
-        }, 6000);
-      }
+      setTimeout(() => {
+        setNotification(false);
+        setIsLoading(false);
+        router.push("/login");
+      }, 6000);
     } catch (error) {
       console.error("Erro ao criar usuário:", error);
       setIsLoading(false);
@@ -208,9 +207,6 @@ export default function SignUp() {
             Cadastre-se
           </Typography>
 
-        {/*<Box>
-            <Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>}*/}
-
           <Form
             onSubmit={(data) => handleSubmit(data)}
             placeholder="Cadastro">
@@ -243,15 +239,15 @@ export default function SignUp() {
                   sx={{ backgroundColor: "#fff" }}
                 >
 
-                  <InputLabel htmlFor="lastName" style={{ visibility: "hidden" }}>
+                  <InputLabel htmlFor="last_name" style={{ visibility: "hidden" }}>
                     Sobrenome
                   </InputLabel>
 
                   <VTextField
                     required
-                    id="lastName"
-                    name="lastName"
-                    aria-label="name"
+                    id="last_name"
+                    name="last_name"
+                    aria-label="last_name"
                     label="Sobrenome"
                   />
                 </FormControl>
@@ -266,9 +262,12 @@ export default function SignUp() {
                 <InputLabel htmlFor="email" style={{ visibility: "hidden" }}>
                   Email
                 </InputLabel>
-                
-                <VTextField required id="email" name="email" aria-label="email" label="Email Address" />
-
+                <VTextField
+                  name="email"
+                  id="email"
+                  aria-label="email"
+                  label="Email"
+                />
               </FormControl>
 
               <FormControl
@@ -278,35 +277,9 @@ export default function SignUp() {
                 sx={{ backgroundColor: "#fff" }}
               >
 
-        {/*<div style={{ position: "relative" }}>
-                  <VOutlinedInput
-                    name="password"
-                    label="Password"
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="Password"
-                          onClick={() => setShowPassword((show) => !show)}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </div>
-                <Typography variant="caption" color="textSecondary" textAlign={'left'} sx={{ marginTop: 1 }}>
-                  A senha deve conter entre 8 e 16 caracteres, e no mínimo: uma letra maiúscula, um número e um caractere especial.
-                </Typography>
-              </FormControl>
-              
-              <Button*/}
-
                 <VOutlinedInput
                   name="password"
-                  label="Password"
+                  label="Senha"
                   id="password"
                   autoComplete="password"
                   type={showPassword ? "text" : "password"}
@@ -337,13 +310,16 @@ export default function SignUp() {
                 }}
               >
                 Cadastrar
-                {/*
-              </Button>
-            </Form>
-          </Box>
-          */}
               </LoadingButton>
             </Box>
+            <Link
+              variant="subtitle1"
+              href="/login"
+              underline="none"
+              sx={{ color: theme.colors.neutral100 }}
+            >
+              Já tem uma conta? Faça login
+            </Link>
           </Form>
         </Box>
       </Grid>
