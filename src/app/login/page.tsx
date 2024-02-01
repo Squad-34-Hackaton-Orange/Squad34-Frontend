@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   FormControl,
@@ -26,34 +26,36 @@ import { useRouter } from "next/navigation";
 import { LoadingButton } from "@mui/lab";
 
 export default function Login() {
-  const { signin, user } = useContext(LoginContext);
+  const { signin, user, isLogged } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
   const theme = useTheme();
 
-  console.log(user);
+  console.log({ isLogged });
+  console.log({ user });
 
   const handleSubmit = async (data: User) => {
-    if (!data.email || !data.password) {
+    if (!data) {
       return;
     }
 
     try {
       setIsLoading(true);
-      const userExist = await signin(data.email, data.password);
-
-      if (userExist) {
-        setIsLoading(false);
-        router.push("/portifolio")
-      };
+      await signin(data);
 
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isLogged) {
+      setIsLoading(false);
+      router.push("/portifolio");
+    };
+  }, [isLogged])
 
   return (
     <Grid
@@ -122,7 +124,8 @@ export default function Login() {
               <GoogleLogin
                 onSuccess={(response) => {
                   let decode = jwtDecode(response.credential as string);
-                  console.log(decode);
+                  return decode;
+                  // console.log(decode);
                 }}
                 onError={() => console.log("Failed")}
               />
