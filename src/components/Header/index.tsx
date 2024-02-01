@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Link, Typography, Box } from "@mui/material";
 import { Logo } from "../Logo";
-import ButtonHambuerguer from "../buttons/HamburguerButton";
+import MenuHamburguer from "../HamburguerMenu";
 import AvatarButton from "../buttons/AvatarButton";
 import NotificationButton from "../buttons/notificationButton";
 
@@ -32,7 +32,7 @@ export default function Header() {
           justifyContent: "space-between",
         }}>
           {/* MENU MOBILE */}
-          <ButtonHambuerguer />           
+          <MenuHamburguer />           
           {/* <Image src={Logo} width={83} height={31} alt="orange-logo" sizes="(min-width: 900px) 111px, 41px" /> */}
           <Logo alt={"orange-logo"} />
           <Box
