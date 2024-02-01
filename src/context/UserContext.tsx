@@ -5,17 +5,21 @@ import { User, create, login } from "@/lib/api/user";
 interface LoginContextProps {
   isLogged: boolean;
   user: User | null;
-  signin: (email: string, senha: string) => Promise<any>;
+  signin: (email: string, password: string) => Promise<User>;
   logout: () => void;
-  signup: (name: string, last_name: string, email: string, password: string) => Promise<void>;
+  signup: (name: string, last_name: string, email: string, password: string) => Promise<User>;
 }
 
 export const LoginContext = createContext<LoginContextProps>({
   isLogged: false,
   user: null,
-  signin: async () => { },
+  signin: async (email: string, password: string) => {
+    return { email, password };
+  },
   logout: () => { },
-  signup: async () => { },
+  signup: async (name: string, last_name: string, email: string, password: string) => {
+    return { email, password, name, last_name };
+  },
 });
 interface LoginProviderProps {
   children: ReactNode;
@@ -25,13 +29,14 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const auth = async (email: string, senha: string) => {
-    const getUser = await login({ email: email, password: senha });
+  const auth = async (email: string, password: string) => {
+    const getUser = await login(email, password);
 
     if (getUser) {
       setUser(getUser);
       setIsLogged(true);
     }
+
     return getUser;
   };
 
@@ -41,7 +46,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   };
 
   const signup = async (name: string, last_name: string, email: string, password: string) => {
-    await create({ name, last_name, email, password });
+    return await create({ name, last_name, email, password });
   };
 
   return (
