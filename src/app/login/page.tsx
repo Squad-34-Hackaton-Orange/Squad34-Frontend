@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
+
 import {
   Box,
   FormControl,
@@ -16,14 +17,53 @@ import { useTheme } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
+// import { Google } from "@/components/Icons/Google";
 import { jwtDecode } from "jwt-decode";
 import { LoginContext } from "@/context/UserContext";
 import { Form } from "@unform/web";
+import { FormHandles } from '@unform/core';
 import { VTextField } from "@/forms/VTextField";
 import { VOutlinedInput } from "@/forms/VOutlinedInput";
+        import { jwtDecode } from "jwt-decode";
 import { User } from "@/lib/api/user";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "@mui/lab";
+
+import * as yup from 'yup';
+
+interface IFormData {
+  email: string;
+  password: string;
+}
+
+const formValidationSchema: yup.Schema<any> = yup.object().shape({
+  email: yup.string().transform((originalValue) => {
+    if (originalValue.trim() === '') {
+      return null;
+    }
+    return originalValue;
+  })
+    .min(5, 'A email deve ter pelo menos 5 caracteres')
+    .max(180, 'A senha deve ter no máximo 180 caracteres')
+    .required('O email é obrigatório')
+    .email('Insira um email válido'),
+  password: yup
+    .string().transform((originalValue) => {
+      if (originalValue.trim() === '') {
+        return null;
+      }
+      return originalValue;
+    })
+    .min(8, 'A senha deve ter pelo menos 8 caracteres')
+    .max(16, 'A senha deve ter no máximo 16 caracteres')
+    .matches(/[0-9]/, 'A senha deve conter pelo menos um número')
+    .matches(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      'A senha deve conter pelo menos um caractere especial'
+    )
+    .matches(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
+    .required('A senha é obrigatória'),
+});
 
 export default function Login() {
   const { signin, user, isLogged } = useContext(LoginContext);
@@ -31,6 +71,29 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const theme = useTheme();
+
+  /*const formRef = useRef<FormHandles>(null);
+
+  //TRATAR ESSES DADOS NO BANCO DE DADOS console.log(dados);
+  const handleSubmit = (dados: IFormData) => {
+
+    formValidationSchema.validate(dados, {abortEarly: false })
+    .then((dadosValidados) =>{
+      console.log(dados);
+    })
+    .catch((errors: yup.ValidationError) => {
+      const validationErrors: {[key: string]: string} = {};
+
+      errors.inner.forEach(error => {
+        if (!error.path) return;
+
+        validationErrors[error.path] = error.message;
+      });
+      console.log(errors.inner);
+      formRef.current?.setErrors(validationErrors);
+    })
+    
+  }*/
 
   const handleSubmit = async (data: User) => {
     if (!data) {
@@ -143,6 +206,11 @@ export default function Login() {
               Faça login com email
             </Typography>
 
+        {/*<Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>*/}
+
+            
+
+
             <Form onSubmit={(data) => handleSubmit(data)} placeholder="Login">
               <FormControl
                 variant="outlined"
@@ -189,6 +257,7 @@ export default function Login() {
                 />
               </FormControl>
 
+
               <LoadingButton
                 loading={isLoading}
                 type="submit"
@@ -202,6 +271,7 @@ export default function Login() {
                 }}
               >
                 Entrar
+
               </LoadingButton>
             </Form>
 
