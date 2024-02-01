@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 
 import {
   Box,
@@ -66,13 +66,11 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
 });
 
 export default function Login() {
-  const { signin, user } = useContext(LoginContext);
+  const { signin, user, isLogged } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
   const theme = useTheme();
-
 
   /*const formRef = useRef<FormHandles>(null);
 
@@ -97,26 +95,27 @@ export default function Login() {
     
   }*/
 
-
   const handleSubmit = async (data: User) => {
-    if (!data.email || !data.password) {
+    if (!data) {
       return;
     }
 
     try {
       setIsLoading(true);
-      const userExist = await signin(data.email, data.password);
-
-      if (userExist) {
-        setIsLoading(false);
-        router.push("/portifolio")
-      };
+      await signin(data);
 
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isLogged) {
+      setIsLoading(false);
+      router.push("/portifolio");
+    };
+  }, [isLogged])
 
   return (
     <Grid
@@ -185,7 +184,8 @@ export default function Login() {
               <GoogleLogin
                 onSuccess={(response) => {
                   let decode = jwtDecode(response.credential as string);
-                  console.log(decode);
+                  return decode;
+                  // console.log(decode);
                 }}
                 onError={() => console.log("Failed")}
               />
