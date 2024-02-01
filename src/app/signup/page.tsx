@@ -1,20 +1,25 @@
 "use client";
 
+<<<<<<< HEAD
 import * as React from "react";
 import { useTheme, Theme } from "@mui/material/styles";
+=======
+import React, { useContext, useState } from "react";
+import { useTheme } from "@mui/material/styles";
+import LoadingButton from '@mui/lab/LoadingButton';
+>>>>>>> develop
 import {
+  Alert,
   Box,
-  Button,
   FormControl,
   Grid,
   IconButton,
   InputAdornment,
   InputLabel,
-  OutlinedInput,
-  TextField,
   Typography,
 } from "@mui/material";
 
+<<<<<<< HEAD
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { object, string, InferType } from 'yup';
 import * as yup from 'yup';
@@ -91,6 +96,48 @@ const SignUp: React.FC<SignUpProps> = () => {
       }
     }
   };
+=======
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { LoginContext } from "@/context/UserContext";
+import { Form } from "@unform/web";
+import { VTextField } from "@/forms/VTextField";
+import { VOutlinedInput } from "@/forms/VOutlinedInput";
+import { useRouter } from "next/navigation";
+import { User } from "@/lib/api/user";
+
+export default function SignUp() {
+  const { signup } = useContext(LoginContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [notification, setNotification] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+  const theme = useTheme();
+>>>>>>> develop
+
+  const handleSubmit = async (data: User) => {
+    if (!data.name || !data.last_name || !data.email || !data.password) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const createdUser = await signup(data.name, data.last_name, data.email, data.password);
+
+      if (createdUser) {
+        setNotification(true);
+
+        setTimeout(() => {
+          setNotification(false);
+          setIsLoading(false);
+          router.push("/login");
+        }, 6000);
+      }
+    } catch (error) {
+      console.error("Erro ao criar usuário:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Grid
@@ -104,7 +151,7 @@ const SignUp: React.FC<SignUpProps> = () => {
         backgroundSize: { md: "contain" },
         justifyContent: { md: "flex-end" },
       }}
-    >      
+    >
 
       <Grid item xs={16} md={8} xl={10}>
         <Box
@@ -118,6 +165,25 @@ const SignUp: React.FC<SignUpProps> = () => {
             margin: "0 auto",
           }}
         >
+
+          <Box sx={{
+            position: "absolute",
+            top: "6rem",
+            padding: "1rem",
+            gap: 1,
+          }}>
+            {notification ? (
+              <Alert variant="filled" severity="success"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Cadastro feito com sucesso. Você será redirecionado para o login.
+              </Alert>
+            ) : null}
+          </Box>
+
           <Typography
             sx={{
               marginBottom: 2,
@@ -133,25 +199,47 @@ const SignUp: React.FC<SignUpProps> = () => {
             Cadastre-se
           </Typography>
 
-          <Box>
-            <Box
-              display="flex"
-              gap={1}
-              sx={{
-                flexDirection: { xs: "column", sm: "row" },
-              }}
-            >
-              <FormControl
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                sx={{ backgroundColor: "#fff" }}
+          <Form
+            onSubmit={(data) => handleSubmit(data)}
+            placeholder="Cadastro">
+            <Box>
+              <Box
+                display="flex"
+                gap={1}
+                sx={{
+                  flexDirection: { xs: "column", sm: "row" },
+                }}
               >
-                <InputLabel htmlFor="name" style={{ visibility: "hidden" }}>
-                  Nome
-                </InputLabel>
-                <TextField required id="name" aria-label="name" label="Nome" />
-              </FormControl>
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  sx={{ backgroundColor: "#fff" }}
+                >
+                  <InputLabel htmlFor="name" style={{ visibility: "hidden" }}>
+                    Nome
+                  </InputLabel>
+                  <VTextField required name="name" id="name" aria-label="name" label="Nome" />
+                </FormControl>
+
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  sx={{ backgroundColor: "#fff" }}
+                >
+                  <InputLabel htmlFor="last_name" style={{ visibility: "hidden" }}>
+                    Sobrenome
+                  </InputLabel>
+                  <VTextField
+                    required
+                    name="last_name"
+                    id="last_name"
+                    aria-label="name"
+                    label="Sobrenome"
+                  />
+                </FormControl>
+              </Box>
 
               <FormControl
                 variant="outlined"
@@ -159,11 +247,12 @@ const SignUp: React.FC<SignUpProps> = () => {
                 margin="normal"
                 sx={{ backgroundColor: "#fff" }}
               >
-                <InputLabel htmlFor="lastName" style={{ visibility: "hidden" }}>
-                  Sobrenome
+                <InputLabel htmlFor="email" style={{ visibility: "hidden" }}>
+                  Email
                 </InputLabel>
-                <TextField
+                <VTextField
                   required
+<<<<<<< HEAD
                   id="lastName"
                   name="lastName"
                   aria-label="lastName"
@@ -172,9 +261,57 @@ const SignUp: React.FC<SignUpProps> = () => {
                   onChange={handleChange}
                   error={!!formErrors.lastName}
                   helperText={formErrors.lastName}
+=======
+                  name="email"
+                  id="email"
+                  aria-label="email"
+                  label="Email Address"
+>>>>>>> develop
                 />
               </FormControl>
+
+              <FormControl
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                sx={{ backgroundColor: "#fff" }}
+              >
+                <VOutlinedInput
+                  name="password"
+                  label="Password"
+                  id="password"
+                  autoComplete="password"
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="Password"
+                        onClick={() => setShowPassword((show) => !show)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+
+              <LoadingButton
+                loading={isLoading}
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                sx={{
+                  color: theme.colors.neutral60,
+                  backgroundColor: theme.colors.secondary100,
+                  margin: ".8rem 0",
+                }}
+              >
+                Cadastrar
+              </LoadingButton>
             </Box>
+<<<<<<< HEAD
 
             <FormControl
               variant="outlined"
@@ -247,9 +384,12 @@ const SignUp: React.FC<SignUpProps> = () => {
               Cadastrar
             </Button>
           </Box>
+=======
+          </Form>
+>>>>>>> develop
         </Box>
       </Grid>
-    </Grid>
+    </Grid >
   );
 }
 

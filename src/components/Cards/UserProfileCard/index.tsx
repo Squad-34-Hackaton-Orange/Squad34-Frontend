@@ -1,10 +1,13 @@
 "use client";
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import AvatarButton from "@/components/buttons/AvatarButton";
+import AddProjectModal from '@/components/Forms/AdicionarProjeto';
 
 const ProfileCard = () => {
   const theme = useTheme();
+
+  const [modalOpen, setModalOpen] = useState(false)
 
 
   return (
@@ -43,10 +46,14 @@ const ProfileCard = () => {
           color: 'rgba(0,0,0, 0.38)',
           borderRadius: "4px",
         }}
+
+        onClick={() => setModalOpen(true)}
       >
         <Typography variant="button">
         Adicionar Projeto</Typography>
       </Button>
+
+      <AddProjectModal open={modalOpen} setOpen={setModalOpen} />
     </Box>
   </Box>
   )

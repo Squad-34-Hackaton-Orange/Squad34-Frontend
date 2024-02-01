@@ -8,13 +8,14 @@ type GetByUserIdParams = { id: Id };
 
 export type Project = Partial<{
   id: Id;
+  image: string;
   date_post: Date;
   title: string;
   description: string;
   link: string;
   id_user: Id;
   user: User;
-  ProjectTag: ProjectTag[];
+  projectTag: ProjectTag[];
 }>;
 
 /**
