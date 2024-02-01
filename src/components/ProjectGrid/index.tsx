@@ -3,7 +3,6 @@
 import React, { ReactNode } from "react";
 import { Box } from "@mui/material";
 import ProjectCard from "../Cards/ProjectCard";
-import {v4} from 'uuid'
 
 type ProjectsType = {
   date_post: Date,
@@ -28,12 +27,6 @@ const ProjectsGrid = ({ children }: ProjectsGridType) => {
     image: '/project-camila.svg',
     id_user: 1,
     tags: ['UX', 'Web']
-<<<<<<< HEAD
-  }]
-
-  //const projects:ProjectsType[] = []
-  //  <--------- APAGAR DEPOIS APENAS PARA TESTE 
-=======
   },
   {
     date_post: new Date(),
@@ -43,8 +36,10 @@ const ProjectsGrid = ({ children }: ProjectsGridType) => {
     image: '/project-camila.svg',
     id_user: 1,
     tags: ['UX', 'Web']
-  }];
->>>>>>> develop
+  }]
+
+  //const projects:ProjectsType[] = []
+  //  <--------- APAGAR DEPOIS APENAS PARA TESTE 
 
   if (!projects.length) {
     return (
@@ -83,14 +78,7 @@ const ProjectsGrid = ({ children }: ProjectsGridType) => {
         justifyContent: { xs: 'center', md: 'flex-start' },
         pb: '40px'
       }}>
-<<<<<<< HEAD
-        {projects.map((project) => (
-          <ProjectCard key={project.id_user + v4()} project={project} />
-        ))}
-        {/* map dos cards do projeto */}
-=======
         {children}
->>>>>>> develop
       </Box>
     );
   }

@@ -1,6 +1,5 @@
 <<<<<<< HEAD
-import { Box, Typography, Button, useTheme, Chip } from "@mui/material";
-import Image from "next/image";
+import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
 =======
 import EditButton from "@/components/buttons/EditButton";
 import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
@@ -24,9 +23,6 @@ interface Projects {
 
 export default function ProjectCard({ project, hasTag = true }: Projects) {
   const theme = useTheme();
-
-<<<<<<< HEAD
-  //Pegar do useContext as informações do usuário
 
 =======
   console.log(project);
@@ -105,7 +101,7 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
       <Box
         sx={{
           width: "100%",
-          height: { xs: '316px', sm: "298px" },
+          height: {  xs: '316px', sm: "298px"  },
           justifySelf: "center",
           display: "flex",
           flexDirection: "column",
@@ -169,20 +165,22 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                   {handleDate(project.date_post)}
                 </Typography>
               </Box>
-<<<<<<< HEAD
+              {hasTag ? (
+  <<<<<<< HEAD
               <Box sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                gap: {xs: '8px'}
-              }}>
-                {project.tags.map((tag)=> (
-                  <Chip key={tag + v4()} label={tag} sx={{
-                    fontSize:'1.3rem',
-                    fontWeight: 400,
-                  }}  />
-                ))}
-              </Box>
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: { xs: '8px' }
+                }}>
+                  {project.tags.map((tag) => (
+                    <Chip key={tag + v4()} label={tag} sx={{
+                      fontSize: '1.3rem',
+                      fontWeight: 400,
+                    }} />
+                  ))}
+                </Box>
+              ) : null}
 =======
               {hasTag ? (
                 <Box sx={{

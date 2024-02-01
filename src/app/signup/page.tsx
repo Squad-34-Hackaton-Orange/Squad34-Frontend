@@ -1,13 +1,8 @@
 "use client";
 
-<<<<<<< HEAD
-import * as React from "react";
-import { useTheme, Theme } from "@mui/material/styles";
-=======
 import React, { useContext, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import LoadingButton from '@mui/lab/LoadingButton';
->>>>>>> develop
 import {
   Alert,
   Box,
@@ -19,84 +14,6 @@ import {
   Typography,
 } from "@mui/material";
 
-<<<<<<< HEAD
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { object, string, InferType } from 'yup';
-import * as yup from 'yup';
-
-
-// Defina os tipos para os valores do formulário e erros
-interface FormValues {
-  name: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
-
-interface FormErrors {
-  name?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-}
-
-// Defina os tipos para as props do componente
-interface SignUpProps {
-  // Adicione qualquer prop específica, se necessário
-}
-
-const userSchema = object({
-  name: string().required().matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, 'Digite um nome válido (apenas letras)'),
-  lastName: string().required().matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, 'Digite um nome válido (apenas letras)'),
-  email: string().required().email(),
-  password: string()
-    .required()
-    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/, 'Deve conter ao menos um número, uma letra maiúscula, no mínimo oito dígitos e um caracter especial.'),
-});
-
-const SignUp: React.FC<SignUpProps> = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const theme: Theme = useTheme();
-
-  // Estados locais para armazenar valores dos campos e erros
-  const [formValues, setFormValues] = React.useState<FormValues>({
-    name: '',
-    lastName: '',
-    email: '',
-    password: '',
-  });
-
-  const [formErrors, setFormErrors] = React.useState<FormErrors>({});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      await userSchema.validate(formValues, { abortEarly: false });
-      setFormErrors({});
-      console.log('Formulário enviado com valores:', formValues);
-    } catch (errors) {
-      if (errors instanceof yup.ValidationError) {
-        const validationErrors: { [key: string]: string } = {};
-        errors.inner.forEach((error: yup.ValidationError) => {
-          if (error.path) {
-            validationErrors[error.path] = error.message;
-          }
-        });
-        setFormErrors(validationErrors);
-        console.error('Erro de validação:', errors);
-      }
-    }
-  };
-=======
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoginContext } from "@/context/UserContext";
 import { Form } from "@unform/web";
@@ -113,7 +30,6 @@ export default function SignUp() {
 
   const router = useRouter();
   const theme = useTheme();
->>>>>>> develop
 
   const handleSubmit = async (data: User) => {
     if (!data.name || !data.last_name || !data.email || !data.password) {
@@ -252,21 +168,10 @@ export default function SignUp() {
                 </InputLabel>
                 <VTextField
                   required
-<<<<<<< HEAD
-                  id="lastName"
-                  name="lastName"
-                  aria-label="lastName"
-                  label="Sobrenome"
-                  value={formValues.lastName}
-                  onChange={handleChange}
-                  error={!!formErrors.lastName}
-                  helperText={formErrors.lastName}
-=======
                   name="email"
                   id="email"
                   aria-label="email"
                   label="Email Address"
->>>>>>> develop
                 />
               </FormControl>
 
@@ -311,86 +216,9 @@ export default function SignUp() {
                 Cadastrar
               </LoadingButton>
             </Box>
-<<<<<<< HEAD
-
-            <FormControl
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              sx={{ backgroundColor: "#fff" }}
-            >
-              <InputLabel htmlFor="email" style={{ visibility: "hidden" }}>
-                Email
-              </InputLabel>
-              <TextField
-                required
-                id="email"
-                name="email"
-                aria-label="email"
-                label="Email Address"
-                value={formValues.email}
-                onChange={handleChange}
-                error={!!formErrors.email}
-                helperText={formErrors.email}
-              />
-            </FormControl>
-
-            <FormControl
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              sx={{ backgroundColor: "#fff" }}
-            >
-              <InputLabel required htmlFor="password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                label="Password"
-                id="password"
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="Password"
-                      onClick={() => setShowPassword((show) => !show)}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                value={formValues.password}
-                onChange={handleChange}
-                error={!!formErrors.password}
-              />
-              {formErrors.password && (
-                <Typography variant="caption" color="error">
-                  {formErrors.password}
-                </Typography>
-              )}
-            </FormControl>
-
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              sx={{
-                color: theme.colors.neutral60,
-                backgroundColor: theme.colors.secondary100,
-                margin: ".8rem 0",
-              }}
-              onClick={handleSubmit}
-            >
-              Cadastrar
-            </Button>
-          </Box>
-=======
           </Form>
->>>>>>> develop
         </Box>
       </Grid>
     </Grid >
   );
 }
-
-export default SignUp;

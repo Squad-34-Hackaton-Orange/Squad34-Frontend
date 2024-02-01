@@ -1,11 +1,6 @@
 "use client";
 
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
-=======
 import React, { useContext, useState } from "react";
->>>>>>> develop
 import {
   Box,
   FormControl,
@@ -63,12 +58,33 @@ import { LoadingButton } from "@mui/lab";
 
 export default function Login() {
   const { signin, user } = useContext(LoginContext);
->>>>>>> develop
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const theme = useTheme();
+
+  console.log(user);
+
+  const handleSubmit = async (data: User) => {
+    if (!data.email || !data.password) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const userExist = await signin(data.email, data.password);
+
+      if (userExist) {
+        setIsLoading(false);
+        router.push("/portifolio")
+      };
+
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      setIsLoading(false);
+    }
+  };
 
 <<<<<<< HEAD
   // Estados locais para armazenar valores dos campos e erros
@@ -275,75 +291,9 @@ export default function Login() {
                   margin: ".8rem 0",
                 }}
               >
-<<<<<<< HEAD
-                Endereço de email
-              </InputLabel>
-              <TextField
-                required
-                id="email"
-                name="email"
-                aria-label="email"
-                label="Email Address"
-                value={formValues.email}
-                onChange={handleChange}
-                error={!!formErrors.email}
-                helperText={formErrors.email}
-              />
-            </FormControl>
-
-            <FormControl
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              sx={{ backgroundColor: "#fff" }}
-              required
-            >
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <OutlinedInput
-                label="Password"
-                id="password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="Password"
-                      onClick={() => setShowPassword((show) => !show)}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                value={formValues.password}
-                onChange={handleChange}
-                error={!!formErrors.password}
-              />
-              {formErrors.password && (
-                <Typography variant="caption" color="error">
-                  {formErrors.password}
-                </Typography>
-              )}
-            </FormControl>
-
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              sx={{
-                color: theme.colors.neutral60,
-                backgroundColor: theme.colors.secondary100,
-                margin: ".8rem 0",
-              }}
-              onClick={handleSubmit}
-            >
-              Entrar
-            </Button>
-=======
                 Entrar
               </LoadingButton>
             </Form>
->>>>>>> develop
 
             <Link
               variant="subtitle1"
