@@ -13,7 +13,6 @@ export default function Header() {
   const [pathname, setPathname] = useState('/');
 
   useEffect(() => {
-    console.log({ pathname });
     setPathname(window.location.pathname);
   }, [pathname]);
 
