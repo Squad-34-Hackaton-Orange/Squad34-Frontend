@@ -14,14 +14,12 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
 import * as yup from 'yup';
 import { LoginContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { User } from "@/lib/api/user";
 import { VTextField } from "@/components/forms/VTextField";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 
@@ -34,12 +32,7 @@ interface IFormData {
 
 const formValidationSchema: yup.Schema<any> = yup.object().shape({
   name: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+    .string().trim()
     .required("O nome é obrigatório")
     .max(50, "O nome deve conter no máximo cinquenta caracteres")
     .min(2, "O nome deve conter no mínimo dois caracteres")
@@ -48,12 +41,7 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
       "Digite um nome válido"
     ),
   lastName: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+    .string().trim()
     .required("O sobrenome é obrigatório")
     .min(2, "O sobrenome deve conter no mínimo dois caracteres")
     .max(50, "O sobrenome deve conter no máximo cinquenta caracteres")
@@ -62,12 +50,7 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
       "Digite um nome válido"
     ),
   email: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+    .string().trim()
     .required("O email é obrigatório")
     .email("Formato de email inválido")
     .matches(
@@ -77,12 +60,7 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
     .max(180, "O email deve conter no máximo 180 caracteres")
     .min(5, "O email deve conter no mínimo 5 caracteres"),
   password: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+    .string().trim()
     .required("A senha é obrigatória")
     .min(8, "A senha deve conter pelo menos 8 caracteres")
     .max(16, "A senha deve conter no máximo 16 caracteres")
@@ -97,7 +75,6 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
     ),
 });
 
-
 export default function SignUp() {
   const { signup } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
@@ -108,42 +85,34 @@ export default function SignUp() {
   const theme = useTheme();
   const formRef = React.useRef<FormHandles>(null);
 
-  // Validação de formulário com yup
-  // const handleSubmit = async (data: IFormData) => {
-  //   try {
-  //     await formValidationSchema.validate(data, { abortEarly: false });
-  //     console.log("Dados válidos:", data);
-  //   } catch (errors: yup.ValidationError | any) {
-  //     const validationErrors: { [key: string]: string } = {};
-
-  //     errors.inner.forEach((error: any) => {
-  //       if (!error.path) return;
-
-  //       validationErrors[error.path] = error.message;
-  //     });
-
-  //     formRef.current?.setErrors(validationErrors);
-  //   }
-  // };
-
-  const handleSubmit = async (data: User) => {
+  const handleSubmit = async (data: IFormData) => {
     if (!data) {
       return;
     }
-
     try {
+      await formValidationSchema.validate(data, { abortEarly: false });
+      console.log("Dados válidos:", data);
       setIsLoading(true);
-      await signup(data);
       setNotification(true);
-
       setTimeout(() => {
-        setNotification(false);
+       setNotification(false);
         setIsLoading(false);
         router.push("/login");
       }, 6000);
-    } catch (error) {
-      console.error("Erro ao criar usuário:", error);
+
+    } catch (errors: yup.ValidationError | any) {
+      const validationErrors: { [key: string]: string } = {};
+
+      console.error("Erro ao criar usuário");
       setIsLoading(false);
+
+      errors.inner.forEach((error: any) => {
+        if (!error.path) return;
+
+        validationErrors[error.path] = error.message;
+      });
+
+      formRef.current?.setErrors(validationErrors);
     }
   };
 
@@ -160,7 +129,6 @@ export default function SignUp() {
         justifyContent: { md: "flex-end" },
       }}
     >
-
       <Grid item xs={16} md={8} xl={10}>
         <Box
           sx={{
@@ -173,7 +141,6 @@ export default function SignUp() {
             margin: "0 auto",
           }}
         >
-
           <Box sx={{
             position: "absolute",
             top: "6rem",
@@ -190,6 +157,7 @@ export default function SignUp() {
                 Cadastro feito com sucesso. Você será redirecionado para o login.
               </Alert>
             ) : null}
+              
           </Box>
 
           <Typography
@@ -227,9 +195,7 @@ export default function SignUp() {
                   <InputLabel htmlFor="name" style={{ visibility: "hidden" }}>
                     Nome
                   </InputLabel>
-
                   <VTextField required id="name" name="name" aria-label="name" label="Nome" />
-
                 </FormControl>
 
                 <FormControl
@@ -238,16 +204,14 @@ export default function SignUp() {
                   margin="normal"
                   sx={{ backgroundColor: "#fff" }}
                 >
-
-                  <InputLabel htmlFor="last_name" style={{ visibility: "hidden" }}>
+                  <InputLabel htmlFor="lastName" style={{ visibility: "hidden" }}>
                     Sobrenome
                   </InputLabel>
-
                   <VTextField
                     required
-                    id="last_name"
-                    name="last_name"
-                    aria-label="last_name"
+                    id="lastName"
+                    name="lastName"
+                    aria-label="name"
                     label="Sobrenome"
                   />
                 </FormControl>
@@ -262,12 +226,7 @@ export default function SignUp() {
                 <InputLabel htmlFor="email" style={{ visibility: "hidden" }}>
                   Email
                 </InputLabel>
-                <VTextField
-                  name="email"
-                  id="email"
-                  aria-label="email"
-                  label="Email"
-                />
+                <VTextField required id="email" name="email" aria-label="email" label="Email Address" />
               </FormControl>
 
               <FormControl
@@ -276,25 +235,28 @@ export default function SignUp() {
                 margin="normal"
                 sx={{ backgroundColor: "#fff" }}
               >
-
-                <VOutlinedInput
-                  name="password"
-                  label="Senha"
-                  id="password"
-                  autoComplete="password"
-                  type={showPassword ? "text" : "password"}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="Password"
-                        onClick={() => setShowPassword((show) => !show)}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
+                <div style={{ position: "relative" }}>
+                  <VOutlinedInput
+                    name="password"
+                    label="Password"
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="Password"
+                          onClick={() => setShowPassword((show) => !show)}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </div>
+                <Typography variant="caption" color="textSecondary" textAlign={'left'} sx={{ marginTop: 1 }}>
+                  A senha deve conter entre 8 e 16 caracteres, e no mínimo: uma letra maiúscula, um número e um caractere especial.
+                </Typography>
               </FormControl>
 
               <LoadingButton
@@ -311,18 +273,18 @@ export default function SignUp() {
               >
                 Cadastrar
               </LoadingButton>
+              <Link
+                variant="subtitle1"
+                href="/login"
+                underline="none"
+                sx={{ color: theme.colors.neutral100 }}
+              >
+                Já tem uma conta? Faça login
+              </Link>
             </Box>
-            <Link
-              variant="subtitle1"
-              href="/login"
-              underline="none"
-              sx={{ color: theme.colors.neutral100 }}
-            >
-              Já tem uma conta? Faça login
-            </Link>
           </Form>
         </Box>
       </Grid>
-    </Grid >
+    </Grid>
   );
 }

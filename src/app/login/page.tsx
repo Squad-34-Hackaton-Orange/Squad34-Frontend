@@ -22,7 +22,7 @@ import { LoginContext } from "@/context/UserContext";
 import { Form } from "@unform/web";
 import { User } from "@/lib/api/user";
 import { useRouter } from "next/navigation";
-import { LoadingButton } from "@mui/lab";
+import LoadingButton from '@mui/lab/LoadingButton';
 import { VTextField } from "@/components/forms/VTextField";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 
