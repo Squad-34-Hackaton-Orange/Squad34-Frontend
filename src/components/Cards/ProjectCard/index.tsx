@@ -161,11 +161,13 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                   alignItems: 'center',
                   gap: { xs: '8px' }
                 }}>
-                  {project.tags.map((tag) => (
-                    <Chip label={tag} sx={{
-                      fontSize: '1.3rem',
-                      fontWeight: 400,
-                    }} />
+                  {project.tags.map((tag, index) => (
+                    <Chip label={tag}
+                      key={index}
+                      sx={{
+                        fontSize: '1.3rem',
+                        fontWeight: 400,
+                      }} />
                   ))}
                 </Box>
               ) : null}

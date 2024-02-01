@@ -16,7 +16,6 @@ type ProjectsType = {
   tags: string[]
 }
 
-
 function DiscoverView() {
 
   const projects: ProjectsType[] = [{
@@ -34,7 +33,7 @@ function DiscoverView() {
     description: "Descrição do projeto teste",
     link: "https://github.com/camilasoares",
     image: '/project-camila.svg',
-    id_user: 1,
+    id_user: 2,
     tags: ['UX', 'Web']
   }];
 

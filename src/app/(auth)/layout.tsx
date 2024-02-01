@@ -3,11 +3,9 @@ import Header from "@/components/Header";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="pt-br">
-      <body>
-        <Header />
-        <main>{props.children}</main>
-      </body>
-    </html>
+    <div>
+      <Header />
+      <main>{props.children}</main>
+    </div>
   );
 }
