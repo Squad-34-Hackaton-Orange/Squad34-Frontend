@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Link, Typography, Box } from "@mui/material";
 import { Logo } from "../Logo";
@@ -10,11 +10,16 @@ import NotificationButton from "../buttons/notificationButton";
 
 export default function Header() {
   const theme = useTheme();
+  const [pathname, setPathname] = useState('/');
 
-  const currentRouter = window.location.pathname
+  useEffect(() => {
+    console.log({ pathname });
+    setPathname(window.location.pathname);
+  }, [pathname]);
 
-  const isDiscoverRoute = () => currentRouter === '/discover';
-  const isPortifolioRoute = () => currentRouter === "/portifolio";
+  const isDiscoverRoute = pathname === '/discover';
+  const isPortifolioRoute = pathname === '/portifolio';
+
 
   return (
     <Box sx={{ backgroundColor: theme.colors.primary100, boxShadow: { xs: "0 1px 10px #000000BB", sm: "none" } }}>
@@ -48,7 +53,7 @@ export default function Header() {
               underline="none"
               sx={{
                 color:
-                  isPortifolioRoute() ? theme.colors.secondary90 : theme.colors.neutral60
+                  isPortifolioRoute ? theme.colors.secondary90 : theme.colors.neutral60
               }}
             >
               <Typography
@@ -74,7 +79,7 @@ export default function Header() {
               href="/discover"
               underline="none"
               sx={{
-                color: isDiscoverRoute() ? theme.colors.secondary90 : theme.colors.neutral60
+                color: isDiscoverRoute ? theme.colors.secondary90 : theme.colors.neutral60
               }}
             >
               <Typography
