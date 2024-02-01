@@ -239,15 +239,15 @@ export default function SignUp() {
                   sx={{ backgroundColor: "#fff" }}
                 >
 
-                  <InputLabel htmlFor="lastName" style={{ visibility: "hidden" }}>
+                  <InputLabel htmlFor="last_name" style={{ visibility: "hidden" }}>
                     Sobrenome
                   </InputLabel>
 
                   <VTextField
                     required
-                    id="lastName"
-                    name="lastName"
-                    aria-label="name"
+                    id="last_name"
+                    name="last_name"
+                    aria-label="last_name"
                     label="Sobrenome"
                   />
                 </FormControl>
@@ -263,7 +263,6 @@ export default function SignUp() {
                   Email
                 </InputLabel>
                 <VTextField
-                  required
                   name="email"
                   id="email"
                   aria-label="email"
