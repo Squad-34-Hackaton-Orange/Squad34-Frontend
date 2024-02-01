@@ -33,13 +33,23 @@ interface IFormData {
 }
 
 const formValidationSchema: yup.Schema<any> = yup.object().shape({
-  email: yup.string()
+  email: yup.string().transform((originalValue) => {
+    if (originalValue.trim() === '') {
+      return null;
+    }
+    return originalValue;
+  })
     .min(5, 'A email deve ter pelo menos 5 caracteres')
     .max(180, 'A senha deve ter no máximo 180 caracteres')
     .required('O email é obrigatório')
     .email('Insira um email válido'),
   password: yup
-    .string()
+    .string().transform((originalValue) => {
+      if (originalValue.trim() === '') {
+        return null;
+      }
+      return originalValue;
+    })
     .min(8, 'A senha deve ter pelo menos 8 caracteres')
     .max(16, 'A senha deve ter no máximo 16 caracteres')
     .matches(/[0-9]/, 'A senha deve conter pelo menos um número')
@@ -159,7 +169,7 @@ export default function Login() {
               Faça login com email
             </Typography>
 
-            <Form ref={formRef} onSubmit={handleSubmit}>
+            <Form placeholder={''} ref={formRef} onSubmit={handleSubmit}>
 
             
 
