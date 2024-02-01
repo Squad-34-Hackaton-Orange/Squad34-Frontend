@@ -58,7 +58,7 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
 });
 
 export default function Login() {
-  const { signin, user, isLogged } = useContext(LoginContext);
+  const { signin, isLogged } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
