@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Link, Typography, Box } from "@mui/material";
 import { Logo } from "../Logo";
-import ButtonHambuerguer from "../buttons/HamburguerButton";
+import MenuHamburguer from "../HamburguerMenu";
 import AvatarButton from "../buttons/AvatarButton";
 import NotificationButton from "../buttons/notificationButton";
 
@@ -37,7 +37,7 @@ export default function Header() {
           alignItems: "center",
           justifyContent: "space-between",
         }}>
-          <ButtonHambuerguer />
+          <MenuHamburguer />
           <Logo alt={"orange-logo"} />
           <Box
             sx={{
