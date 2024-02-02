@@ -1,12 +1,14 @@
 import { api } from ".";
 import { Id } from "./id";
 import { Project } from "./project";
+import { Token } from "./token";
 
 type GetByIdParams = { id: Id };
 
 export type User = Partial<{
   id: Id;
   name: string;
+  image: string;
   last_name: string;
   email: string;
   password: string;
@@ -15,6 +17,7 @@ export type User = Partial<{
   updatedAt: Date;
   deletedAt: Date;
   project: Project[];
+  token: Token;
 }>;
 
 /**
@@ -64,6 +67,6 @@ export const remove = async ({ id }: GetByIdParams): Promise<void> => {
  * @param data User data
  * @returns A promise of a user
  */
-export const login = async (email: string, password: string): Promise<User> => {
+export const login = async ({ email, password }: User): Promise<User> => {
   return (await api.post(`/user/login`, { email, password })).data;
 }

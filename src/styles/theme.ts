@@ -1,12 +1,12 @@
 "use client";
 
-import { Roboto } from "next/font/google";
-import { createTheme } from "@mui/material/styles";
+import { Roboto } from 'next/font/google';
+import { createTheme } from '@mui/material/styles';
 
 const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 const theme = createTheme({
@@ -16,7 +16,7 @@ const theme = createTheme({
       sm: 600, //tablet
       md: 900, // notebook
       lg: 1200, // small desktop
-      xl: 1536, // desktop
+      xl: 1536, // desktop 
     },
   },
   colors: {
@@ -75,6 +75,11 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
+    label: {
+      fontSize: '4rem',
+      color: 'red',
+    },
+
   },
   components: {
     MuiCssBaseline: {
@@ -86,15 +91,16 @@ const theme = createTheme({
         html: {
           width: "100%",
           minHeight: "100vh",
-          fontSize: "10px",
+          fontSize: '10px'
           // TODO: RESETAR O TAMANHO PARA 10 PX OU 62,75%
-        },
+        }
       },
     },
     MuiTypography: {
       defaultProps: {
         variantMapping: {
           // Map the new variant to render a <body1> by default
+          label: 'body1',
         },
       },
       styleOverrides: {
@@ -174,9 +180,9 @@ const theme = createTheme({
           fontWeight: 500,
           letterSpacing: "0.046rem",
         },
-      },
-    },
-  },
+      }
+    }
+  }
 });
 
 export default theme;

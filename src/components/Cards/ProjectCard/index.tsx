@@ -1,33 +1,15 @@
-<<<<<<< HEAD
-import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
-=======
 import EditButton from "@/components/buttons/EditButton";
+import { Project } from "@/lib/api/project";
 import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
->>>>>>> develop
 import React from "react";
-import EditButton from "../../buttons/EditButton";
-import {v4} from 'uuid'
 
-interface Projects {
-  project?: {
-    date_post: Date;
-    title: string;
-    description: string;
-    link: string;
-    image: string;
-    id_user: number;
-    tags: string[];
-  },
+interface ProjectProps {
+  project?: Project;
   hasTag: boolean;
 }
 
-export default function ProjectCard({ project, hasTag = true }: Projects) {
+export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
   const theme = useTheme();
-
-=======
-  console.log(project);
-  console.log(project?.image);
->>>>>>> develop
 
   const handleDate = (dateString: Date) => {
     const dia = dateString.getUTCDate();
@@ -101,7 +83,7 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
       <Box
         sx={{
           width: "100%",
-          height: {  xs: '316px', sm: "298px"  },
+          height: { xs: '316px', sm: "298px" },
           justifySelf: "center",
           display: "flex",
           flexDirection: "column",
@@ -150,7 +132,7 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                   sx={{ width: 24, height: 24 }}
                 />
                 <Typography variant="subtitle1" color={theme.colors.neutral120}>
-                  Camila Soares
+                  {project?.user?.name}
                 </Typography>
                 <Typography variant="subtitle1" color={theme.colors.neutral120} sx={{
                   display: { xs: 'none', sm: 'flex' },
@@ -162,26 +144,9 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                     color: { xs: theme.colors.neutral110, sm: theme.colors.neutral120 }
                   }}
                 >
-                  {handleDate(project.date_post)}
+                  Data indisponível
                 </Typography>
               </Box>
-              {hasTag ? (
-  <<<<<<< HEAD
-              <Box sx={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  gap: { xs: '8px' }
-                }}>
-                  {project.tags.map((tag) => (
-                    <Chip key={tag + v4()} label={tag} sx={{
-                      fontSize: '1.3rem',
-                      fontWeight: 400,
-                    }} />
-                  ))}
-                </Box>
-              ) : null}
-=======
               {hasTag ? (
                 <Box sx={{
                   display: 'flex',
@@ -189,15 +154,19 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                   alignItems: 'center',
                   gap: { xs: '8px' }
                 }}>
-                  {project.tags.map((tag) => (
-                    <Chip label={tag} sx={{
-                      fontSize: '1.3rem',
-                      fontWeight: 400,
-                    }} />
+                  {project?.projectTag?.map((projectTag) => (
+                    <div key={projectTag.tag?.id}>
+                      <Chip
+                        label={projectTag?.tag?.name}
+                        sx={{
+                          fontSize: '1.3rem',
+                          fontWeight: 400,
+                        }}
+                      />
+                    </div>
                   ))}
                 </Box>
               ) : null}
->>>>>>> develop
             </Box>
           </Box>
         </Button>

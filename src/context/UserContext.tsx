@@ -1,25 +1,24 @@
 "use client";
 
-import React, { ReactNode, createContext, useState } from "react";
+import React, { ReactNode, createContext, useEffect, useState } from "react";
 import { User, create, login } from "@/lib/api/user";
+import { jwtDecode } from "jwt-decode";
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
 interface LoginContextProps {
   isLogged: boolean;
   user: User | null;
-  signin: (email: string, password: string) => Promise<User>;
+  signin: (data: User) => Promise<void>;
   logout: () => void;
-  signup: (name: string, last_name: string, email: string, password: string) => Promise<User>;
+  signup: (data: User) => Promise<void>;
 }
 
 export const LoginContext = createContext<LoginContextProps>({
   isLogged: false,
   user: null,
-  signin: async (email: string, password: string) => {
-    return { email, password };
-  },
+  signin: async () => { },
   logout: () => { },
-  signup: async (name: string, last_name: string, email: string, password: string) => {
-    return { email, password, name, last_name };
-  },
+  signup: async () => { },
 });
 interface LoginProviderProps {
   children: ReactNode;
@@ -28,29 +27,65 @@ interface LoginProviderProps {
 export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
-  const auth = async (email: string, password: string) => {
-    const getUser = await login(email, password);
+  const signin = async (data: User) => {
+    try {
+      const validateLogin = await login(data);
 
-    if (getUser) {
-      setUser(getUser);
-      setIsLogged(true);
+      if (validateLogin) {
+        const token = validateLogin.token;
+
+        if (token) {
+          Cookies.set("AccessToken", token, {
+            expires: 60 * 60 * 1000,
+            secure: true,
+            sameSite: 'Lax',
+          });
+          const decoded = jwtDecode<User>(token);
+          setUser(decoded);
+          setIsLogged(true);
+        }
+      }
+    } catch (error) {
+      console.error(error)
     }
-
-    return getUser;
   };
 
   const logout = () => {
-    setUser(null);
-    setIsLogged(false);
+    try {
+      Cookies.remove("AccessToken");
+      setUser(null);
+      setIsLogged(false);
+    } catch (error) {
+      console.error(error)
+    }
   };
 
-  const signup = async (name: string, last_name: string, email: string, password: string) => {
-    return await create({ name, last_name, email, password });
+  useEffect(() => {
+    const token = Cookies.get("AccessToken");
+
+    if (token) {
+      const decoded = jwtDecode<User>(token);
+      setUser(decoded);
+      setIsLogged(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = Cookies.get("AccessToken");
+
+    if (!isLogged && !token) {
+      router.push("/login");
+    }
+  }, [isLogged]);
+
+  const signup = async (data: User) => {
+    await create(data);
   };
 
   return (
-    <LoginContext.Provider value={{ user, signin: auth, logout, isLogged, signup }}>
+    <LoginContext.Provider value={{ user, signin, logout, isLogged, signup }}>
       {children}
     </LoginContext.Provider>
   );

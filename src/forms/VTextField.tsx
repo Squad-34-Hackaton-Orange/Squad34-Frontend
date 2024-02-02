@@ -8,7 +8,9 @@ type VtextFieldProps = TextFieldProps & {
 
 export const VTextField = ({ name, ...rest }: VtextFieldProps) => {
   const { fieldName, registerField, defaultValue, error, clearError } = useField(name);
-  const [value, setValue] = useState(defaultValue ?? "");
+
+  const [value, setValue] = useState(defaultValue || '');
+
 
   useEffect(() => {
     registerField({
@@ -18,11 +20,19 @@ export const VTextField = ({ name, ...rest }: VtextFieldProps) => {
     });
   }, [registerField, fieldName, value]);
 
-  return (
+  return (    
     <TextField
-      {...rest}
+      
+      
+      error={!!error}
+      helperText={error}
+      defaultValue={defaultValue}
+
+      label={rest.label}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={e => setValue(e.target.value)}
+      onKeyDown={() => error ? clearError() : undefined}
+
     />
   );
 };
