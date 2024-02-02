@@ -25,7 +25,7 @@ export type Project = Partial<{
  * @returns A promise of a list of projects
  */
 export const list = async ({ id }: User): Promise<Project[]> => {
-  return (await api.get(`/project/${id}/all`)).data;
+  return (await api.get(`/project?userId=${id}`)).data;
 };
 
 
@@ -35,13 +35,13 @@ export const list = async ({ id }: User): Promise<Project[]> => {
  * @returns A promise of a project
  */
 export const get = async ({ id }: GetByIdParams): Promise<Project[]> => {
-  return (await api.get(`/project?userId=${id}`)).data;
+  return (await api.get(`/project/${id}/all`)).data;
 };
 
 
 
 /**
- * Get all projects from a user
+ * Get project from a user by id
  * @param id User id
  * @returns A promise of a list of projects from a users
  */
