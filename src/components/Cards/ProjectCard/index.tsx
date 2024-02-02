@@ -1,21 +1,14 @@
 import EditButton from "@/components/buttons/EditButton";
+import { Project } from "@/lib/api/project";
 import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
 import React from "react";
 
-interface Projects {
-  project?: {
-    date_post: Date;
-    title: string;
-    description: string;
-    link: string;
-    image: string;
-    id_user: number;
-    tags: string[];
-  },
+interface ProjectProps {
+  project?: Project;
   hasTag: boolean;
 }
 
-export default function ProjectCard({ project, hasTag = true }: Projects) {
+export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
   const theme = useTheme();
 
   const handleDate = (dateString: Date) => {
@@ -139,7 +132,7 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                   sx={{ width: 24, height: 24 }}
                 />
                 <Typography variant="subtitle1" color={theme.colors.neutral120}>
-                  Camila Soares
+                  {project?.user?.name}
                 </Typography>
                 <Typography variant="subtitle1" color={theme.colors.neutral120} sx={{
                   display: { xs: 'none', sm: 'flex' },
@@ -151,7 +144,7 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                     color: { xs: theme.colors.neutral110, sm: theme.colors.neutral120 }
                   }}
                 >
-                  {handleDate(project.date_post)}
+                  Data indisponível
                 </Typography>
               </Box>
               {hasTag ? (
@@ -161,13 +154,16 @@ export default function ProjectCard({ project, hasTag = true }: Projects) {
                   alignItems: 'center',
                   gap: { xs: '8px' }
                 }}>
-                  {project.tags.map((tag, index) => (
-                    <Chip label={tag}
-                      key={index}
-                      sx={{
-                        fontSize: '1.3rem',
-                        fontWeight: 400,
-                      }} />
+                  {project?.projectTag?.map((projectTag) => (
+                    <div key={projectTag.tag?.id}>
+                      <Chip
+                        label={projectTag?.tag?.name}
+                        sx={{
+                          fontSize: '1.3rem',
+                          fontWeight: 400,
+                        }}
+                      />
+                    </div>
                   ))}
                 </Box>
               ) : null}

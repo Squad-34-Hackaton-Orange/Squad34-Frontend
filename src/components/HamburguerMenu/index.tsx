@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import {
   Box,
   IconButton,
-  Drawer, 
+  Drawer,
   useTheme,
   MenuItem,
   Link,
   Typography,
   Divider,
 } from "@mui/material";
-import {Menu as MenuIcon, Close as CloseIcon} from "@mui/icons-material";
+import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 
 const HamburguerMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -28,14 +28,14 @@ const HamburguerMenu = () => {
   return (
 
     <Box sx={{
-      display: { xs: "flex", sm: "none" } 
+      display: { xs: "flex", sm: "none" }
     }}>
 
-      <IconButton 
+      <IconButton
         aria-label="open drawer"
         onClick={handleClick}
-        sx={{color: theme.colors.secondary60}}
-        >   
+        sx={{ color: theme.colors.secondary60 }}
+      >
         <MenuIcon />
       </IconButton>
 
@@ -50,16 +50,19 @@ const HamburguerMenu = () => {
           },
         }}
       >
-              
+
         <Box>
 
-          <Box sx={{padding: 1.5}}>
+          <Box sx={{ padding: 1.5 }}>
 
-            <IconButton sx={{
-              backgroundColor: theme.colors.secondary100
-            }}>
+            <IconButton
+              onClick={handleClose}
+              sx={{
+                backgroundColor: theme.colors.secondary100
+              }}
+            >
 
-              <CloseIcon onClick={handleClose} sx={{color: theme.colors.secondary60}}/>
+              <CloseIcon sx={{ color: theme.colors.secondary60 }} />
 
             </IconButton>
 
@@ -88,7 +91,7 @@ const HamburguerMenu = () => {
 
             <Link
               variant="subtitle1"
-              href="/descobrir"
+              href="/discover"
               underline="none"
               sx={{ color: theme.colors.primary90 }}
             >
@@ -102,7 +105,7 @@ const HamburguerMenu = () => {
             </Link>
 
           </MenuItem>
-        
+
           <Divider />
 
           <MenuItem onClick={handleClose}>
@@ -119,7 +122,7 @@ const HamburguerMenu = () => {
               >
                 Configurações
               </Typography>
-              
+
             </Link>
 
           </MenuItem>

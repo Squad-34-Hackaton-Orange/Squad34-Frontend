@@ -1,9 +1,10 @@
 import { api } from ".";
 import { Id } from "./id";
 import { ProjectTag } from "./project-tag";
+import { Token } from "./token";
 import { User } from "./user";
 
-type GetByIdParams = { id: Id };
+type GetByIdParams = { id: string };
 type GetByUserIdParams = { id: Id };
 
 export type Project = Partial<{
@@ -15,26 +16,28 @@ export type Project = Partial<{
   link: string;
   id_user: Id;
   user: User;
+  token: Token;
   projectTag: ProjectTag[];
 }>;
 
 /**
- * List all projects
+ * List all projects from all users
  * @returns A promise of a list of projects
  */
-export const list = async (): Promise<Project[]> => {
-  return (await api.get(`/project`)).data;
+export const list = async ({ id }: User): Promise<Project[]> => {
+  return (await api.get(`/project/${id}/all`)).data;
 };
 
 
 /**
- * Get a single project by id
+ * Get all projects from a user
  * @param id Project id
  * @returns A promise of a project
  */
-export const get = async ({ id }: GetByIdParams): Promise<Project> => {
-  return (await api.get(`/project/${id}`)).data;
+export const get = async ({ id }: GetByIdParams): Promise<Project[]> => {
+  return (await api.get(`/project?userId=${id}`)).data;
 };
+
 
 
 /**
@@ -42,8 +45,8 @@ export const get = async ({ id }: GetByIdParams): Promise<Project> => {
  * @param id User id
  * @returns A promise of a list of projects from a users
  */
-export const getAllUserProjects = async ({ id }: GetByUserIdParams): Promise<Project[]> => {
-  return (await api.get(`/project/user/${id}`)).data;
+export const getProjectById = async ({ id }: GetByUserIdParams): Promise<Project[]> => {
+  return (await api.get(`/project/${id}/`)).data;
 };
 
 

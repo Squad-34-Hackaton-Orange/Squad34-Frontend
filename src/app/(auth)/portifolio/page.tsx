@@ -7,40 +7,27 @@ import ProjectsGrid from "@/components/ProjectGrid";
 import TagSearch from "@/components/Input/TagSearch";
 import ProjectCard from "@/components/Cards/ProjectCard";
 import isAuth from "@/components/isAuth";
-
-type ProjectsType = {
-  date_post: Date,
-  title: string,
-  description: string,
-  link: string,
-  image: string,
-  id_user: number,
-  tags: string[]
-}
-
+import { useContext, useEffect, useState } from "react";
+import { LoginContext } from "@/context/UserContext";
+import { Project, get } from "@/lib/api/project";
 
 function PortifolioView() {
+  const { user } = useContext(LoginContext);
+  const [projects, setProjects] = useState<Project[]>([]);
   const theme = useTheme();
 
-  const projects: ProjectsType[] = [{
-    date_post: new Date(),
-    title: "Ecommerce One Page",
-    description: "Descrição do projeto teste",
-    link: "https://github.com/camilasoares",
-    image: '/project-camila.svg',
-    id_user: 1,
-    tags: ['UX', 'Web']
-  },
-  {
-    date_post: new Date(),
-    title: "Ecommerce One Page",
-    description: "Descrição do projeto teste",
-    link: "https://github.com/camilasoares",
-    image: '/project-camila.svg',
-    id_user: 2,
-    tags: ['UX', 'Web']
-  }];
+  if (!user) {
+    return;
+  }
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const getAllUserProject = await get({ id: String(user.id) });
+      setProjects(getAllUserProject);
+    };
+
+    fetchProjects();
+  }, [user.id])
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -83,7 +70,12 @@ function PortifolioView() {
           <TagSearch />
           <ProjectsGrid>
             {projects?.map((project) => (
-              <ProjectCard key={project.id_user} project={project} hasTag={true} />
+              <div key={project.id}>
+                <ProjectCard
+                  project={project}
+                  hasTag={true}
+                />
+              </div>
             ))}
           </ProjectsGrid>
         </Box>

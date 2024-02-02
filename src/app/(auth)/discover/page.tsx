@@ -4,38 +4,27 @@ import ProjectCard from "@/components/Cards/ProjectCard";
 import TagSearch from "@/components/Input/TagSearch";
 import ProjectsGrid from "@/components/ProjectGrid";
 import isAuth from "@/components/isAuth";
+import { LoginContext } from "@/context/UserContext";
+import { Project, list } from "@/lib/api/project";
 import { Box, Typography } from "@mui/material";
-
-type ProjectsType = {
-  date_post: Date,
-  title: string,
-  description: string,
-  link: string,
-  image: string,
-  id_user: number,
-  tags: string[]
-}
+import { useContext, useEffect, useState } from "react";
 
 function DiscoverView() {
+  const { user } = useContext(LoginContext);
+  const [projects, setProjects] = useState<Project[]>([]);
 
-  const projects: ProjectsType[] = [{
-    date_post: new Date(),
-    title: "Ecommerce One Page",
-    description: "Descrição do projeto teste",
-    link: "https://github.com/camilasoares",
-    image: '/project-camila.svg',
-    id_user: 1,
-    tags: ['UX', 'Web']
-  },
-  {
-    date_post: new Date(),
-    title: "Ecommerce One Page",
-    description: "Descrição do projeto teste",
-    link: "https://github.com/camilasoares",
-    image: '/project-camila.svg',
-    id_user: 2,
-    tags: ['UX', 'Web']
-  }];
+  if (!user) {
+    return;
+  };
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const projects = await list({ id: user.id });
+      setProjects(projects);
+    };
+
+    fetchProjects();
+  }, [projects])
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -72,7 +61,12 @@ function DiscoverView() {
           <TagSearch />
           <ProjectsGrid>
             {projects?.map((project) => (
-              <ProjectCard key={project.id_user} project={project} hasTag={false} />
+              <div key={project.id}>
+                <ProjectCard
+                  project={project}
+                  hasTag={false}
+                />
+              </div>
             ))}
           </ProjectsGrid>
         </Box>
