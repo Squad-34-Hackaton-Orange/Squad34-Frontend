@@ -1,8 +1,9 @@
 "use client";
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import AvatarButton from "@/components/buttons/AvatarButton";
 import { LoginContext } from '@/context/UserContext';
+import AddProjectModal from '@/components/forms/AdicionarProjeto';
 
 const ProfileCard = () => {
   const { user } = useContext(LoginContext);
@@ -12,6 +13,8 @@ const ProfileCard = () => {
   }
 
   const theme = useTheme();
+
+  const [modalOpen, setModalOpen] = useState(false)
 
 
   return (
@@ -42,16 +45,18 @@ const ProfileCard = () => {
           {user.country}
         </Typography>
         <Button
+        onClick={() => setModalOpen(true)}          
           variant="contained"
           style={{
             backgroundColor: 'rgba(0,0,0, 0.12)',
             color: 'rgba(0,0,0, 0.38)',
             borderRadius: "4px",
-          }}
+          }}          
         >
           <Typography variant="button">
             Adicionar Projeto</Typography>
         </Button>
+        <AddProjectModal open={modalOpen} setOpen={setModalOpen} />
       </Box>
     </Box>
   )
