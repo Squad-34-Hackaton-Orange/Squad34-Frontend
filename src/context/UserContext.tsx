@@ -72,14 +72,6 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
     }
   }, []);
 
-  useEffect(() => {
-    const token = Cookies.get("AccessToken");
-
-    if (!isLogged && !token) {
-      router.push("/login");
-    }
-  }, [isLogged]);
-
   const signup = async (data: User) => {
     await create(data);
   };

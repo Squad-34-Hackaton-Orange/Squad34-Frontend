@@ -1,8 +1,11 @@
-import { Id } from "./id";
-import { ProjectTag } from "./project-tag";
+import { Project } from "./project"
 
 export type Tag = Partial<{
-  id: Id;
-  name: string;
-  ProjectTag: ProjectTag[];
-}>;  
+  id: number
+  name: string
+  project_id: number[]
+  project: Project[]
+  created_at: Date
+  updated_at: Date
+  deleted_at: Date
+}>
