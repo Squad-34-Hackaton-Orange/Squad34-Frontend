@@ -1,4 +1,5 @@
 import { CustomModal } from "@/components/Modal";
+import AvatarButton from "@/components/buttons/AvatarButton";
 import EditButton from "@/components/buttons/EditButton";
 import { Project } from "@/lib/api/project";
 import { User } from "@/lib/api/user";

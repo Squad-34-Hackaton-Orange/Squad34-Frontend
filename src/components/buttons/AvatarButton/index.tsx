@@ -2,7 +2,7 @@
 import React, { useContext, useState } from 'react'
 import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material'
 import { LoginContext } from '@/context/UserContext'
-import { User, remove } from '@/lib/api/user';
+import { User, get } from '@/lib/api/user'
 
 
 type AvatarProps = {
@@ -13,11 +13,18 @@ type AvatarProps = {
 };
 
 
-const AvatarButton = ({ width, height, menu, user }: AvatarProps) => {
-  const { logout, user: userContext } = useContext(LoginContext);
-
+const AvatarButton = ({ width, height, menu }: AvatarProps) => {
+  const { logout, user } = useContext(LoginContext)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  if(!user?.id) return;
+
+  
+  const userData = async ():Promise<User> => await get({id: user.id})
+
+  if(!userData) return;
+
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -53,11 +60,7 @@ const AvatarButton = ({ width, height, menu, user }: AvatarProps) => {
 
           }}
         >
-          <Avatar
-            alt={user?.name}
-            src={user?.image}
-            sx={{ width: width, height: height }}
-          />
+          <Avatar alt="Remy Sharp" src={userData.image} sx={{ width: width, height: height }} />
         </Button>
         <Menu
           id="basic-menu"
