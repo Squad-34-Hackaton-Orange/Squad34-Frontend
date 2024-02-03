@@ -41,17 +41,12 @@ const projectSchema = yup.object({
 const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const { user } = useContext(LoginContext);
 
-  const [projectData, setProjectData] = useState<Project | undefined>(undefined)
-
   if (!user || !project) {
     return;
   }
 
   const theme = useTheme();
-
-  if (!projectData) {
-    return;
-  }
+  
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -109,17 +104,13 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
   const [sucess, setSucess] = useState(false);
 
-
   useEffect(() => {
-    console.log('setando imagem')
-    setImageUrl(projectData.image)
-  }, [projectData])
-  
-  useEffect(() => {       
-    if (ImageUrl) setSubmitFlag(false);
-  }, [ImageUrl]);
+    if (open === true) {
+      console.log("setando imagem");
+      setImageUpload(project?.image);
+    }
+  }, [open]);
 
-  
 
   function contarDoisSegundos(): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -158,8 +149,17 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
         description: data.description?data.description: project.description,
         image: ImageUrl?ImageUrl:project.image,
         id_user: user.id,
-        link: data.link,
+        link: data.link?data.link:project.link,
+        date_post: new Date()
       };
+
+      console.log(formData);
+
+      if (project.id === undefined) {
+        return;
+      }      
+
+      const id: string = typeof project.id === 'number' ? project.id.toString() : '';
 
       const resume = await update({id: id, data: formData});
 
@@ -184,6 +184,9 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
             validationErrors[error.path] = error.message;
           }
         });
+
+        // setFormErrors(validationErrors);
+        // console.error("Erro de validação:", errors);
       }
     }
   };
@@ -302,10 +305,11 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                   <Box
                     style={{
                       objectFit: "cover",
-                      backgroundImage: `url('${imageUpload
-                        ? `${imageUpload}`
-                        : "/default-project-mobile.svg"
-                        }')`,
+                      backgroundImage: `url('${
+                        imageUpload
+                          ? `${imageUpload}`
+                          : "/default-project-mobile.svg"
+                      }')`,
                       backgroundSize: "cover",
                       width: "100%",
                       height: "100%",
