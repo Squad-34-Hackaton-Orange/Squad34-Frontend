@@ -63,7 +63,8 @@ const ProfileCard = ({ userImage }: ProfileCardProps) => {
           }}
         >
           <Typography variant="button">
-            Adicionar Projeto</Typography>
+            Adicionar Projeto
+          </Typography>
         </Button>
         <AddProjectModal open={modalOpen} setOpen={setModalOpen} />
       </Box>

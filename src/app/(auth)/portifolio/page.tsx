@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ProfileCard from "@/components/Cards/UserProfileCard";
 import ProjectsGrid from "@/components/ProjectGrid";
@@ -10,10 +10,13 @@ import isAuth from "@/components/isAuth";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "@/context/UserContext";
 import { Project, get } from "@/lib/api/project";
+import CollectionsIcon from '@mui/icons-material/Collections';
+import AddProjectModal from "@/components/forms/AdicionarProjeto";
 
 function PortifolioView() {
   const { user } = useContext(LoginContext);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
   const theme = useTheme();
 
 
@@ -87,20 +90,50 @@ function PortifolioView() {
                 ))}
               </ProjectsGrid>
             ) : (
-              <Typography
-                variant="subtitle1"
+              <Button
+                variant="text"
+                onClick={() => setModalOpen(true)}
                 sx={{
-                  marginTop: 6,
-                  color: theme.colors.neutral130,
-                  opacity: "0.6",
+                  height: "250px",
+                  width: "320px",
+                  background: theme.colors.neutral70,
+                  marginTop: 6
                 }}
               >
-                Nenhum projeto cadastrado
-              </Typography>
+                <Box>
+                  <CollectionsIcon
+                    sx={{
+                      fontSize: 40,
+                      color: theme.colors.neutral120,
+                      marginBottom: 2
+                    }}
+                  />
+
+                  <Typography
+                    sx={{
+                      color: theme.colors.neutral120,
+                      marginBottom: 2,
+                      textTransform: "none"
+                    }}
+                  >
+                    Adicione seu primeiro projeto
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      color: theme.colors.neutral120,
+                      textTransform: "none"
+                    }}
+                  >
+                    Compartilhe seu talento com milhares de pessoas
+                  </Typography>
+                </Box>
+              </Button>
             )
           }
         </Box>
       </Box>
+      <AddProjectModal open={modalOpen} setOpen={setModalOpen} />
     </section>
   );
 };

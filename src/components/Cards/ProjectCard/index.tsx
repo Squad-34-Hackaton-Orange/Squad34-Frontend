@@ -3,7 +3,8 @@ import EditButton from "@/components/buttons/EditButton";
 import { Project } from "@/lib/api/project";
 import { User } from "@/lib/api/user";
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Typography, Button, useTheme, Chip, Avatar, Link } from "@mui/material";
+import { Box, Typography, Button, Chip, Avatar, Link } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import React, { useState } from "react";
 
 type PreviewCardProps = {
@@ -13,6 +14,8 @@ type PreviewCardProps = {
 };
 
 const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
+  const theme = useTheme();
+
   return (
     <CustomModal.Root
       open={open}
@@ -31,7 +34,7 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
       >
         <Button
           sx={{
-            color: "#000",
+            color: theme.colors.neutral130,
           }}
           onClick={handleClose}
         >
