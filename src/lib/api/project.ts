@@ -1,3 +1,4 @@
+import { Description } from "@mui/icons-material";
 import { api } from ".";
 import { Id } from "./id";
 import { ProjectTag } from "./project-tag";
@@ -28,7 +29,6 @@ export const list = async ({ id }: User): Promise<Project[]> => {
   return (await api.get(`/project?userId=${id}`)).data;
 };
 
-
 /**
  * Get all projects from a user
  * @param id Project id
@@ -36,23 +36,21 @@ export const list = async ({ id }: User): Promise<Project[]> => {
  */
 export const get = async ({ id }: GetByIdParams): Promise<Project[]> => {
   return (await api.get(`/project/${id}/all`)).data;
-
-  
 };
-
-
 
 /**
  * Get project from a user by id
  * @param id User id
  * @returns A promise of a list of projects from a users
  */
-export const getProjectById = async ({ id, id_user }: Project): Promise<Project> => {
+export const getProjectById = async ({
+  id,
+  id_user,
+}: Project): Promise<Project> => {
   const resume = await api.get(`/project/${id_user}/${id}/`);
 
-  return resume.data
+  return resume.data;
 };
-
 
 /**
  * Create a new project
@@ -62,10 +60,8 @@ export const getProjectById = async ({ id, id_user }: Project): Promise<Project>
 export const create = async (data: Project): Promise<any> => {
   const resume = await api.post(`/project`, data);
 
-  return {status: resume.status,
-    data: resume.data};
+  return { status: resume.status, data: resume.data };
 };
-
 
 /**
  * Update a project
@@ -73,16 +69,13 @@ export const create = async (data: Project): Promise<any> => {
  * @param data Project data
  * @returns A promise of a project
  */
-export const update = async ({ id, ...data }: GetByIdParams & Project): Promise<any> => {
-   
-  
-  const resume = await api.put(`/project/${id}`, data)
-
-  return {status: resume.status,
-    data: resume.data};
-
+export const update = async (
+  {id}: GetByIdParams,
+  data: Project
+): Promise<any> => {
+  console.log(id)
+  return (await api.put(`/project/${id}`, data)).data;
 };
-
 
 /**
  * Delete a project
@@ -90,8 +83,7 @@ export const update = async ({ id, ...data }: GetByIdParams & Project): Promise<
  * @returns A promise of a project
  */
 export const remove = async ({ id, id_user }: Project): Promise<any> => {
-  const resume = await api.delete(`/project/${id_user}/${id}`)
+  const resume = await api.delete(`/project/${id_user}/${id}`);
 
-  return {status: resume.status,
-  data: resume.data};
-}
+  return { status: resume.status, data: resume.data };
+};

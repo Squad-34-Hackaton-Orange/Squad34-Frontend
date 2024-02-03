@@ -136,39 +136,35 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
   //TODO: PRIMEIRO CHAMAR A FUNÇÃO DE UPLOAD DE IMAGEM E DEPOIS CHAMAR A FUNÇÃO DE INTEGRAÇÃO DO BACKEND
 
-  const handleSubmit = async (data: any) => {
-    if (data === undefined) {
+  const handleSubmit = async (formData: any) => {
+    if (formData === undefined) {
       return;
     }
 
     
 
     try {
-      const formData: Project = {
-        title: data.title?data.title:project.title,
-        description: data.description?data.description: project.description,
+      const data: Project = {
+        title: formData.title?formData.title:project.title,
+        description: formData.description?formData.description: project.description,
         image: ImageUrl?ImageUrl:project.image,
         id_user: user.id,
-        link: data.link?data.link:project.link,
+        link: formData.link?formData.link:project.link,
         date_post: new Date()
       };
 
-      console.log(formData);
 
       if (project.id === undefined) {
         return;
       }      
 
-      const id: string = typeof project.id === 'number' ? project.id.toString() : '';
+      const id: string = String(project.id);
 
-      const resume = await update({id: id, data: formData});
+      const resume = await update({id}, data);
 
-      if (resume.status === 200) {
-        setSucess(true);
+      setSucess(true);
 
-        contarDoisSegundos();
-        // TODO: APENAS SE DER CERTO FAZER O TRYCATCH
-      }
+        contarDoisSegundos()
     } catch (errors) {
       if (errors instanceof yup.ValidationError) {
         const validationErrors: ProjectFormErrors = {
