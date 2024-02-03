@@ -1,23 +1,23 @@
 import { useTheme } from '@mui/material/styles';
-import { Button } from "@mui/material";
+import { Button, ButtonProps } from "@mui/material";
 
-type ModalActionProps = {
+type ModalActionProps = ButtonProps & {
   text: string;
   color: "primary" | "secondary";
-  action: "warning" | "success";
+  actionI: "warning" | "success";
 };
 
 export const ModalAction = (
   {
     text,
     color = "primary",
-    action = "warning",
+    actionI = "warning",
     ...props
   }: ModalActionProps) => {
   const theme = useTheme();
 
   const buttonStyle = {
-    width: action === "success" ? "100%" : "auto",
+    width: actionI === "success" ? "100%" : "auto",
     backgroundColor: color === "primary" ? theme.colors.secondary100
       : "rgba(0, 0, 0, 0.12)",
     color: color === "primary" ? "#fff"

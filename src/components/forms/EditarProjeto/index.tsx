@@ -1,3 +1,4 @@
+'use client'
 import { CustomModal } from "@/components/Modal";
 import { ProjectFormErrors, ProjectFormValues } from "@/lib/validation/project";
 import {
@@ -14,14 +15,15 @@ import * as yup from "yup";
 import { storage } from "@/lib/firebase/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-import { Project, create } from "@/lib/api/project";
+import { Project, create, getProjectById } from "@/lib/api/project";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 import { Form } from "@unform/web";
 import { LoginContext } from "@/context/UserContext";
 
-type AddprojectType = {
+type AtualizarProjetoType = {
   open: boolean;
   setOpen: (open: boolean) => void;
+  project: Project;
 };
 
 const projectSchema = yup.object({
@@ -35,13 +37,24 @@ const projectSchema = yup.object({
   image: yup.string(),
 });
 
-const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
+const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const { user } = useContext(LoginContext);
 
-  if (!user) {
+  console.log('abriu')
+
+  const [projectData, setProjectData] = useState<Project | undefined>(undefined)
+
+  if (!user || !project) {
     return;
   }
+
   const theme = useTheme();
+
+
+
+  if (!projectData) {
+    return;
+  }
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -55,7 +68,8 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
     width: 1,
   });
 
-  const [formValues, setFormValues] = useState<ProjectFormValues>({
+  {
+    /*const [formValues, setFormValues] = useState<ProjectFormValues>({
     title: "",
     description: "",
     link: "",
@@ -69,7 +83,8 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
     link: "",
     projectTag: [],
     image: "",
-  });
+  });*/
+  }
 
   const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null>(
     null
@@ -97,9 +112,17 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
 
   const [sucess, setSucess] = useState(false);
 
+    
   useEffect(() => {
+    console.log('setando imagem')
+    setImageUrl(projectData.image)
+  }, [projectData])
+  
+  useEffect(() => {       
     if (ImageUrl) setSubmitFlag(false);
   }, [ImageUrl]);
+
+  
 
   function contarDoisSegundos(): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -114,13 +137,13 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   const handleClose = () => {
     setOpen(false);
     setImageUpload(null);
-    setFormValues({
-      title: "",
-      description: "",
-      link: "",
-      projectTag: [],
-      image: "",
-    });
+    // setFormValues({
+    //   title: "",
+    //   description: "",
+    //   link: "",
+    //   projectTag: [],
+    //   image: "",
+    // });
     setSubmitFlag(true);
   };
 
@@ -141,13 +164,13 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
         link: data.link,
       };
 
-      const resume = await create(formData);
+      console.log(formData);
 
+      const resume = await create(formData);
 
       if (resume.status === 201) {
         setSucess(true);
-        console.log(sucess)
-        
+
         contarDoisSegundos();
         // TODO: APENAS SE DER CERTO FAZER O TRYCATCH
       }
@@ -167,8 +190,8 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
           }
         });
 
-        setFormErrors(validationErrors);
-        console.error("Erro de validação:", errors);
+        // setFormErrors(validationErrors);
+        // console.error("Erro de validação:", errors);
       }
     }
   };
@@ -177,10 +200,10 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
     <CustomModal.Root open={open} onClose={handleClose} variant="form">
       <CustomModal.Title>
         <Typography variant="h5" color={theme.colors.neutral110}>
-          Adicionar projeto
+          Editar projeto
         </Typography>
       </CustomModal.Title>
-      <Form onSubmit={(data) => handleSubmit(data)} placeholder="Login">
+      <Form onSubmit={(data) => handleSubmit(data)} placeholder="EditarProjeto">
         <CustomModal.Content>
           <Box
             sx={{
@@ -205,8 +228,8 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
               <FormControl>
                 <VOutlinedInput
                   id="title"
-                  label="Título"
                   name="title"
+                  placeholder={projectData?.title}
                   sx={{
                     fontSize: "1.6rem",
                     color: theme.colors.neutral100,
@@ -223,7 +246,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
               <FormControl>
                 <VOutlinedInput
                   id="projectTag"
-                  label="Tags"
+                  placeholder={projectData?.projectTag?.toString().replace(/[=,\[\]"]/g, ' ')}
                   aria-describedby="my-helper-text"
                   name="projectTag"
                   sx={{
@@ -242,7 +265,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
               <FormControl>
                 <VOutlinedInput
                   id="link"
-                  label="Links"
+                  placeholder={projectData?.link}
                   aria-describedby="my-helper-text"
                   name="link"
                   sx={{
@@ -265,7 +288,8 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
               >
                 <VOutlinedInput
                   id="description"
-                  label="Descrição"
+                  placeholder={projectData?.description}
+                  value={projectData?.description}
                   aria-describedby="my-helper-text"
                   name="description"
                   sx={{
@@ -434,7 +458,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
             transform: "translate(-50%, -50%)",
           }}
         >
-          Projeto Cadastrado com sucesso
+          Projeto Atualizado com sucesso
         </Alert>
       ) : (
         <></>
@@ -443,4 +467,4 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   );
 };
 
-export default AddProjectModal;
+export default EditarProjeto;
