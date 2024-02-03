@@ -73,8 +73,14 @@ export const create = async (data: Project): Promise<any> => {
  * @param data Project data
  * @returns A promise of a project
  */
-export const update = async ({ id, ...data }: GetByIdParams & Project): Promise<Project> => {
-  return (await api.patch(`/project/${id}`, data)).data;
+export const update = async ({ id, ...data }: GetByIdParams & Project): Promise<any> => {
+   
+  
+  const resume = await api.put(`/project/${id}`, data)
+
+  return {status: resume.status,
+    data: resume.data};
+
 };
 
 
