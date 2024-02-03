@@ -27,7 +27,7 @@ function PortifolioView() {
     };
 
     fetchProjects();
-  }, [user.id])
+  }, [user.id]);
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -72,17 +72,32 @@ function PortifolioView() {
             Meus projetos
           </Typography>
           <TagSearch />
-          <ProjectsGrid>
-            {projects?.map((project) => (
-              <div key={project.id}>
-                <ProjectCard
-                  hasEditButton={true}
-                  project={project}
-                  hasTag={true}
-                />
-              </div>
-            ))}
-          </ProjectsGrid>
+          {
+            projects.length > 0 ? (
+              <ProjectsGrid>
+                {projects?.map((project) => (
+                  <div key={project.id}>
+                    <ProjectCard
+                      hasEditButton={true}
+                      project={project}
+                      hasTag={true}
+                    />
+                  </div>
+                ))}
+              </ProjectsGrid>
+            ) : (
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  marginTop: 6,
+                  color: theme.colors.neutral130,
+                  opacity: "0.6",
+                }}
+              >
+                Nenhum projeto cadastrado
+              </Typography>
+            )
+          }
         </Box>
       </Box>
     </section>
