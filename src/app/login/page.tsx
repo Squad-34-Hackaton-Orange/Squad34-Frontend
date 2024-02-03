@@ -58,9 +58,8 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
 });
 
 export default function Login() {
-  const { signin, isLogged } = useContext(LoginContext);
+  const { signin, isLogged, isLoading, setIsLoading } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const theme = useTheme();
 
@@ -69,14 +68,8 @@ export default function Login() {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      await signin(data);
-
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    await signin(data);
   };
 
   useEffect(() => {
@@ -152,9 +145,8 @@ export default function Login() {
               clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}>
               <GoogleLogin
                 onSuccess={(response) => {
-                  let decode = jwtDecode(response.credential as string);
-                  return decode;
-                  // console.log(decode);
+                  let credentials = jwtDecode(response.credential as string);
+                  console.log(credentials);
                 }}
                 onError={() => console.log("Failed")}
               />

@@ -11,6 +11,8 @@ interface LoginContextProps {
   signin: (data: User) => Promise<void>;
   logout: () => void;
   signup: (data: User) => Promise<void>;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
 }
 
 export const LoginContext = createContext<LoginContextProps>({
@@ -19,6 +21,8 @@ export const LoginContext = createContext<LoginContextProps>({
   signin: async () => { },
   logout: () => { },
   signup: async () => { },
+  isLoading: false,
+  setIsLoading: () => { },
 });
 interface LoginProviderProps {
   children: ReactNode;
@@ -27,6 +31,7 @@ interface LoginProviderProps {
 export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const signin = async (data: User) => {
@@ -48,7 +53,8 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -78,7 +84,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   };
 
   return (
-    <LoginContext.Provider value={{ user, signin, logout, isLogged, signup }}>
+    <LoginContext.Provider value={{ user, signin, logout, isLogged, signup, isLoading, setIsLoading }}>
       {children}
     </LoginContext.Provider>
   );
