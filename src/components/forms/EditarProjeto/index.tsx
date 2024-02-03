@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { CustomModal } from "@/components/Modal";
 import { ProjectFormErrors, ProjectFormValues } from "@/lib/validation/project";
 import {
@@ -19,6 +19,7 @@ import { Project, create, getProjectById } from "@/lib/api/project";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 import { Form } from "@unform/web";
 import { LoginContext } from "@/context/UserContext";
+import { update } from "@/lib/api/project";
 
 type AtualizarProjetoType = {
   open: boolean;
@@ -82,7 +83,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   });*/
   }
 
-  const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null>(
+  const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null| undefined>(
     null
   );
 
@@ -104,20 +105,21 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
     return newUrl;
   };
 
-  const [SubmitFlag, setSubmitFlag] = useState(true);
+  
 
   const [sucess, setSucess] = useState(false);
 
 
   useEffect(() => {
+    console.log('setando imagem')
     setImageUrl(projectData.image)
   }, [projectData])
-
-  useEffect(() => {
+  
+  useEffect(() => {       
     if (ImageUrl) setSubmitFlag(false);
   }, [ImageUrl]);
 
-
+  
 
   function contarDoisSegundos(): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -131,7 +133,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
   const handleClose = () => {
     setOpen(false);
-    setImageUpload(null);
+    setImageUpload(undefined);
     // setFormValues({
     //   title: "",
     //   description: "",
@@ -139,29 +141,29 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
     //   projectTag: [],
     //   image: "",
     // });
-    setSubmitFlag(true);
   };
 
   //TODO: PRIMEIRO CHAMAR A FUNÇÃO DE UPLOAD DE IMAGEM E DEPOIS CHAMAR A FUNÇÃO DE INTEGRAÇÃO DO BACKEND
 
-  const handleSubmit = async (data: Project) => {
+  const handleSubmit = async (data: any) => {
     if (data === undefined) {
       return;
     }
 
+    
+
     try {
       const formData: Project = {
-        title: data.title,
-        description: data.description,
-        image: ImageUrl,
-        projectTag: data.projectTag,
+        title: data.title?data.title:project.title,
+        description: data.description?data.description: project.description,
+        image: ImageUrl?ImageUrl:project.image,
         id_user: user.id,
         link: data.link,
       };
 
-      const resume = await create(formData);
+      const resume = await update({id: id, data: formData});
 
-      if (resume.status === 201) {
+      if (resume.status === 200) {
         setSucess(true);
 
         contarDoisSegundos();
@@ -219,7 +221,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                 <VOutlinedInput
                   id="title"
                   name="title"
-                  placeholder={projectData?.title}
+                  placeholder={project?.title}
                   sx={{
                     fontSize: "1.6rem",
                     color: theme.colors.neutral100,
@@ -232,30 +234,11 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                     },
                   }}
                 />
-              </FormControl>
-              <FormControl>
-                <VOutlinedInput
-                  id="projectTag"
-                  placeholder={projectData?.projectTag?.toString().replace(/[=,\[\]"]/g, ' ')}
-                  aria-describedby="my-helper-text"
-                  name="projectTag"
-                  sx={{
-                    fontSize: "1.6rem",
-                    color: theme.colors.neutral100,
-                    height: "56px",
-                    padding: "16px, 14px",
-
-                    width: "100%",
-                    "&.MuiOutlinedInput-notchedOutline": {
-                      borderColor: theme.colors.primary90,
-                    },
-                  }}
-                />
-              </FormControl>
+              </FormControl>              
               <FormControl>
                 <VOutlinedInput
                   id="link"
-                  placeholder={projectData?.link}
+                  placeholder={project?.link}
                   aria-describedby="my-helper-text"
                   name="link"
                   sx={{
@@ -278,8 +261,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
               >
                 <VOutlinedInput
                   id="description"
-                  placeholder={projectData?.description}
-                  value={projectData?.description}
+                  placeholder={project?.description}
                   aria-describedby="my-helper-text"
                   name="description"
                   sx={{
@@ -356,7 +338,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                       const fileReader = new FileReader();
 
                       fileReader.onloadend = function () {
-                        setImageUpload(fileReader.result);
+                        setImageUpload(fileReader?.result);
                       };
                       fileReader.readAsDataURL(file);
 
@@ -406,8 +388,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
             >
               <Button
                 variant="contained"
-                size="large"
-                disabled={SubmitFlag}
+                size="large"                
                 sx={{
                   color: theme.colors.neutral60,
                   backgroundColor: theme.colors.secondary100,
