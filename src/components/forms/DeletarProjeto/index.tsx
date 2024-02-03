@@ -41,11 +41,17 @@ export const DeletarProjeto = ({
         <CustomModal.Root open={open} onClose={handleClose}>
           <Box
             sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
               maxWidth: "337px",
             }}
           >
             <CustomModal.Title>
-              <Typography variant="h5" color={theme.colors.neutral110}>
+              <Typography
+                variant="h5"
+                color={theme.colors.neutral110}
+              >
                 Deseja Excluir?
               </Typography>
             </CustomModal.Title>
@@ -63,9 +69,7 @@ export const DeletarProjeto = ({
                   rowGap: "16px",
                 }}
               >
-                <Typography variant="subtitle1" color={theme.colors.neutral110}>
-                  Visualizar publicação
-                </Typography>
+
                 <Box
                   sx={{
                     display: "flex",
