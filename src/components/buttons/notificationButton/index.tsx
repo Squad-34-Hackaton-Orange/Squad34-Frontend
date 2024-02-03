@@ -38,8 +38,8 @@ const NotificationButton = () => {
     >
       <List>
         {/* COLOCAR AQUI O MAP DAS NOTIFICAÇÕES */}
-        {['Notificação 1', 'Notificação 2', 'Notificação 3'].map((text, index) => (
-          <ListItem key={index} disablePadding>
+        {["Não há notificações"].map((text, index) => (
+          <ListItem key={index}>
             <ListItemButton sx={{
               padding: 0,
               minWidth: 'auto'
