@@ -110,7 +110,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
 
   useEffect(() => {
-    console.log('setando imagem')
     setImageUrl(projectData.image)
   }, [projectData])
 
@@ -160,8 +159,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
         link: data.link,
       };
 
-      console.log(formData);
-
       const resume = await create(formData);
 
       if (resume.status === 201) {
@@ -185,9 +182,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
             validationErrors[error.path] = error.message;
           }
         });
-
-        // setFormErrors(validationErrors);
-        // console.error("Erro de validação:", errors);
       }
     }
   };

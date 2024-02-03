@@ -57,6 +57,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
       Cookies.remove("AccessToken");
       setUser(null);
       setIsLogged(false);
+      router.push("/");
     } catch (error) {
       console.error(error)
     }

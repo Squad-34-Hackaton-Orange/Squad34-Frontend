@@ -88,8 +88,6 @@ export const DeletarProjeto = ({
                         id_user: user.id,
                       });
 
-                      console.log(remover);
-
                       if (remover.status === 200) {
                         setconfirmação(true);
                         setStatus("success");
@@ -169,9 +167,9 @@ export const DeletarProjeto = ({
               </Box>
             </CustomModal.Content>
             <CustomModal.Actions>
-              <CustomModal.Action  text="VOLTAR PARA PROJETOS" color='primary' actionI="success" onClick={handleClose}  />
-               
-                
+              <CustomModal.Action text="VOLTAR PARA PROJETOS" color='primary' actionI="success" onClick={handleClose} />
+
+
             </CustomModal.Actions>
           </Box>
         </CustomModal.Root>

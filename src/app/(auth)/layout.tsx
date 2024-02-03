@@ -7,8 +7,6 @@ import { LoginContext } from "@/context/UserContext";
 export default function RootLayout(props: { children: React.ReactNode }) {
   const { user } = useContext(LoginContext);
 
-  console.log(user);
-
   if (!user) {
     return;
   };

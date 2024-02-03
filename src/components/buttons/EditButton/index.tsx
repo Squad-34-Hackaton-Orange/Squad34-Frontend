@@ -106,7 +106,6 @@ const EditButton = ({ projectId, project, visible }: EditButtonType) => {
         }}
           onClickCapture={() => {
             handleClose();
-            console.log(editarProjeto)
             setEditarProjeto(!editarProjeto)
           }}>
 

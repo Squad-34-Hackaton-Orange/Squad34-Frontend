@@ -146,8 +146,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
 
       if (resume.status === 201) {
         setSucess(true);
-        console.log(sucess)
-        
+
         contarDoisSegundos();
         // TODO: APENAS SE DER CERTO FAZER O TRYCATCH
       }
@@ -306,11 +305,10 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
                   <Box
                     style={{
                       objectFit: "cover",
-                      backgroundImage: `url('${
-                        imageUpload
-                          ? `${imageUpload}`
-                          : "/default-project-mobile.svg"
-                      }')`,
+                      backgroundImage: `url('${imageUpload
+                        ? `${imageUpload}`
+                        : "/default-project-mobile.svg"
+                        }')`,
                       backgroundSize: "cover",
                       width: "100%",
                       height: "100%",

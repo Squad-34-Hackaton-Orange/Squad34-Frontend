@@ -14,7 +14,8 @@ type AvatarProps = {
 
 
 const AvatarButton = ({ width, height, menu, user }: AvatarProps) => {
-  const { logout } = useContext(LoginContext)
+  const { logout } = useContext(LoginContext);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
