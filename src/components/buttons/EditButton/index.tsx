@@ -1,9 +1,19 @@
+import {DeletarProjeto} from "@/components/forms/DeletarProjeto";
+import { ConfirmacaoDeletarProjeto } from "@/components/forms/DeletarProjeto/ConfirmaçãoModal";
+import EditarProjeto from "@/components/forms/EditarProjeto";
+import { Project } from "@/lib/api/project";
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, Fab, IconButton, Link, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useTheme } from "@mui/material";
+import { IconButton, Link, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 
-const EditButton = () => {
+type EditButtonType = {
+  projectId:any
+  project: Project
+}
+
+const EditButton = ({projectId, project}:EditButtonType) => {
   const theme = useTheme();
+  const [openModal, setOpenModal] = useState(false)
 
   //HANDLE THE BUTTON
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -11,9 +21,18 @@ const EditButton = () => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
+  const [confirmação, setconfirmação] = useState<boolean>(false)
+
+  const [status, setStatus] = useState<boolean>(false)
+
+  const [editarProjeto, setEditarProjeto] = useState<boolean>(false)
+  
 
   return (
     <>      
@@ -86,37 +105,33 @@ const EditButton = () => {
       >
         <MenuItem onClick={handleClose} sx={{
             width: 208
+        }}
+        onClickCapture={() => {
+          handleClose();
+          console.log(editarProjeto)
+          setEditarProjeto(!editarProjeto)
         }}>
-          <Link
-            variant="subtitle1"
-            href="/portifolio"
-            underline="none"
-            sx={{ color: theme.colors.primary90 }}
-          >
+          
             <Typography
               sx={{ fontSize: { xs: "16px" }, lineHeight: { xs: "16px" } }}
             >
               Editar
             </Typography>
-          </Link>
         </MenuItem>
-        <MenuItem onClick={handleClose} sx={{
+        <MenuItem onClick={() => {handleClose(); setOpenModal(true)}} sx={{
             width: 208
         }}>
-          <Link
-            variant="subtitle1"
-            href="/descobrir"
-            underline="none"
-            sx={{ color: theme.colors.primary90 }}
-          >
+          
             <Typography
-              sx={{ fontSize: { xs: "16px" }, lineHeight: { xs: "16px" },  }}
+              sx={{ fontSize: { xs: "16px" }, lineHeight: { xs: "16px" }, color: theme.colors.primary90 }}
             >
               Excluir
             </Typography>
-          </Link>
         </MenuItem>        
       </Menu>
+      <DeletarProjeto open={openModal} setOpen={setOpenModal} projectId={projectId} />
+      <EditarProjeto open={editarProjeto} setOpen={setEditarProjeto} project={project} />
+      <ConfirmacaoDeletarProjeto status={status} open={confirmação} setOpen={setconfirmação} />
     </>
   );
 };

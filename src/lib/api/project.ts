@@ -36,6 +36,8 @@ export const list = async ({ id }: User): Promise<Project[]> => {
  */
 export const get = async ({ id }: GetByIdParams): Promise<Project[]> => {
   return (await api.get(`/project/${id}/all`)).data;
+
+  
 };
 
 
@@ -45,8 +47,10 @@ export const get = async ({ id }: GetByIdParams): Promise<Project[]> => {
  * @param id User id
  * @returns A promise of a list of projects from a users
  */
-export const getProjectById = async ({ id }: GetByUserIdParams): Promise<Project[]> => {
-  return (await api.get(`/project/${id}/`)).data;
+export const getProjectById = async ({ id, id_user }: Project): Promise<Project> => {
+  const resume = await api.get(`/project/${id_user}/${id}/`);
+
+  return resume.data
 };
 
 
@@ -55,8 +59,11 @@ export const getProjectById = async ({ id }: GetByUserIdParams): Promise<Project
  * @param data Project data
  * @returns A promise of a project
  */
-export const create = async (data: Project): Promise<Project> => {
-  return (await api.post(`/project`, data)).data;
+export const create = async (data: Project): Promise<any> => {
+  const resume = await api.post(`/project`, data);
+
+  return {status: resume.status,
+    data: resume.data};
 };
 
 
@@ -76,6 +83,9 @@ export const update = async ({ id, ...data }: GetByIdParams & Project): Promise<
  * @param id Project id
  * @returns A promise of a project
  */
-export const remove = async ({ id }: GetByIdParams): Promise<void> => {
-  return (await api.delete(`/project/${id}`)).data;
+export const remove = async ({ id, id_user }: Project): Promise<any> => {
+  const resume = await api.delete(`/project/${id_user}/${id}`)
+
+  return {status: resume.status,
+  data: resume.data};
 }

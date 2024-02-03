@@ -1,7 +1,7 @@
 import { ModalAction } from "./ModalAction";
 import { ModalActions } from "./ModalActions";
 import { ModalContent } from "./ModalContent";
-import { ModalRoot } from "./ModalRoot";
+import {ModalRoot} from "./ModalRoot";
 import { ModalTitle } from "./ModalTitle";
 import { Modal } from "./Modal";
 

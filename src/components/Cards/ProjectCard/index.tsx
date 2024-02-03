@@ -1,7 +1,7 @@
 import EditButton from "@/components/buttons/EditButton";
 import { Project } from "@/lib/api/project";
 import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 interface ProjectProps {
   project?: Project;
@@ -12,8 +12,9 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
   const theme = useTheme();
 
   const handleDate = (dateString: Date) => {
-    const dia = dateString.getUTCDate();
-    const mes = dateString.getUTCMonth() + 1;
+    const date = new Date(dateString)
+    const dia = date.getDate();
+    const mes = date.getMonth() + 1;
 
     const diaMesFormatado = `${dia.toString().padStart(2, "0")}/${mes
       .toString()
@@ -21,6 +22,14 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
 
     return diaMesFormatado;
   };
+
+  if(!project){
+    return;
+  }
+
+  
+
+
 
   if (!project) {
     return (
@@ -144,7 +153,7 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
                     color: { xs: theme.colors.neutral110, sm: theme.colors.neutral120 }
                   }}
                 >
-                  Data indisponível
+                  {project.date_post?handleDate(project.date_post):"Data Indisponível"}
                 </Typography>
               </Box>
               {hasTag ? (
@@ -170,7 +179,8 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
             </Box>
           </Box>
         </Button>
-        <EditButton />
+        <EditButton projectId={project.id} project={project} /> 
+      
       </Box>
     );
   }
