@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ProfileCard from "@/components/Cards/UserProfileCard";
 import ProjectsGrid from "@/components/ProjectGrid";
@@ -10,11 +10,15 @@ import isAuth from "@/components/isAuth";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "@/context/UserContext";
 import { Project, get } from "@/lib/api/project";
+import CollectionsIcon from '@mui/icons-material/Collections';
+import AddProjectModal from "@/components/forms/AdicionarProjeto";
 
 function PortifolioView() {
   const { user } = useContext(LoginContext);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
   const theme = useTheme();
+
 
   if (!user) {
     return;
@@ -27,7 +31,7 @@ function PortifolioView() {
     };
 
     fetchProjects();
-  }, [user.id])
+  }, [user.id]);
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -46,7 +50,11 @@ function PortifolioView() {
         }}
       >
         <Box sx={{ mt: "56px" }}>
-          <ProfileCard />
+          <ProfileCard
+            userImage={
+              projects[0]?.user
+            }
+          />
         </Box>
         <Box
           sx={{
@@ -68,18 +76,64 @@ function PortifolioView() {
             Meus projetos
           </Typography>
           <TagSearch />
-          <ProjectsGrid>
-            {projects?.map((project) => (
-              <div key={project.id}>
-                <ProjectCard
-                  project={project}
-                  hasTag={true}
-                />
-              </div>
-            ))}
-          </ProjectsGrid>
+          {
+            projects.length > 0 ? (
+              <ProjectsGrid>
+                {projects?.map((project) => (
+                  <div key={project.id}>
+                    <ProjectCard
+                      hasEditButton={true}
+                      project={project}
+                      hasTag={true}
+                    />
+                  </div>
+                ))}
+              </ProjectsGrid>
+            ) : (
+              <Button
+                variant="text"
+                onClick={() => setModalOpen(true)}
+                sx={{
+                  height: "250px",
+                  width: "320px",
+                  background: theme.colors.neutral70,
+                  marginTop: 6
+                }}
+              >
+                <Box>
+                  <CollectionsIcon
+                    sx={{
+                      fontSize: 40,
+                      color: theme.colors.neutral120,
+                      marginBottom: 2
+                    }}
+                  />
+
+                  <Typography
+                    sx={{
+                      color: theme.colors.neutral120,
+                      marginBottom: 2,
+                      textTransform: "none"
+                    }}
+                  >
+                    Adicione seu primeiro projeto
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      color: theme.colors.neutral120,
+                      textTransform: "none"
+                    }}
+                  >
+                    Compartilhe seu talento com milhares de pessoas
+                  </Typography>
+                </Box>
+              </Button>
+            )
+          }
         </Box>
       </Box>
+      <AddProjectModal open={modalOpen} setOpen={setModalOpen} />
     </section>
   );
 };

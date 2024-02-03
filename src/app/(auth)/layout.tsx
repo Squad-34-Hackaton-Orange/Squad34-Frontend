@@ -1,10 +1,20 @@
-import * as React from "react";
+"use client"
+
+import React, { useContext } from "react";
 import Header from "@/components/Header";
+import { LoginContext } from "@/context/UserContext";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+  const { user } = useContext(LoginContext);
+
+  if (!user) {
+    return;
+  };
+
   return (
     <div>
-      <Header />
+      <Header user={user}
+      />
       <main>{props.children}</main>
     </div>
   );

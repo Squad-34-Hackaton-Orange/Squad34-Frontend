@@ -7,8 +7,13 @@ import { Logo } from "../Logo";
 import MenuHamburguer from "../HamburguerMenu";
 import AvatarButton from "../buttons/AvatarButton";
 import NotificationButton from "../buttons/notificationButton";
+import { User } from "@/lib/api/user";
 
-export default function Header() {
+type HeaderProps = {
+  user?: User;
+};
+
+export default function Header({ user }: HeaderProps) {
   const theme = useTheme();
   const [pathname, setPathname] = useState('/');
 
@@ -97,7 +102,12 @@ export default function Header() {
           gap: "20px"
         }}>
 
-          <AvatarButton width={40} height={40} menu={true} />
+          <AvatarButton
+            user={user}
+            width={40}
+            height={40}
+            menu={true}
+          />
           <NotificationButton />
 
         </Box>

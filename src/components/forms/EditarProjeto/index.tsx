@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { CustomModal } from "@/components/Modal";
 import { ProjectFormErrors, ProjectFormValues } from "@/lib/validation/project";
 import {
@@ -19,6 +19,7 @@ import { Project, create, getProjectById } from "@/lib/api/project";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 import { Form } from "@unform/web";
 import { LoginContext } from "@/context/UserContext";
+import { update } from "@/lib/api/project";
 
 type AtualizarProjetoType = {
   open: boolean;
@@ -40,21 +41,12 @@ const projectSchema = yup.object({
 const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const { user } = useContext(LoginContext);
 
-  console.log('abriu')
-
-  const [projectData, setProjectData] = useState<Project | undefined>(undefined)
-
   if (!user || !project) {
     return;
   }
 
   const theme = useTheme();
-
-
-
-  if (!projectData) {
-    return;
-  }
+  
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -86,7 +78,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   });*/
   }
 
-  const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null>(
+  const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null| undefined>(
     null
   );
 
@@ -108,21 +100,17 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
     return newUrl;
   };
 
-  const [SubmitFlag, setSubmitFlag] = useState(true);
+  
 
   const [sucess, setSucess] = useState(false);
 
-    
   useEffect(() => {
-    console.log('setando imagem')
-    setImageUrl(projectData.image)
-  }, [projectData])
-  
-  useEffect(() => {       
-    if (ImageUrl) setSubmitFlag(false);
-  }, [ImageUrl]);
+    if (open === true) {
+      console.log("setando imagem");
+      setImageUpload(project?.image);
+    }
+  }, [open]);
 
-  
 
   function contarDoisSegundos(): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -136,7 +124,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
   const handleClose = () => {
     setOpen(false);
-    setImageUpload(null);
+    setImageUpload(undefined);
     // setFormValues({
     //   title: "",
     //   description: "",
@@ -144,36 +132,39 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
     //   projectTag: [],
     //   image: "",
     // });
-    setSubmitFlag(true);
   };
 
   //TODO: PRIMEIRO CHAMAR A FUNÇÃO DE UPLOAD DE IMAGEM E DEPOIS CHAMAR A FUNÇÃO DE INTEGRAÇÃO DO BACKEND
 
-  const handleSubmit = async (data: Project) => {
-    if (data === undefined) {
+  const handleSubmit = async (formData: any) => {
+    if (formData === undefined) {
       return;
     }
 
+    
+
     try {
-      const formData: Project = {
-        title: data.title,
-        description: data.description,
-        image: ImageUrl,
-        projectTag: data.projectTag,
+      const data: Project = {
+        title: formData.title?formData.title:project.title,
+        description: formData.description?formData.description: project.description,
+        image: ImageUrl?ImageUrl:project.image,
         id_user: user.id,
-        link: data.link,
+        link: formData.link?formData.link:project.link,
+        date_post: new Date()
       };
 
-      console.log(formData);
 
-      const resume = await create(formData);
+      if (project.id === undefined) {
+        return;
+      }      
 
-      if (resume.status === 201) {
-        setSucess(true);
+      const id: string = String(project.id);
 
-        contarDoisSegundos();
-        // TODO: APENAS SE DER CERTO FAZER O TRYCATCH
-      }
+      const resume = await update({id}, data);
+
+      setSucess(true);
+
+        contarDoisSegundos()
     } catch (errors) {
       if (errors instanceof yup.ValidationError) {
         const validationErrors: ProjectFormErrors = {
@@ -229,7 +220,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                 <VOutlinedInput
                   id="title"
                   name="title"
-                  placeholder={projectData?.title}
+                  placeholder={project?.title}
                   sx={{
                     fontSize: "1.6rem",
                     color: theme.colors.neutral100,
@@ -242,30 +233,11 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                     },
                   }}
                 />
-              </FormControl>
-              <FormControl>
-                <VOutlinedInput
-                  id="projectTag"
-                  placeholder={projectData?.projectTag?.toString().replace(/[=,\[\]"]/g, ' ')}
-                  aria-describedby="my-helper-text"
-                  name="projectTag"
-                  sx={{
-                    fontSize: "1.6rem",
-                    color: theme.colors.neutral100,
-                    height: "56px",
-                    padding: "16px, 14px",
-
-                    width: "100%",
-                    "&.MuiOutlinedInput-notchedOutline": {
-                      borderColor: theme.colors.primary90,
-                    },
-                  }}
-                />
-              </FormControl>
+              </FormControl>              
               <FormControl>
                 <VOutlinedInput
                   id="link"
-                  placeholder={projectData?.link}
+                  placeholder={project?.link}
                   aria-describedby="my-helper-text"
                   name="link"
                   sx={{
@@ -288,8 +260,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
               >
                 <VOutlinedInput
                   id="description"
-                  placeholder={projectData?.description}
-                  value={projectData?.description}
+                  placeholder={project?.description}
                   aria-describedby="my-helper-text"
                   name="description"
                   sx={{
@@ -367,7 +338,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                       const fileReader = new FileReader();
 
                       fileReader.onloadend = function () {
-                        setImageUpload(fileReader.result);
+                        setImageUpload(fileReader?.result);
                       };
                       fileReader.readAsDataURL(file);
 
@@ -417,8 +388,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
             >
               <Button
                 variant="contained"
-                size="large"
-                disabled={SubmitFlag}
+                size="large"                
                 sx={{
                   color: theme.colors.neutral60,
                   backgroundColor: theme.colors.secondary100,

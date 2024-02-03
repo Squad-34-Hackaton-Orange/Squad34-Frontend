@@ -24,8 +24,8 @@ export const ModalRoot = ({
     return (
       <Modal
         open={open}
-        onClose={onClose}  
-        className="modalStyle1"      
+        onClose={onClose}
+        className="modalStyle1"
         sx={{
           display: "flex",
           alignItems: "center",
@@ -38,8 +38,8 @@ export const ModalRoot = ({
         <Box
           sx={{
             maxWidth: "890px",
-            width: {xs: "312px", sm: '95%'},
-            maxHeight: '659px',
+            width: { xs: "312px", sm: '95%' },
+            maxHeight: '800px',
 
             display: "flex",
             flexDirection: "column",
@@ -50,7 +50,7 @@ export const ModalRoot = ({
             px: 3,
             py: 4,
             position: 'fixed',
-            top: {xs: '36px'},
+            top: { xs: '36px' },
             overflow: 'scroll'
           }}
         >

@@ -8,9 +8,11 @@ import { LoginContext } from "@/context/UserContext";
 import { Project, list } from "@/lib/api/project";
 import { Box, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
+import { useTheme } from "@mui/material/styles";
 
 function DiscoverView() {
   const { user } = useContext(LoginContext);
+  const theme = useTheme();
   const [projects, setProjects] = useState<Project[]>([]);
 
   if (!user) {
@@ -24,7 +26,8 @@ function DiscoverView() {
     };
 
     fetchProjects();
-  }, [projects])
+  }, []);
+  
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -60,14 +63,32 @@ function DiscoverView() {
         >
           <TagSearch />
           <ProjectsGrid>
-            {projects?.map((project) => (
-              <div key={project.id}>
-                <ProjectCard
-                  project={project}
-                  hasTag={false}
-                />
-              </div>
-            ))}
+            {
+              projects.length > 0 ? (
+                <>
+                  {projects?.map((project) => (
+                    <div key={project.id}>
+                      <ProjectCard
+                        hasEditButton={false}
+                        project={project}
+                        hasTag={false}
+                      />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    marginTop: 6,
+                    color: theme.colors.neutral130,
+                    opacity: "0.6",
+                  }}
+                >
+                  Nenhum projeto encontrado
+                </Typography>
+              )
+            }
           </ProjectsGrid>
         </Box>
       </Box>

@@ -41,11 +41,17 @@ export const DeletarProjeto = ({
         <CustomModal.Root open={open} onClose={handleClose}>
           <Box
             sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
               maxWidth: "337px",
             }}
           >
             <CustomModal.Title>
-              <Typography variant="h5" color={theme.colors.neutral110}>
+              <Typography
+                variant="h5"
+                color={theme.colors.neutral110}
+              >
                 Deseja Excluir?
               </Typography>
             </CustomModal.Title>
@@ -63,9 +69,7 @@ export const DeletarProjeto = ({
                   rowGap: "16px",
                 }}
               >
-                <Typography variant="subtitle1" color={theme.colors.neutral110}>
-                  Visualizar publicação
-                </Typography>
+
                 <Box
                   sx={{
                     display: "flex",
@@ -87,8 +91,6 @@ export const DeletarProjeto = ({
                         id: id,
                         id_user: user.id,
                       });
-
-                      console.log(remover);
 
                       if (remover.status === 200) {
                         setconfirmação(true);
@@ -169,9 +171,9 @@ export const DeletarProjeto = ({
               </Box>
             </CustomModal.Content>
             <CustomModal.Actions>
-              <CustomModal.Action  text="VOLTAR PARA PROJETOS" color='primary' actionI="success" onClick={handleClose}  />
-               
-                
+              <CustomModal.Action text="VOLTAR PARA PROJETOS" color='primary' actionI="success" onClick={handleClose} />
+
+
             </CustomModal.Actions>
           </Box>
         </CustomModal.Root>
