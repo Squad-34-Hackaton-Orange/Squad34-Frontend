@@ -13,8 +13,9 @@ type ProfileCardProps = {
 
 const ProfileCard = ({ userImage }: ProfileCardProps) => {
   const { user } = useContext(LoginContext);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const theme = useTheme();
-  const [modalOpen, setModalOpen] = useState(false)
 
 
   if (!user) {

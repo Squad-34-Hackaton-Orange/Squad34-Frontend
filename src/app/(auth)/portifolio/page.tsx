@@ -16,6 +16,7 @@ function PortifolioView() {
   const [projects, setProjects] = useState<Project[]>([]);
   const theme = useTheme();
 
+
   if (!user) {
     return;
   }

@@ -328,10 +328,9 @@ export default function ProjectCard({
             }}>
               <Box sx={{
                 display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'flex-start', sm: 'center' },
-                rowGap: { xs: '8px' },
-                gap: { sm: '8px' }
+                alignItems: 'center',
+                justifyContent: "center",
+                gap: { xs: '8px' }
               }}>
                 <Avatar
                   alt={project?.user?.name}
@@ -341,9 +340,7 @@ export default function ProjectCard({
                 <Typography variant="subtitle1" color={theme.colors.neutral120}>
                   {project?.user?.name}
                 </Typography>
-                <Typography variant="subtitle1" color={theme.colors.neutral120} sx={{
-                  display: { xs: 'none', sm: 'flex' },
-                }}>
+                <Typography variant="subtitle1" color={theme.colors.neutral120}>
                   •
                 </Typography>
                 <Typography variant="subtitle1"
@@ -376,14 +373,14 @@ export default function ProjectCard({
               ) : null}
             </Box>
           </Box>
-        </Button>
+        </Button >
         <EditButton
           visible={hasEditButton}
           projectId={project.id}
           project={project}
         />
 
-      </Box>
+      </Box >
     </>
   );
 }
