@@ -2,7 +2,7 @@
 import React, { useContext, useState } from 'react'
 import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material'
 import { LoginContext } from '@/context/UserContext'
-import { User } from '@/lib/api/user';
+import { User, remove } from '@/lib/api/user';
 
 
 type AvatarProps = {
@@ -14,7 +14,7 @@ type AvatarProps = {
 
 
 const AvatarButton = ({ width, height, menu, user }: AvatarProps) => {
-  const { logout } = useContext(LoginContext);
+  const { logout, user: userContext } = useContext(LoginContext);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -25,6 +25,17 @@ const AvatarButton = ({ width, height, menu, user }: AvatarProps) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleDelete = async () => {
+    if (!userContext) return;
+
+    try {
+      await remove({ id: userContext?.id as number });
+      logout();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (menu) {
@@ -59,7 +70,11 @@ const AvatarButton = ({ width, height, menu, user }: AvatarProps) => {
         >
           <MenuItem onClick={handleClose}>Atualizar Perfil</MenuItem>
           <MenuItem onClick={handleClose}>Trocar Senha</MenuItem>
-          <MenuItem onClick={handleClose}>Excluir Conta</MenuItem>
+          <MenuItem
+            onClick={handleDelete}
+          >
+            Excluir Conta
+          </MenuItem>
           <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
       </Box>
