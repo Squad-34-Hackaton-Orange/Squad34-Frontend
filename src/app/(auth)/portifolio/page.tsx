@@ -46,7 +46,11 @@ function PortifolioView() {
         }}
       >
         <Box sx={{ mt: "56px" }}>
-          <ProfileCard />
+          <ProfileCard
+            userImage={
+              projects[0]?.user
+            }
+          />
         </Box>
         <Box
           sx={{
@@ -72,6 +76,7 @@ function PortifolioView() {
             {projects?.map((project) => (
               <div key={project.id}>
                 <ProjectCard
+                  hasEditButton={true}
                   project={project}
                   hasTag={true}
                 />

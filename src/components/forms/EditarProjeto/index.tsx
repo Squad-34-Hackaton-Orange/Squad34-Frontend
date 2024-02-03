@@ -40,8 +40,6 @@ const projectSchema = yup.object({
 const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const { user } = useContext(LoginContext);
 
-  console.log('abriu')
-
   const [projectData, setProjectData] = useState<Project | undefined>(undefined)
 
   if (!user || !project) {
@@ -49,8 +47,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   }
 
   const theme = useTheme();
-
-
 
   if (!projectData) {
     return;
@@ -112,17 +108,17 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
   const [sucess, setSucess] = useState(false);
 
-    
+
   useEffect(() => {
     console.log('setando imagem')
     setImageUrl(projectData.image)
   }, [projectData])
-  
-  useEffect(() => {       
+
+  useEffect(() => {
     if (ImageUrl) setSubmitFlag(false);
   }, [ImageUrl]);
 
-  
+
 
   function contarDoisSegundos(): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -330,11 +326,10 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                   <Box
                     style={{
                       objectFit: "cover",
-                      backgroundImage: `url('${
-                        imageUpload
-                          ? `${imageUpload}`
-                          : "/default-project-mobile.svg"
-                      }')`,
+                      backgroundImage: `url('${imageUpload
+                        ? `${imageUpload}`
+                        : "/default-project-mobile.svg"
+                        }')`,
                       backgroundSize: "cover",
                       width: "100%",
                       height: "100%",

@@ -2,16 +2,18 @@
 import React, { useContext, useState } from 'react'
 import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material'
 import { LoginContext } from '@/context/UserContext'
+import { User } from '@/lib/api/user';
 
 
 type AvatarProps = {
   width: number,
   height: number,
   menu?: boolean
-}
+  user?: User;
+};
 
 
-const AvatarButton = ({ width, height, menu }: AvatarProps) => {
+const AvatarButton = ({ width, height, menu, user }: AvatarProps) => {
   const { logout } = useContext(LoginContext)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -25,7 +27,6 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
   };
 
   if (menu) {
-
     return (
       <Box>
         <Button
@@ -40,7 +41,11 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
 
           }}
         >
-          <Avatar alt="Remy Sharp" src="/hero.svg" sx={{ width: width, height: height }} />
+          <Avatar
+            alt={user?.name}
+            src={user?.image}
+            sx={{ width: width, height: height }}
+          />
         </Button>
         <Menu
           id="basic-menu"
@@ -64,7 +69,14 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
   if (!menu) {
     return (
       <Box>
-        <Avatar alt="Remy Sharp" src="/hero.svg" sx={{ width: width, height: height }} />
+        <Avatar
+          alt={user?.name}
+          src={user?.image}
+          sx={{
+            width: width,
+            height: height
+          }}
+        />
       </Box>
     )
   }

@@ -1,14 +1,21 @@
 import EditButton from "@/components/buttons/EditButton";
 import { Project } from "@/lib/api/project";
+import { User } from "@/lib/api/user";
 import { Box, Typography, Button, useTheme, Chip, Avatar } from "@mui/material";
-import React, { useState } from "react";
-
+import React from "react";
 interface ProjectProps {
   project?: Project;
   hasTag: boolean;
+  hasEditButton: boolean;
+  user?: User;
 }
 
-export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
+export default function ProjectCard({
+  project,
+  hasTag = true,
+  hasEditButton,
+  user
+}: ProjectProps) {
   const theme = useTheme();
 
   const handleDate = (dateString: Date) => {
@@ -23,68 +30,12 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
     return diaMesFormatado;
   };
 
-  if(!project){
-    return;
-  }
-
-  
-
-
-
   if (!project) {
     return (
-      <>
-        <Button
-          sx={{
-            width: "100%",
-            padding: 0,
-          }}
-        >
-          <Box
-            sx={{
-              width: { xs: "100%" },
-              height: "258px",
-              backgroundImage: `url('/default-project.svg')`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-              justifySelf: "center",
-              alignSelf: "center",
-            }}
-          ></Box>
-        </Button>
-        <Box
-          sx={{
-            width: { xs: "100%" },
-            height: "258px",
-            backgroundColor: theme.colors.neutral70,
-            justifySelf: "center",
-            display: { xs: "none", md: "flex" },
-            opacity: "0.2",
-          }}
-        ></Box>
-        <Box
-          sx={{
-            width: { xs: "100%" },
-            height: "258px",
-            backgroundColor: theme.colors.neutral70,
-            justifySelf: "center",
-            display: { xs: "none", lg: "flex" },
-            opacity: "0.2",
-          }}
-        ></Box>
-        <Box
-          sx={{
-            width: { xs: "100%" },
-            height: "258px",
-            backgroundColor: theme.colors.neutral70,
-            justifySelf: "center",
-            display: { xs: "none", xl: "flex" },
-            opacity: "0.2",
-          }}
-        ></Box>
-      </>
-    );
+      <Typography variant="h6" color={theme.colors.neutral120}>
+        Nenhum projeto encontrado
+      </Typography>
+    )
   }
 
   if (project) {
@@ -136,8 +87,8 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
                 gap: { sm: '8px' }
               }}>
                 <Avatar
-                  alt="Remy Sharp"
-                  src="/hero.svg"
+                  alt={project?.user?.name}
+                  src={project?.user?.image}
                   sx={{ width: 24, height: 24 }}
                 />
                 <Typography variant="subtitle1" color={theme.colors.neutral120}>
@@ -153,7 +104,7 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
                     color: { xs: theme.colors.neutral110, sm: theme.colors.neutral120 }
                   }}
                 >
-                  {project.date_post?handleDate(project.date_post):"Data Indisponível"}
+                  {project.date_post ? handleDate(project.date_post) : "Data Indisponível"}
                 </Typography>
               </Box>
               {hasTag ? (
@@ -179,8 +130,12 @@ export default function ProjectCard({ project, hasTag = true }: ProjectProps) {
             </Box>
           </Box>
         </Button>
-        <EditButton projectId={project.id} project={project} /> 
-      
+        <EditButton
+          visible={hasEditButton}
+          projectId={project.id}
+          project={project}
+        />
+
       </Box>
     );
   }

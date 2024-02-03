@@ -24,7 +24,7 @@ function DiscoverView() {
     };
 
     fetchProjects();
-  }, [projects])
+  }, [projects]);
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -63,6 +63,7 @@ function DiscoverView() {
             {projects?.map((project) => (
               <div key={project.id}>
                 <ProjectCard
+                  hasEditButton={false}
                   project={project}
                   hasTag={false}
                 />
