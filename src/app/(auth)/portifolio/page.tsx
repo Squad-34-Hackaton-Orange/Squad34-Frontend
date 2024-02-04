@@ -17,11 +17,7 @@ function PortifolioView() {
   const { user } = useContext(LoginContext);
   const [projects, setProjects] = useState<Project[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
-
-  console.log(user)
-
 
   if (!user) {
     return;

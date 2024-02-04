@@ -19,11 +19,11 @@ interface LoginContextProps {
 export const LoginContext = createContext<LoginContextProps>({
   isLogged: false,
   user: null,
-  signin: async () => {},
-  logout: () => {},
-  signup: async () => {},
+  signin: async () => { },
+  logout: () => { },
+  signup: async () => { },
   isLoading: false,
-  setIsLoading: () => {},
+  setIsLoading: () => { },
 });
 interface LoginProviderProps {
   children: ReactNode;
@@ -39,24 +39,25 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   const router = useRouter();
 
   const signin = async (data: User) => {
-    const {token} = data
+    const { token } = data
     if (token) {
-      try {        
-          Cookies.set("AccessToken", token, {
-            expires: 60 * 60 * 1000,
-            secure: true,
-            sameSite: "Lax",
-          });
+      try {
+        Cookies.set("AccessToken", token, {
+          expires: 60 * 60 * 1000,
+          secure: true,
+          sameSite: "Lax",
+        });
 
-          const decoded = jwtDecode(token);
-          setUser(decoded as User);
-          console.log(decoded)
-          setIsLogged(true);
-          return;
-        } catch (error) {
-        console.error(error);
+        const decoded = jwtDecode(token);
+        setUser(decoded as User);
+        setIsLogged(true);
+        return;
+      } catch (error) {
         setIsLoading(false);
-        throw error
+        setIsLoginError(true);
+        setTimeout(() => {
+          setIsLoginError(false);
+        }, 4000);
       }
     }
 
@@ -80,7 +81,10 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
       }
     } catch (error) {
       setIsLoading(false);
-      throw error;
+      setIsLoginError(true);
+      setTimeout(() => {
+        setIsLoginError(false);
+      }, 4000);
     }
   };
 
