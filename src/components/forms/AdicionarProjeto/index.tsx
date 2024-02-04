@@ -447,12 +447,10 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
           variant="filled"
           severity="success"
           sx={{
-            display: "flex",
-            alignItems: "center",
-            position: "fixed",
-            left: "50%",
-            top: "5%",
-            transform: "translate(-50%, -50%)",
+            position: "absolute",
+            top: 0,
+            right: 0,
+            margin: 2,
           }}
         >
           Projeto Cadastrado com sucesso
