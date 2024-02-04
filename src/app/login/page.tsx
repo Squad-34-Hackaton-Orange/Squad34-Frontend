@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import {
   Box,
@@ -29,36 +29,29 @@ import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 import * as yup from "yup";
 import { GoogleCredencials, handleGoogle } from "@/lib/validation/user";
 
-const formValidationSchema: yup.Schema<any> = yup.object().shape({
+const transformString = (originalValue: string) => {
+  return originalValue.trim() === '' ? null : originalValue;
+};
+
+const formValidationSchema = yup.object().shape({
   email: yup
-    .string()
-    .transform((originalValue) => {
-      if (originalValue.trim() === "") {
-        return null;
-      }
-      return originalValue;
-    })
-    .min(5, "A email deve ter pelo menos 5 caracteres")
-    .max(180, "A senha deve ter no máximo 180 caracteres")
+    .string().transform(transformString)
     .required("O email é obrigatório")
-    .email("Insira um email válido"),
+    .email("Formato de email inválido")
+    .matches(
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      "Formato de email inválido"
+    )
+    .max(180, "O email deve conter no máximo 180 caracteres")
+    .min(5, "O email deve conter no mínimo 5 caracteres"),
   password: yup
     .string()
-    .transform((originalValue) => {
-      if (originalValue.trim() === "") {
-        return null;
-      }
-      return originalValue;
-    })
+    .required("A senha é obrigatória")
     .min(8, "A senha deve ter pelo menos 8 caracteres")
     .max(16, "A senha deve ter no máximo 16 caracteres")
     .matches(/[0-9]/, "A senha deve conter pelo menos um número")
-    .matches(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      "A senha deve conter pelo menos um caractere especial"
-    )
-    .matches(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
-    .required("A senha é obrigatória"),
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, "A senha deve conter pelo menos um caractere especial")
+    .matches(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula"),
 });
 
 export default function Login() {
@@ -67,14 +60,28 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const theme = useTheme();
+  const formRef = useRef(null);
 
   const handleSubmit = async (data: User) => {
-    if (!data) {
-      return;
-    }
+    try {
+      formRef.current.setErrors({});
 
-    setIsLoading(true);
-    await signin(data);
+      await formValidationSchema.validate(data, {
+        abortEarly: false,
+      });
+
+      setIsLoading(true);
+      await signin(data);
+    } catch (err) {
+      const validationErrors = {};
+      if (err instanceof yup.ValidationError) {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+
+        formRef.current.setErrors(validationErrors);
+      }
+    }
   };
 
   useEffect(() => {
@@ -186,7 +193,11 @@ export default function Login() {
               Faça login com email
             </Typography>
 
-            <Form onSubmit={(data) => handleSubmit(data)} placeholder="Login">
+            <Form
+              ref={formRef}
+              onSubmit={(data) => handleSubmit(data)}
+              placeholder="Login"
+            >
               <FormControl
                 variant="outlined"
                 fullWidth

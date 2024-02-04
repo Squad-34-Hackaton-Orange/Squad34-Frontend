@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { useTheme } from "@mui/material/styles";
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
@@ -17,7 +17,6 @@ import {
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Form } from "@unform/web";
-import { FormHandles } from '@unform/core';
 import * as yup from 'yup';
 import { LoginContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
@@ -25,21 +24,13 @@ import { User } from "@/lib/api/user";
 import { VTextField } from "@/components/forms/VTextField";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 
-interface IFormData {
-  name: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+const transformString = (originalValue: string) => {
+  return originalValue.trim() === '' ? null : originalValue;
+};
 
 const formValidationSchema: yup.Schema<any> = yup.object().shape({
   name: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+    .string().transform(transformString)
     .required("O nome é obrigatório")
     .max(50, "O nome deve conter no máximo cinquenta caracteres")
     .min(2, "O nome deve conter no mínimo dois caracteres")
@@ -47,13 +38,8 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
       /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/,
       "Digite um nome válido"
     ),
-  lastName: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+  last_name: yup
+    .string().transform(transformString)
     .required("O sobrenome é obrigatório")
     .min(2, "O sobrenome deve conter no mínimo dois caracteres")
     .max(50, "O sobrenome deve conter no máximo cinquenta caracteres")
@@ -62,12 +48,7 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
       "Digite um nome válido"
     ),
   email: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+    .string().transform(transformString)
     .required("O email é obrigatório")
     .email("Formato de email inválido")
     .matches(
@@ -77,12 +58,7 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
     .max(180, "O email deve conter no máximo 180 caracteres")
     .min(5, "O email deve conter no mínimo 5 caracteres"),
   password: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
-        return null;
-      }
-      return originalValue;
-    })
+    .string().transform(transformString)
     .required("A senha é obrigatória")
     .min(8, "A senha deve conter pelo menos 8 caracteres")
     .max(16, "A senha deve conter no máximo 16 caracteres")
@@ -97,38 +73,34 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
     ),
 });
 
-
 export default function SignUp() {
-  const { signup, isLoading, setIsLoading } = useContext(LoginContext);
+  const { signup, setIsSignupLoading, isSignupLoading } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
 
-  const router = useRouter();
   const theme = useTheme();
-  const formRef = React.useRef<FormHandles>(null);
+  const formRef = useRef(null);
 
-  // Validação de formulário com yup
-  // const handleSubmit = async (data: IFormData) => {
-  //   try {
-  //     await formValidationSchema.validate(data, { abortEarly: false });
-  //     console.log("Dados válidos:", data);
-  //   } catch (errors: yup.ValidationError | any) {
-  //     const validationErrors: { [key: string]: string } = {};
-
-  //     errors.inner.forEach((error: any) => {
-  //       if (!error.path) return;
-
-  //       validationErrors[error.path] = error.message;
-  //     });
-
-  //     formRef.current?.setErrors(validationErrors);
-  //   }
-  // };
 
   const handleSubmit = async (data: User) => {
-    if (!data) {
-      return;
+    try {
+      formRef.current.setErrors({});
+
+      await formValidationSchema.validate(data, {
+        abortEarly: false,
+      });
+
+      setIsSignupLoading(true);
+      await signup(data);
+    } catch (err) {
+      const validationErrors = {};
+      if (err instanceof yup.ValidationError) {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+
+        formRef.current.setErrors(validationErrors);
+      }
     }
-    await signup(data);
   };
 
   return (
@@ -174,6 +146,7 @@ export default function SignUp() {
           </Typography>
 
           <Form
+            ref={formRef}
             onSubmit={(data) => handleSubmit(data)}
             placeholder="Cadastro">
             <Box>
@@ -264,7 +237,7 @@ export default function SignUp() {
               </FormControl>
 
               <LoadingButton
-                loading={isLoading}
+                loading={isSignupLoading}
                 type="submit"
                 variant="contained"
                 fullWidth

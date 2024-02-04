@@ -10,7 +10,7 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import { storage } from "@/lib/firebase/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -30,24 +30,26 @@ type AtualizarProjetoType = {
 const projectSchema = yup.object({
   title: yup
     .string()
-    .required()
-    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])/),
-  description: yup.string().required(),
-  link: yup.string().required(),
-  ProjectTag: yup.string(),
-  image: yup.string(),
+    .required("O título é obrigatório")
+    .max(50, "O título deve conter no máximo cinquenta caracteres")
+    .min(2, "O título deve conter no mínimo dois caracteres"),
+  description: yup.string().required("A descrição é obrigatória")
+    .max(255, "A descrição deve conter no máximo 255 caracteres")
+    .min(2, "A descrição deve conter no mínimo dois caracteres"),
+  link: yup.string().url("O link deve ser uma URL válida").required("O link é obrigatório"),
 });
 
 const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const { user } = useContext(LoginContext);
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   if (!user || !project) {
     return;
   }
 
   const theme = useTheme();
-
+  const formRef = useRef(null);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -60,24 +62,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
     whiteSpace: "nowrap",
     width: 1,
   });
-
-  {
-    /*const [formValues, setFormValues] = useState<ProjectFormValues>({
-    title: "",
-    description: "",
-    link: "",
-    projectTag: [],
-    image: "",
-  });
-
-  const [formErrors, setFormErrors] = useState<ProjectFormErrors>({
-    title: "",
-    description: "",
-    link: "",
-    projectTag: [],
-    image: "",
-  });*/
-  }
 
   const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null | undefined>(
     null
@@ -101,10 +85,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
     return newUrl;
   };
 
-
-
-  const [success, setSuccess] = useState(false);
-
   useEffect(() => {
     if (open === true) {
       setImageUpload(project?.image);
@@ -125,23 +105,17 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const handleClose = () => {
     setOpen(false);
     setImageUpload(undefined);
-    // setFormValues({
-    //   title: "",
-    //   description: "",
-    //   link: "",
-    //   projectTag: [],
-    //   image: "",
-    // });
   };
 
-  //TODO: PRIMEIRO CHAMAR A FUNÇÃO DE UPLOAD DE IMAGEM E DEPOIS CHAMAR A FUNÇÃO DE INTEGRAÇÃO DO BACKEND
-
   const handleSubmit = async (formData: any) => {
-    if (formData === undefined) {
-      return;
-    };
-
     try {
+
+      formRef.current.setErrors({});
+
+      await projectSchema.validate(formData, {
+        abortEarly: false,
+      });
+
       const data: Project = {
         title: formData.title ? formData.title : project.title,
         description: formData.description ? formData.description : project.description,
@@ -159,7 +133,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
         setError(true);
       };
 
-
       if (project.id === undefined) {
         return;
       }
@@ -176,23 +149,13 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
         setError(false);
       }, 3000);
 
+      const validationErrors = {};
       if (errors instanceof yup.ValidationError) {
-        const validationErrors: ProjectFormErrors = {
-          title: "",
-          description: "",
-          link: "",
-          projectTag: [],
-          image: "",
-        };
-
-        errors.inner.forEach((error: yup.ValidationError) => {
-          if (error.path) {
-            validationErrors[error.path] = error.message;
-          }
+        errors.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
         });
 
-        // setFormErrors(validationErrors);
-        // console.error("Erro de validação:", errors);
+        formRef.current.setErrors(validationErrors);
       }
     }
   };
@@ -204,7 +167,11 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
           Editar projeto
         </Typography>
       </CustomModal.Title>
-      <Form onSubmit={(data) => handleSubmit(data)} placeholder="EditarProjeto">
+      <Form
+        ref={formRef}
+        onSubmit={(data) => handleSubmit(data)}
+        placeholder="EditarProjeto"
+      >
         <CustomModal.Content>
           <Box
             sx={{

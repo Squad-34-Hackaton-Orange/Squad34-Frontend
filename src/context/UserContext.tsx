@@ -14,6 +14,10 @@ interface LoginContextProps {
   signup: (data: User) => Promise<void>;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  isSignupLoading: boolean;
+  setIsSignupLoading: (loading: boolean) => void;
+  notification: boolean;
+  setNotification: (notification: boolean) => void;
 }
 
 export const LoginContext = createContext<LoginContextProps>({
@@ -24,6 +28,10 @@ export const LoginContext = createContext<LoginContextProps>({
   signup: async () => { },
   isLoading: false,
   setIsLoading: () => { },
+  isSignupLoading: false,
+  setIsSignupLoading: () => { },
+  notification: false,
+  setNotification: () => { },
 });
 interface LoginProviderProps {
   children: ReactNode;
@@ -33,13 +41,15 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSignupLoading, setIsSignupLoading] = useState(false);
   const [isLoginError, setIsLoginError] = useState(false);
   const [isSignupError, setIsSignupError] = useState(false);
   const [notification, setNotification] = useState(false);
   const router = useRouter();
 
   const signin = async (data: User) => {
-    const { token } = data
+    const { token } = data;
+
     if (token) {
       try {
         Cookies.set("AccessToken", token, {
@@ -65,15 +75,16 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
       const validateLogin = await login(data);
 
       if (validateLogin) {
-        const token = validateLogin.token;
+        const validateToken = validateLogin.token;
 
-        if (token) {
-          Cookies.set("AccessToken", token, {
+        if (validateToken) {
+          Cookies.set("AccessToken", validateToken, {
             expires: 60 * 60 * 1000,
             secure: true,
             sameSite: "Lax",
           });
-          const decoded = jwtDecode<User>(token);
+
+          const decoded = jwtDecode<User>(validateToken);
           setUser(decoded);
           setIsLogged(true);
           return;
@@ -111,9 +122,9 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
 
   const signup = async (data: User) => {
     try {
-      setIsLoading(true);
+      setIsSignupLoading(true);
       await create(data);
-      setIsLoading(false);
+      setIsSignupLoading(false);
       setNotification(true);
 
       setTimeout(() => {
@@ -122,7 +133,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
       }, 3000);
 
     } catch (error) {
-      setIsLoading(false);
+      setIsSignupLoading(false);
       setIsSignupError(true);
       setTimeout(() => {
         setIsSignupError(false);
@@ -179,7 +190,19 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         </Alert >
       )}
 
-      <LoginContext.Provider value={{ user, signin, logout, isLogged, signup, isLoading, setIsLoading }}>
+      <LoginContext.Provider value={{
+        user,
+        signin,
+        logout,
+        isLogged,
+        signup,
+        isLoading,
+        setIsLoading,
+        notification,
+        setNotification,
+        isSignupLoading,
+        setIsSignupLoading,
+      }}>
         {children}
       </LoginContext.Provider>
     </>

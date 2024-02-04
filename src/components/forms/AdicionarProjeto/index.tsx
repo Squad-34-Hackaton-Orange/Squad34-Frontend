@@ -1,5 +1,5 @@
 import { CustomModal } from "@/components/Modal";
-import { ProjectFormErrors, ProjectFormValues } from "@/lib/validation/project";
+
 import {
   Alert,
   Box,
@@ -9,7 +9,7 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import { storage } from "@/lib/firebase/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -27,13 +27,15 @@ type AddprojectType = {
 const projectSchema = yup.object({
   title: yup
     .string()
-    .required()
-    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])/),
-  description: yup.string().required(),
-  link: yup.string().required(),
-  ProjectTag: yup.string(),
-  image: yup.string(),
+    .required("O título é obrigatório")
+    .max(50, "O título deve conter no máximo cinquenta caracteres")
+    .min(2, "O título deve conter no mínimo dois caracteres"),
+  description: yup.string().required("A descrição é obrigatória")
+    .max(255, "A descrição deve conter no máximo 255 caracteres")
+    .min(2, "A descrição deve conter no mínimo dois caracteres"),
+  link: yup.string().url("O link deve ser uma URL válida").required("O link é obrigatório"),
 });
+
 
 const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   const { user } = useContext(LoginContext);
@@ -46,6 +48,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   const [SubmitFlag, setSubmitFlag] = useState(true);
   const [sucess, setSucess] = useState(false);
   const [error, setError] = useState(false);
+  const formRef = useRef(null);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -57,22 +60,6 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
     left: 0,
     whiteSpace: "nowrap",
     width: 1,
-  });
-
-  const [formValues, setFormValues] = useState<ProjectFormValues>({
-    title: "",
-    description: "",
-    link: "",
-    projectTag: [],
-    image: "",
-  });
-
-  const [formErrors, setFormErrors] = useState<ProjectFormErrors>({
-    title: "",
-    description: "",
-    link: "",
-    projectTag: [],
-    image: "",
   });
 
   const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null>(
@@ -114,24 +101,18 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   const handleClose = () => {
     setOpen(false);
     setImageUpload(null);
-    setFormValues({
-      title: "",
-      description: "",
-      link: "",
-      projectTag: [],
-      image: "",
-    });
     setSubmitFlag(true);
   };
 
-  //TODO: PRIMEIRO CHAMAR A FUNÇÃO DE UPLOAD DE IMAGEM E DEPOIS CHAMAR A FUNÇÃO DE INTEGRAÇÃO DO BACKEND
-
   const handleSubmit = async (data: Project) => {
-    if (data === undefined) {
-      return;
-    }
 
     try {
+      formRef.current.setErrors({});
+
+      await projectSchema.validate(data, {
+        abortEarly: false,
+      });
+
       const formData: Project = {
         title: data.title,
         description: data.description,
@@ -157,23 +138,13 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
         setError(false);
       }, 3000);
 
+      const validationErrors = {};
       if (errors instanceof yup.ValidationError) {
-        const validationErrors: ProjectFormErrors = {
-          title: "",
-          description: "",
-          link: "",
-          projectTag: [],
-          image: "",
-        };
-
-        errors.inner.forEach((error: yup.ValidationError) => {
-          if (error.path) {
-            validationErrors[error.path] = error.message;
-          }
+        errors.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
         });
 
-        setFormErrors(validationErrors);
-        console.error("Erro de validação:", errors);
+        formRef.current.setErrors(validationErrors);
       }
     }
   };
@@ -185,7 +156,11 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
           Adicionar projeto
         </Typography>
       </CustomModal.Title>
-      <Form onSubmit={(data) => handleSubmit(data)} placeholder="Login">
+      <Form
+        ref={formRef}
+        onSubmit={(data) => handleSubmit(data)}
+        placeholder="Login"
+      >
         <CustomModal.Content>
           <Box
             sx={{
@@ -323,6 +298,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
                     {" "}
                   </Box>
                   <VisuallyHiddenInput
+                    name="image"
                     accept="image/*"
                     type="file"
                     onChange={async (
@@ -332,7 +308,6 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
                         ? e.target.files[0]
                         : undefined;
 
-                      // Verifica se o tamanho do arquivo está dentro do limite desejado (por exemplo, 5 MB)
                       const maxSizeInBytes = 5 * 1024 * 1024; // 5 MB
 
                       if (!file) return;
