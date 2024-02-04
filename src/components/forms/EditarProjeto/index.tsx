@@ -106,6 +106,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
   const handleSubmit = async (formData: any) => {
     try {
+        // @ts-ignore
 
       formRef.current.setErrors({});
 
@@ -148,10 +149,13 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
       const validationErrors = {};
       if (errors instanceof yup.ValidationError) {
+
         errors.inner.forEach((error) => {
+        // @ts-ignore
+
           validationErrors[error.path] = error.message;
         });
-
+        // @ts-ignore
         formRef.current.setErrors(validationErrors);
       }
     }

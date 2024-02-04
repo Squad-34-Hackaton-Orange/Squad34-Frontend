@@ -55,7 +55,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         Cookies.set("AccessToken", token, {
           expires: 60 * 60 * 1000,
           secure: true,
-          sameSite: "None",
+          sameSite: "Lax",
         });
 
         const decoded = jwtDecode(token);
@@ -80,7 +80,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
           Cookies.set("AccessToken", validateToken, {
             expires: 60 * 60 * 1000,
             secure: true,
-            sameSite: "None",
+            sameSite: "Lax",
           });
 
           const decoded = jwtDecode<User>(validateToken);
