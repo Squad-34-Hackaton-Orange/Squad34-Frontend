@@ -95,7 +95,7 @@ export default function SignUp() {
       const validationErrors = {};
       if (err instanceof yup.ValidationError) {
         err.inner.forEach((error) => {
-          validationErrors[error.path] = error.message;
+          validationErrors[error?.path] = error.message;
         });
 
         formRef.current.setErrors(validationErrors);

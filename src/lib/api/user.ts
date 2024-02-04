@@ -50,7 +50,11 @@ export const create = async ({ name, last_name, email, password }: User): Promis
  * @returns A promise of a user
  */
 export const update = async ({ id, ...data }: GetByIdParams & User): Promise<User> => {
-  return (await api.patch(`/user/${id}`, data)).data;
+  return (await api.put(`/user/${id}`, data)).data;
+}
+
+export const updateImage = async ({ id, ...data }: GetByIdParams & User): Promise<User> => {
+  return (await api.put(`/user/${id}/image`, data)).data;
 }
 
 /**

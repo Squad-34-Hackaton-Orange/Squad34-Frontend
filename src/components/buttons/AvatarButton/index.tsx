@@ -1,20 +1,25 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Avatar, Box, Button, Menu, MenuItem } from "@mui/material";
 import { LoginContext } from "@/context/UserContext";
 import { User, remove } from "@/lib/api/user";
+import { HandleImage } from "@/components/forms/ImageHandle";
 
 type AvatarProps = {
   width: number;
   height: number;
   menu?: boolean;
   user?: User;
+  edit?: boolean
 };
 
-const AvatarButton = ({ width, height, menu }: AvatarProps) => {
+const AvatarButton = ({ width, height, menu, edit }: AvatarProps) => {
   const { logout, user } = useContext(LoginContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [openEditImage, setOpenEditImage] = useState(false)
+
+  
 
   if (!user?.id) return;
 
@@ -73,7 +78,9 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
 
   if (!menu) {
     return (
-      <Box>
+      <Button disabled={openEditImage} onClick={() => setOpenEditImage(true)} sx={{
+        borderRadius: '50%'
+      }}>
         <Avatar
           alt={user?.name}
           src={user?.image}
@@ -82,7 +89,8 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
             height: height,
           }}
         />
-      </Box>
+        <HandleImage open={openEditImage} setOpen={setOpenEditImage}  />
+      </Button>
     );
   }
 };

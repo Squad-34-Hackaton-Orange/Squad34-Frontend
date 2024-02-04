@@ -23,9 +23,9 @@ interface LoginContextProps {
 export const LoginContext = createContext<LoginContextProps>({
   isLogged: false,
   user: null,
-  signin: async () => { },
-  logout: () => { },
-  signup: async () => { },
+  signin: async () => {},
+  logout: () => {},
+  signup: async () => {},
   isLoading: false,
   setIsLoading: () => { },
   isSignupLoading: false,
@@ -35,7 +35,7 @@ export const LoginContext = createContext<LoginContextProps>({
 });
 interface LoginProviderProps {
   children: ReactNode;
-};
+}
 
 export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
@@ -55,7 +55,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         Cookies.set("AccessToken", token, {
           expires: 60 * 60 * 1000,
           secure: true,
-          sameSite: "Lax",
+          sameSite: "None",
         });
 
         const decoded = jwtDecode(token);
@@ -70,7 +70,6 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         }, 4000);
       }
     }
-
     try {
       const validateLogin = await login(data);
 
@@ -81,7 +80,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
           Cookies.set("AccessToken", validateToken, {
             expires: 60 * 60 * 1000,
             secure: true,
-            sameSite: "Lax",
+            sameSite: "None",
           });
 
           const decoded = jwtDecode<User>(validateToken);
@@ -131,7 +130,6 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         setNotification(false);
         router.push("/login");
       }, 3000);
-
     } catch (error) {
       setIsSignupLoading(false);
       setIsSignupError(true);
@@ -143,42 +141,40 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
 
   return (
     <>
-      {
-        isLoginError && (
-          <Alert
-            variant="filled"
-            severity="error"
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              margin: 2,
-            }}
-          >
-            Erro ao fazer login. Verifique seu e-mail e sua senha.
-          </Alert>
-        )
-      }
+      {isLoginError && (
+        <Alert
+          variant="filled"
+          severity="error"
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            margin: 2,
+          }}
+        >
+          Erro ao fazer login. Verifique seu e-mail e sua senha.
+        </Alert>
+      )}
 
-      {
-        isSignupError && (
-          <Alert
-            variant="filled"
-            severity="error"
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              margin: 2,
-            }}
-          >
-            Erro ao fazer cadastro. Verifique os campos e tente novamente.
-          </Alert>
-        )
-      }
+      {isSignupError && (
+        <Alert
+          variant="filled"
+          severity="error"
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            margin: 2,
+          }}
+        >
+          Erro ao fazer cadastro. Verifique os campos e tente novamente.
+        </Alert>
+      )}
 
       {notification && (
-        <Alert variant="filled" severity="success"
+        <Alert
+          variant="filled"
+          severity="success"
           sx={{
             position: "absolute",
             top: 0,
@@ -187,7 +183,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
           }}
         >
           Cadastro feito com sucesso. Você será redirecionado para o login.
-        </Alert >
+        </Alert>
       )}
 
       <LoginContext.Provider value={{
