@@ -1,33 +1,47 @@
+import { DeletarProjeto } from "@/components/forms/DeletarProjeto";
+import EditarProjeto from "@/components/forms/EditarProjeto";
+import { Project } from "@/lib/api/project";
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, Fab, IconButton, Link, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import { IconButton, Link, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useTheme } from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-const EditButton = () => {
+type EditButtonType = {
+  projectId: any
+  project: Project
+  visible?: boolean
+}
+
+const EditButton = ({ projectId, project, visible }: EditButtonType) => {
   const theme = useTheme();
+  const [openModal, setOpenModal] = useState(false)
 
-  //HANDLE THE BUTTON
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  const [editarProjeto, setEditarProjeto] = useState<boolean>(false)
+ 
+
   return (
-    <>      
+    <>
       <Tooltip title="Menu" sx={{
-       position: 'absolute',
-       backgroundColor: theme.colors.secondary70,
-       width: 28,
-       height: 28,
-       right: 16,
-       top: 16,
-       zIndex: 1000,
-       '&:hover': {
-        backgroundColor: theme.colors.neutral70
-       }
+        visibility: visible ? "visible" : "hidden",
+        position: 'absolute',
+        backgroundColor: theme.colors.secondary70,
+        width: 28,
+        height: 28,
+        right: 16,
+        top: 16,
+        zIndex: 1000,
+        '&:hover': {
+          backgroundColor: theme.colors.neutral70
+        }
       }}>
         <IconButton
           onClick={handleClick}
@@ -52,7 +66,7 @@ const EditButton = () => {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        
+
         PaperProps={{
           elevation: 0,
           sx: {
@@ -85,38 +99,32 @@ const EditButton = () => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose} sx={{
-            width: 208
-        }}>
-          <Link
-            variant="subtitle1"
-            href="/portifolio"
-            underline="none"
-            sx={{ color: theme.colors.primary90 }}
+          width: 208
+        }}
+          onClickCapture={() => {
+            handleClose();
+            setEditarProjeto(!editarProjeto)
+          }}>
+
+          <Typography
+            sx={{ fontSize: { xs: "16px" }, lineHeight: { xs: "16px" } }}
           >
-            <Typography
-              sx={{ fontSize: { xs: "16px" }, lineHeight: { xs: "16px" } }}
-            >
-              Editar
-            </Typography>
-          </Link>
+            Editar
+          </Typography>
         </MenuItem>
-        <MenuItem onClick={handleClose} sx={{
-            width: 208
+        <MenuItem onClick={() => { handleClose(); setOpenModal(true) }} sx={{
+          width: 208
         }}>
-          <Link
-            variant="subtitle1"
-            href="/descobrir"
-            underline="none"
-            sx={{ color: theme.colors.primary90 }}
+
+          <Typography
+            sx={{ fontSize: { xs: "16px" }, lineHeight: { xs: "16px" }, color: theme.colors.primary90 }}
           >
-            <Typography
-              sx={{ fontSize: { xs: "16px" }, lineHeight: { xs: "16px" },  }}
-            >
-              Excluir
-            </Typography>
-          </Link>
-        </MenuItem>        
+            Excluir
+          </Typography>
+        </MenuItem>
       </Menu>
+      <DeletarProjeto open={openModal} setOpen={setOpenModal} projectId={projectId} />
+      <EditarProjeto open={editarProjeto} setOpen={setEditarProjeto} project={project} />      
     </>
   );
 };

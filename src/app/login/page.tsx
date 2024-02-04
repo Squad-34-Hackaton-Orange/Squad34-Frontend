@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   Box,
@@ -26,41 +26,45 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { VTextField } from "@/components/forms/VTextField";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 
-import * as yup from 'yup';
+import * as yup from "yup";
+import { GoogleCredencials, handleGoogle } from "@/lib/validation/user";
 
 const formValidationSchema: yup.Schema<any> = yup.object().shape({
-  email: yup.string().transform((originalValue) => {
-    if (originalValue.trim() === '') {
-      return null;
-    }
-    return originalValue;
-  })
-    .min(5, 'A email deve ter pelo menos 5 caracteres')
-    .max(180, 'A senha deve ter no máximo 180 caracteres')
-    .required('O email é obrigatório')
-    .email('Insira um email válido'),
-  password: yup
-    .string().transform((originalValue) => {
-      if (originalValue.trim() === '') {
+  email: yup
+    .string()
+    .transform((originalValue) => {
+      if (originalValue.trim() === "") {
         return null;
       }
       return originalValue;
     })
-    .min(8, 'A senha deve ter pelo menos 8 caracteres')
-    .max(16, 'A senha deve ter no máximo 16 caracteres')
-    .matches(/[0-9]/, 'A senha deve conter pelo menos um número')
+    .min(5, "A email deve ter pelo menos 5 caracteres")
+    .max(180, "A senha deve ter no máximo 180 caracteres")
+    .required("O email é obrigatório")
+    .email("Insira um email válido"),
+  password: yup
+    .string()
+    .transform((originalValue) => {
+      if (originalValue.trim() === "") {
+        return null;
+      }
+      return originalValue;
+    })
+    .min(8, "A senha deve ter pelo menos 8 caracteres")
+    .max(16, "A senha deve ter no máximo 16 caracteres")
+    .matches(/[0-9]/, "A senha deve conter pelo menos um número")
     .matches(
       /[!@#$%^&*(),.?":{}|<>]/,
-      'A senha deve conter pelo menos um caractere especial'
+      "A senha deve conter pelo menos um caractere especial"
     )
-    .matches(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
-    .required('A senha é obrigatória'),
+    .matches(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
+    .required("A senha é obrigatória"),
 });
 
 export default function Login() {
-  const { signin, isLogged } = useContext(LoginContext);
+  const { signin, isLogged, isLoading, setIsLoading } =
+    useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const theme = useTheme();
 
@@ -69,22 +73,16 @@ export default function Login() {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      await signin(data);
-
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    await signin(data);
   };
 
   useEffect(() => {
     if (isLogged) {
       setIsLoading(false);
       router.push("/portifolio");
-    };
-  }, [isLogged])
+    }
+  }, [isLogged]);
 
   return (
     <Grid
@@ -149,12 +147,25 @@ export default function Login() {
             }}
           >
             <GoogleOAuthProvider
-              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}>
+              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
+            >
               <GoogleLogin
-                onSuccess={(response) => {
-                  let decode = jwtDecode(response.credential as string);
-                  return decode;
-                  // console.log(decode);
+                onSuccess={async (response) => {
+                  let credentials: GoogleCredencials = jwtDecode(
+                    response.credential as string
+                  );
+                  const data: User = {
+                    name: credentials.given_name,
+                    last_name: credentials.family_name,
+                    email: credentials.email,
+                    image: credentials.picture,
+                  };
+                  const verifyGoogleUser = await handleGoogle(data);
+                  const { token } = verifyGoogleUser;
+
+                  data.token = token;
+
+                  signin(data);
                 }}
                 onError={() => console.log("Failed")}
               />
@@ -191,7 +202,13 @@ export default function Login() {
                 >
                   Email
                 </InputLabel>
-                <VTextField required name="email" id="email" aria-label="email" label="Email" />
+                <VTextField
+                  required
+                  name="email"
+                  id="email"
+                  aria-label="email"
+                  label="Email"
+                />
               </FormControl>
 
               <FormControl
@@ -234,7 +251,6 @@ export default function Login() {
                 }}
               >
                 Entrar
-
               </LoadingButton>
             </Form>
 

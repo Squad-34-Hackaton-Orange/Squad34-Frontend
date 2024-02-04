@@ -9,14 +9,15 @@ type ModalProps = {
   title: string,
   content: string | ReactNode,
   actions: ReactNode;
+  variant: 'form' | undefined
 };
 
-export const Modal = ({ open, onClose, title, content, actions }: ModalProps) => {
+export const Modal = ({ open, onClose, title, content, actions, variant=undefined }: ModalProps) => {
   const theme = useTheme();
   const isContentReactNode = typeof content === "object";
 
   return (
-    <CustomModal.Root open={open} onClose={onClose}>
+    <CustomModal.Root open={open} onClose={onClose} variant={variant}>
       <CustomModal.Title>
         <Typography
           variant="h5"

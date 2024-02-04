@@ -76,10 +76,8 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
 });
 
 export default function SignUp() {
-  const { signup } = useContext(LoginContext);
+  const { signup, isLoading, setIsLoading } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [notification, setNotification] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const theme = useTheme();
@@ -90,10 +88,10 @@ export default function SignUp() {
       return;
     }
     try {
-      await formValidationSchema.validate(data, { abortEarly: false });
-      console.log("Dados válidos:", data);
+      await formValidationSchema.validate(data, { abortEarly: false });      
       setIsLoading(true);
       setNotification(true);
+      await signup(data); // Se sucesso na validação, cadastra o usuário
       setTimeout(() => {
        setNotification(false);
         setIsLoading(false);
@@ -114,6 +112,7 @@ export default function SignUp() {
 
       formRef.current?.setErrors(validationErrors);
     }
+
   };
 
   return (
@@ -141,6 +140,7 @@ export default function SignUp() {
             margin: "0 auto",
           }}
         >
+
           <Box sx={{
             position: "absolute",
             top: "6rem",
@@ -159,7 +159,6 @@ export default function SignUp() {
             ) : null}
               
           </Box>
-
           <Typography
             sx={{
               marginBottom: 2,

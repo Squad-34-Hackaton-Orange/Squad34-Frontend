@@ -1,0 +1,131 @@
+[33mcommit 4aa09b481bf9c464611a198f92718daf8e88ea12[m[33m ([m[1;36mHEAD -> [m[1;32mfeat/project-structure[m[33m)[m
+Author: Juliobz <bzjuliocarmo@hotmail.com>
+Date:   Mon Jan 29 15:38:36 2024 -0300
+
+    feat: Validation Forms Login Page
+
+[33mcommit 920e6d4d517644420aa9916bddd48426e3cbc0d6[m[33m ([m[1;31morigin/feat/project-structure[m[33m)[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 22:40:39 2024 -0300
+
+    Create endpoint calls.
+
+[33mcommit 72041beba731b1e416f5e5f3958c1b5980ea264d[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 22:39:33 2024 -0300
+
+    Create a env example.
+
+[33mcommit ffa44bd85a97d91904325beb9d157494a41598b8[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 22:00:06 2024 -0300
+
+    Move images to another folder.
+
+[33mcommit 1a61ca0719f35d8443eba7044f2c4328b314a33e[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 21:59:19 2024 -0300
+
+    Signup page.
+
+[33mcommit 3972c075c4fe72c3ca17db51a35c1606c8ef8900[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 21:51:44 2024 -0300
+
+    Update theme import.
+
+[33mcommit 242ecca6562bd0d3e5c06e01d9458a6484aade8b[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 21:50:57 2024 -0300
+
+    Create types.
+
+[33mcommit df124d94e52200465ccbcc5129e292fde79cd721[m
+Merge: 17d5809 d6a7b55
+Author: Henry Thuler <64433950+henrythuler@users.noreply.github.com>
+Date:   Fri Jan 26 19:46:14 2024 -0300
+
+    Merge pull request #5 from Squad-34-Hackaton-Orange/feat/login-view
+    
+    Feat/login view
+
+[33mcommit d6a7b55206c874891985949a9c884287e1511dea[m[33m ([m[1;31morigin/feat/login-view[m[33m)[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 18:44:09 2024 -0300
+
+    Remove unused style.
+
+[33mcommit 5aa5d20783705edae3592c32415a739ac607a47e[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Fri Jan 26 17:07:54 2024 -0300
+
+    Refactor login view code.
+
+[33mcommit e9d3bc3565e374b89307cd3521bf53f6454e46b5[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Thu Jan 25 16:11:23 2024 -0300
+
+    Update base path.
+
+[33mcommit 49affc7781cea97ac01aff221a997dafdcedccb8[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Thu Jan 25 16:11:15 2024 -0300
+
+    Create login view.
+
+[33mcommit 017528226dc15dd8b070ec7b44b5692d32031988[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Thu Jan 25 16:07:09 2024 -0300
+
+    Update theme propeties.
+
+[33mcommit 3bf9e106aa9388cb62137c1aa02916d88e5d451e[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Thu Jan 25 11:50:16 2024 -0300
+
+    Fix version of packages instead of latest.
+
+[33mcommit afb9a53a23878cbeeb512859fdf7468bd03ba415[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Thu Jan 25 11:11:15 2024 -0300
+
+    Extends MUI theme type to accept colors.
+
+[33mcommit 35f595d2d17e240cb752d6423fe6a5b18a3de11f[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Thu Jan 25 11:10:06 2024 -0300
+
+    Create custom colors variables.
+
+[33mcommit 17d58099fc3bf1eb889082973d2784ed04fa88af[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 7fd6430 4c5d747
+Author: Matheus Fernandes <108370815+xtirian@users.noreply.github.com>
+Date:   Wed Jan 24 19:54:11 2024 -0300
+
+    Merge pull request #3 from Squad-34-Hackaton-Orange/readme
+    
+    Update README.md
+
+[33mcommit 4c5d7476374c9b7c29670d16dcf46e86482eb5a0[m[33m ([m[1;31morigin/readme[m[33m)[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Wed Jan 24 19:52:20 2024 -0300
+
+    Update README.md
+
+[33mcommit 7fd6430e86c94e0280f5cf26647b33b48c771739[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Tue Jan 23 19:13:34 2024 -0300
+
+    Implemente base url axios.
+
+[33mcommit 07327a15c8f8da81de829724e44e5e3158b2367c[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Tue Jan 23 19:07:31 2024 -0300
+
+    Update README.md
+
+[33mcommit 14a2f77a49aee43160650ecacac428310bdbc3ed[m
+Author: Livia Helen <liviahelen025@gmail.com>
+Date:   Tue Jan 23 19:01:21 2024 -0300
+
+    Create initial structure using material UI.

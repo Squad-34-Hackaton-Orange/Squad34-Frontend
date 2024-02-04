@@ -1,18 +1,26 @@
 "use client";
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import AvatarButton from "@/components/buttons/AvatarButton";
 import { LoginContext } from '@/context/UserContext';
+import AddProjectModal from '@/components/forms/AdicionarProjeto';
+import { User } from '@/lib/api/user';
 
-const ProfileCard = () => {
+type ProfileCardProps = {
+  userImage?: User;
+};
+
+
+const ProfileCard = ({ userImage }: ProfileCardProps) => {
   const { user } = useContext(LoginContext);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const theme = useTheme();
+
 
   if (!user) {
     return;
   }
-
-  const theme = useTheme();
-
 
   return (
     <Box sx={{
@@ -23,7 +31,11 @@ const ProfileCard = () => {
       rowGap: '16px',
       gap: { sm: '42px' }
     }}>
-      <AvatarButton width={122} height={122} />
+      <AvatarButton
+        user={userImage}
+        width={122}
+        height={122}
+      />
       <Box sx={{
         display: "flex",
         flexDirection: "column",
@@ -42,6 +54,7 @@ const ProfileCard = () => {
           {user.country}
         </Typography>
         <Button
+          onClick={() => setModalOpen(true)}
           variant="contained"
           style={{
             backgroundColor: 'rgba(0,0,0, 0.12)',
@@ -50,8 +63,10 @@ const ProfileCard = () => {
           }}
         >
           <Typography variant="button">
-            Adicionar Projeto</Typography>
+            Adicionar Projeto
+          </Typography>
         </Button>
+        <AddProjectModal open={modalOpen} setOpen={setModalOpen} />
       </Box>
     </Box>
   )

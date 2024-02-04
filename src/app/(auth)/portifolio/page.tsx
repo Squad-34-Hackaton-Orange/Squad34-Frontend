@@ -1,46 +1,36 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ProfileCard from "@/components/Cards/UserProfileCard";
 import ProjectsGrid from "@/components/ProjectGrid";
 import TagSearch from "@/components/Input/TagSearch";
 import ProjectCard from "@/components/Cards/ProjectCard";
 import isAuth from "@/components/isAuth";
-
-type ProjectsType = {
-  date_post: Date,
-  title: string,
-  description: string,
-  link: string,
-  image: string,
-  id_user: number,
-  tags: string[]
-}
-
+import { useContext, useEffect, useState } from "react";
+import { LoginContext } from "@/context/UserContext";
+import { Project, get } from "@/lib/api/project";
+import CollectionsIcon from '@mui/icons-material/Collections';
+import AddProjectModal from "@/components/forms/AdicionarProjeto";
 
 function PortifolioView() {
+  const { user } = useContext(LoginContext);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
   const theme = useTheme();
 
-  const projects: ProjectsType[] = [{
-    date_post: new Date(),
-    title: "Ecommerce One Page",
-    description: "Descrição do projeto teste",
-    link: "https://github.com/camilasoares",
-    image: '/project-camila.svg',
-    id_user: 1,
-    tags: ['UX', 'Web']
-  },
-  {
-    date_post: new Date(),
-    title: "Ecommerce One Page",
-    description: "Descrição do projeto teste",
-    link: "https://github.com/camilasoares",
-    image: '/project-camila.svg',
-    id_user: 2,
-    tags: ['UX', 'Web']
-  }];
+  if (!user) {
+    return;
+  }
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const getAllUserProject = await get({ id: String(user.id) });
+      setProjects(getAllUserProject);
+    };
+
+    fetchProjects();
+  }, [user.id]);
 
   return (
     <section style={{ height: "100%", width: "100vw" }}>
@@ -59,7 +49,11 @@ function PortifolioView() {
         }}
       >
         <Box sx={{ mt: "56px" }}>
-          <ProfileCard />
+          <ProfileCard
+            userImage={
+              projects[0]?.user
+            }
+          />
         </Box>
         <Box
           sx={{
@@ -81,13 +75,70 @@ function PortifolioView() {
             Meus projetos
           </Typography>
           <TagSearch />
-          <ProjectsGrid>
-            {projects?.map((project) => (
-              <ProjectCard key={project.id_user} project={project} hasTag={true} />
-            ))}
-          </ProjectsGrid>
+          {
+            projects.length === 0 && (
+              <>
+                <Button
+                  variant="text"
+                  onClick={() => setModalOpen(true)}
+                  sx={{
+                    marginBottom: 4,
+                    height: "250px",
+                    width: "280px",
+                    background: theme.colors.neutral70,
+                    marginTop: 4
+                  }}
+                >
+                  <Box>
+                    <CollectionsIcon
+                      sx={{
+                        fontSize: 40,
+                        color: theme.colors.neutral120,
+                        marginBottom: 2
+                      }}
+                    />
+
+                    <Typography
+                      sx={{
+                        color: theme.colors.neutral120,
+                        marginBottom: 2,
+                        textTransform: "none"
+                      }}
+                    >
+                      Adicione seu primeiro projeto
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        color: theme.colors.neutral120,
+                        textTransform: "none"
+                      }}
+                    >
+                      Compartilhe seu talento com milhares de pessoas
+                    </Typography>
+                  </Box>
+                </Button>
+              </>
+            )
+          }
+
+          {projects.length > 0 && (
+            <ProjectsGrid>
+              {projects?.map((project) => (
+                <div key={project.id}>
+                  <ProjectCard
+                    hasEditButton={true}
+                    project={project}
+                    hasTag={true}
+                  />
+                </div>
+              ))}
+            </ProjectsGrid>
+          )
+          }
         </Box>
       </Box>
+      <AddProjectModal open={modalOpen} setOpen={setModalOpen} />
     </section>
   );
 };
