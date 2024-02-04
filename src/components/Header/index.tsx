@@ -108,6 +108,7 @@ export default function Header({ user }: HeaderProps) {
             height={40}
             menu={true}
           />
+
           <NotificationButton />
 
         </Box>

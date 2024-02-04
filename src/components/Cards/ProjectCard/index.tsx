@@ -261,8 +261,7 @@ interface ProjectCardProps {
 export default function ProjectCard({
   project,
   hasTag = true,
-  hasEditButton,
-  user
+  hasEditButton
 }: ProjectCardProps) {
   const [preview, setPreview] = useState(false);
   const theme = useTheme();
@@ -383,7 +382,6 @@ export default function ProjectCard({
           projectId={project.id}
           project={project}
         />
-
       </Box >
     </>
   );
