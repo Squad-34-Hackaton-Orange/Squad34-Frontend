@@ -64,8 +64,6 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleClose}>Atualizar Perfil</MenuItem>
-          <MenuItem onClick={handleClose}>Trocar Senha</MenuItem>
           <MenuItem onClick={handleDelete}>Excluir Conta</MenuItem>
           <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
