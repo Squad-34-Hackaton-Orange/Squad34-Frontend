@@ -1,20 +1,18 @@
-'use client'
-import React, { useContext, useState } from 'react'
-import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material'
-import { LoginContext } from '@/context/UserContext'
-import { User, get, remove } from '@/lib/api/user'
-
+"use client";
+import React, { useContext, useState } from "react";
+import { Avatar, Box, Button, Menu, MenuItem } from "@mui/material";
+import { LoginContext } from "@/context/UserContext";
+import { User, remove } from "@/lib/api/user";
 
 type AvatarProps = {
-  width: number,
-  height: number,
-  menu?: boolean
+  width: number;
+  height: number;
+  menu?: boolean;
   user?: User;
 };
 
-
 const AvatarButton = ({ width, height, menu }: AvatarProps) => {
-  const { logout, user } = useContext(LoginContext)
+  const { logout, user } = useContext(LoginContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -29,8 +27,6 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
   };
 
   const handleDelete = async () => {
-    if (!user) return;
-
     try {
       await remove({ id: user?.id as number });
       logout();
@@ -44,17 +40,20 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
       <Box>
         <Button
           id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
+          aria-controls={open ? "basic-menu" : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
+          aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
           sx={{
             padding: 0,
-            minWidth: 'auto'
-
+            minWidth: "auto",
           }}
         >
-          <Avatar alt="Remy Sharp" src={user?.image} sx={{ width: width, height: height }} />
+          <Avatar
+            alt={user?.image}
+            src={user?.image}
+            sx={{ width: width, height: height }}
+          />
         </Button>
         <Menu
           id="basic-menu"
@@ -62,21 +61,16 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
           open={open}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': 'basic-button',
+            "aria-labelledby": "basic-button",
           }}
         >
           <MenuItem onClick={handleClose}>Atualizar Perfil</MenuItem>
           <MenuItem onClick={handleClose}>Trocar Senha</MenuItem>
-          <MenuItem
-            onClick={handleDelete}
-          >
-            Excluir Conta
-          </MenuItem>
+          <MenuItem onClick={handleDelete}>Excluir Conta</MenuItem>
           <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
       </Box>
-    )
-
+    );
   }
 
   if (!menu) {
@@ -87,12 +81,12 @@ const AvatarButton = ({ width, height, menu }: AvatarProps) => {
           src={user?.image}
           sx={{
             width: width,
-            height: height
+            height: height,
           }}
         />
       </Box>
-    )
+    );
   }
-}
+};
 
-export default AvatarButton
+export default AvatarButton;

@@ -1,12 +1,13 @@
 import { CustomModal } from "@/components/Modal";
 import AvatarButton from "@/components/buttons/AvatarButton";
 import EditButton from "@/components/buttons/EditButton";
+import { LoginContext } from "@/context/UserContext";
 import { Project } from "@/lib/api/project";
 import { User } from "@/lib/api/user";
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Typography, Button, Chip, Avatar, Link } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 type PreviewCardProps = {
   project: Project;
@@ -16,6 +17,20 @@ type PreviewCardProps = {
 
 const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
   const theme = useTheme();
+
+  const {user} = useContext(LoginContext)
+
+  const handleDate = (dateString: Date) => {
+    const date = new Date(dateString)
+    const dia = date.getDate();
+    const mes = date.getMonth() + 1;
+
+    const diaMesFormatado = `${dia.toString().padStart(2, "0")}/${mes
+      .toString()
+      .padStart(2, "0")}`;
+
+    return diaMesFormatado;
+  };
 
   return (
     <CustomModal.Root
@@ -62,8 +77,8 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
               gap={1}
             >
               <Avatar
-                alt="Remy Sharp"
-                src="/static/images/avatar/1.jpg"
+                alt={project?.user?.image}
+                src={project?.user?.image}
                 sx={{
                   width: 24,
                   height: 24,
@@ -179,8 +194,8 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
               >
                 <Box>
                   <Avatar
-                    alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
+                    alt={project?.user?.image}
+                    src={project?.user?.image}
                     sx={{
                       width: 24,
                       height: 24,
@@ -190,12 +205,13 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
 
                 <Box
                   display="flex"
+                  sx={{
+                    maxWidth: '100%'
+                  }}
                 >
-                  <Typography
-                    variant="caption"
-                  >
-                    Bianca Martins • 02/24
-                  </Typography>
+                  <Typography color={theme.colors.neutral120}>
+                  {project?.user?.name} • {project.date_post ? handleDate(project.date_post) : "Data Indisponível"}
+                </Typography>
                 </Box>
               </Box>
 
@@ -224,20 +240,24 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
             flexDirection="column"
             marginTop={3}
             gap={2}
+            sx={{ maxWidth: '95%'}}
           >
             <Box>
               {project?.description}
             </Box>
 
-            <Box>
+            <Box >
               <Box>
                 Download
               </Box>
-              <Box>
+              <Box >
                 <Link
                   href="/signup"
                   target="_blank"
                   underline="none"
+                  sx={{
+                    wordBreak: 'break-all',
+                  }}
                 >
                   {project?.link ? project?.link : "Link indisponível"}
 

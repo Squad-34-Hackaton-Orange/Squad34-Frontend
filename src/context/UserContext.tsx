@@ -3,7 +3,7 @@
 import React, { ReactNode, createContext, useEffect, useState } from "react";
 import { User, create, login } from "@/lib/api/user";
 import { jwtDecode } from "jwt-decode";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { Alert } from "@mui/material";
 interface LoginContextProps {
@@ -19,11 +19,11 @@ interface LoginContextProps {
 export const LoginContext = createContext<LoginContextProps>({
   isLogged: false,
   user: null,
-  signin: async () => { },
-  logout: () => { },
-  signup: async () => { },
+  signin: async () => {},
+  logout: () => {},
+  signup: async () => {},
   isLoading: false,
-  setIsLoading: () => { },
+  setIsLoading: () => {},
 });
 interface LoginProviderProps {
   children: ReactNode;
@@ -39,6 +39,27 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   const router = useRouter();
 
   const signin = async (data: User) => {
+    const {token} = data
+    if (token) {
+      try {        
+          Cookies.set("AccessToken", token, {
+            expires: 60 * 60 * 1000,
+            secure: true,
+            sameSite: "Lax",
+          });
+
+          const decoded = jwtDecode(token);
+          setUser(decoded as User);
+          console.log(decoded)
+          setIsLogged(true);
+          return;
+        } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+        throw error
+      }
+    }
+
     try {
       const validateLogin = await login(data);
 
@@ -49,19 +70,17 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
           Cookies.set("AccessToken", token, {
             expires: 60 * 60 * 1000,
             secure: true,
-            sameSite: 'Lax',
+            sameSite: "Lax",
           });
           const decoded = jwtDecode<User>(token);
           setUser(decoded);
           setIsLogged(true);
+          return;
         }
       }
     } catch (error) {
       setIsLoading(false);
-      setIsLoginError(true);
-      setTimeout(() => {
-        setIsLoginError(false);
-      }, 2000);
+      throw error;
     }
   };
 
@@ -72,7 +91,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
       setIsLogged(false);
       router.push("/");
     } catch (error) {
-      setIsSignupError(true);
+      console.error(error);
     }
   };
 

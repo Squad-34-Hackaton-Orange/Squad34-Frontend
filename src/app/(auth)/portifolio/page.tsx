@@ -20,6 +20,8 @@ function PortifolioView() {
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
+  console.log(user)
+
 
   if (!user) {
     return;
