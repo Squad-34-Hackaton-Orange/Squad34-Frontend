@@ -20,10 +20,8 @@ export const VTextField = ({ name, ...rest }: VtextFieldProps) => {
     });
   }, [registerField, fieldName, value]);
 
-  return (    
+  return (
     <TextField
-      
-      
       error={!!error}
       helperText={error}
       defaultValue={defaultValue}

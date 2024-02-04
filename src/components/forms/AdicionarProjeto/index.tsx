@@ -4,6 +4,7 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
   FormControl,
   Typography,
   styled,
@@ -18,6 +19,8 @@ import { Project, create } from "@/lib/api/project";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 import { Form } from "@unform/web";
 import { LoginContext } from "@/context/UserContext";
+import { VSelectInput } from "../VSelectInput";
+import { Tag, list } from "@/lib/api/tag";
 
 type AddprojectType = {
   open: boolean;
@@ -49,6 +52,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   const [sucess, setSucess] = useState(false);
   const [error, setError] = useState(false);
   const formRef = useRef(null);
+  const [tagOptions, setTagOptions] = useState<Partial<Tag>[]>([]);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -85,6 +89,19 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tags: Tag[] = await list({ id: user?.id });
+        setTagOptions(tags);
+      } catch (error) {
+        console.error('Erro ao obter opções de tags:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     if (ImageUrl) setSubmitFlag(false);
   }, [ImageUrl]);
 
@@ -117,7 +134,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
         title: data.title,
         description: data.description,
         image: ImageUrl,
-        projectTag: data.projectTag,
+        tags: data.tags,
         id_user: user.id,
         link: data.link,
       };
@@ -201,11 +218,11 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
                 />
               </FormControl>
               <FormControl>
-                <VOutlinedInput
-                  id="projectTag"
+                <VSelectInput
+                  options={tagOptions}
+                  id="tags"
                   label="Tags"
-                  aria-describedby="my-helper-text"
-                  name="projectTag"
+                  name="tags"
                   sx={{
                     fontSize: "1.6rem",
                     color: theme.colors.neutral100,

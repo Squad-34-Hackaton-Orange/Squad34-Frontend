@@ -30,13 +30,10 @@ type AtualizarProjetoType = {
 const projectSchema = yup.object({
   title: yup
     .string()
-    .required("O título é obrigatório")
-    .max(50, "O título deve conter no máximo cinquenta caracteres")
-    .min(2, "O título deve conter no mínimo dois caracteres"),
-  description: yup.string().required("A descrição é obrigatória")
-    .max(255, "A descrição deve conter no máximo 255 caracteres")
-    .min(2, "A descrição deve conter no mínimo dois caracteres"),
-  link: yup.string().url("O link deve ser uma URL válida").required("O link é obrigatório"),
+    .max(50, "O título deve conter no máximo cinquenta caracteres"),
+  description: yup.string()
+    .max(255, "A descrição deve conter no máximo 255 caracteres"),
+  link: yup.string().url("O link deve ser uma URL válida")
 });
 
 const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {

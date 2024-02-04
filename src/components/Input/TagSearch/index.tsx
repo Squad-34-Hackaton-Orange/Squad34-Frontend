@@ -1,57 +1,43 @@
-import { Autocomplete, Chip, TextField, useTheme } from "@mui/material";
-import React from "react";
+import { VSelectInput } from "@/components/forms/VSelectInput";
+import { LoginContext } from "@/context/UserContext";
+import { Tag, list } from "@/lib/api/tag";
+import { Form } from "@unform/web";
+import React, { useContext, useEffect, useState } from "react";
 
-type TagsTypes = "web" | "UX" | "frontend" | "backend";
 
 export default function TagSearch() {
+  const { user } = useContext(LoginContext);
+  const [tagOptions, setTagOptions] = useState<Partial<Tag>[]>([]);
 
-  const handleChange = (values: string[]) => {
-    console.log(values);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tags: Tag[] = await list({ id: user?.id });
+        setTagOptions(tags);
+      } catch (error) {
+        console.error('Erro ao obter opções de tags:', error);
+      }
+    };
+
+    fetchData();
+  }, [tagOptions]);
+
+  const handleSubmit = (data: any) => {
+    console.log(data);
   };
 
-  const theme = useTheme();
-
-  const tags = ["web", "UX", "frontend", "backend", "test"];
-
   return (
-    <Autocomplete
-      multiple
-      id="outlined-multi"
-      options={tags}
-      defaultValue={[]}
-      getOptionLabel={(option) => option}
-      onChange={(event, values) => handleChange(values)}
-      renderOption={(props, option) => {
-        return (
-          <li {...props} key={option}>
-            {option}
-          </li>
-        )
-      }}
-      renderTags={(tagValue, getTagProps) => {
-        return tagValue.map((option, index) => (
-          <Chip {...getTagProps({ index })} key={option} label={option} sx={{
-            fontSize: { xs: "1.2rem", sm: "1.6rem" },
-            lineHeight: { xs: "1.2rem", sm: "1.6rem" }
-          }} />
-        ))
-      }}
-
-      renderInput={(params) => (
-        <TextField
-          sx={{
-            fontSize: "1.6rem",
-          }}
-          {...params}
-          placeholder="Buscar tags"
-        />
-      )}
-      sx={{
-        width: "100%",
-        maxWidth: '513px',
-        borderRadius: '4px',
-
-      }}
-    />
+    <Form onSubmit={(data) => handleSubmit(data)} placeholder="Adicionar">
+      <VSelectInput
+        options={tagOptions}
+        id="tags"
+        name="tags"
+        sx={{
+          maxWidth: "300",
+          minWidth: '280px',
+          borderRadius: '4px',
+        }}
+      />
+    </Form>
   );
-};
+}

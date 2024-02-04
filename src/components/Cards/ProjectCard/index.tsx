@@ -18,7 +18,7 @@ type PreviewCardProps = {
 const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
   const theme = useTheme();
 
-  const {user} = useContext(LoginContext)
+  const { user } = useContext(LoginContext)
 
   const handleDate = (dateString: Date) => {
     const date = new Date(dateString)
@@ -141,7 +141,7 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
                 }
               }}
             >
-              {project?.projectTag?.map((projectTag) => (
+              {project?.tags?.map((projectTag) => (
                 <Box
                   display="flex"
                   gap={1}
@@ -210,12 +210,12 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
                   }}
                 >
                   <Typography color={theme.colors.neutral120}>
-                  {project?.user?.name} • {project.date_post ? handleDate(project.date_post) : "Data Indisponível"}
-                </Typography>
+                    {project?.user?.name} • {project.date_post ? handleDate(project.date_post) : "Data Indisponível"}
+                  </Typography>
                 </Box>
               </Box>
 
-              {project?.projectTag?.map((projectTag) => (
+              {project?.tags?.map((projectTag) => (
                 <Box
                   display="flex"
                   gap={1}
@@ -240,7 +240,7 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
             flexDirection="column"
             marginTop={3}
             gap={2}
-            sx={{ maxWidth: '95%'}}
+            sx={{ maxWidth: '95%' }}
           >
             <Box>
               {project?.description}
@@ -381,7 +381,7 @@ export default function ProjectCard({
                   alignItems: 'center',
                   gap: { xs: '8px' }
                 }}>
-                  {project?.projectTag?.map((projectTag) => (
+                  {project?.tags?.map((projectTag) => (
                     <div key={projectTag.tag?.id}>
                       <Chip
                         label={projectTag?.tag?.name}

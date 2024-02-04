@@ -1,11 +1,17 @@
+import { api } from "."
+import { Id } from "./id"
 import { Project } from "./project"
 
 export type Tag = Partial<{
-  id: number
-  name: string
-  project_id: number[]
-  project: Project[]
-  created_at: Date
-  updated_at: Date
-  deleted_at: Date
+  id: Id;
+  userId: Id;
+  name: string;
 }>
+
+/**
+ * List all projects from all users
+ * @returns A promise of a list of projects
+ */
+export const list = async ({ id }: Tag): Promise<Project[]> => {
+  return (await api.get(`/tag?userId=${id}`)).data;
+};

@@ -1,4 +1,3 @@
-import { Description } from "@mui/icons-material";
 import { api } from ".";
 import { Id } from "./id";
 import { ProjectTag } from "./project-tag";
@@ -18,7 +17,7 @@ export type Project = Partial<{
   id_user: Id;
   user: User;
   token: Token;
-  projectTag: ProjectTag[];
+  tags: ProjectTag[];
 }>;
 
 /**
