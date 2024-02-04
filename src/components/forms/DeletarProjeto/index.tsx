@@ -30,10 +30,15 @@ export const DeletarProjeto = ({
     undefined
   );
 
+  
+
   const handleClose = () => {
     setOpen(false);
     setconfirmação(false);
+    window.location.reload()
   };
+
+  
 
   if (projectId && !confirmação) {
     return (
@@ -95,6 +100,7 @@ export const DeletarProjeto = ({
                       if (remover.status === 200) {
                         setconfirmação(true);
                         setStatus("success");
+                       
                       } else {
                         setconfirmação(true);
                         setStatus("bad");

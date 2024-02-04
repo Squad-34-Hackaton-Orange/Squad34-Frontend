@@ -1,10 +1,9 @@
 import { DeletarProjeto } from "@/components/forms/DeletarProjeto";
-import { ConfirmacaoDeletarProjeto } from "@/components/forms/DeletarProjeto/ConfirmaçãoModal";
 import EditarProjeto from "@/components/forms/EditarProjeto";
 import { Project } from "@/lib/api/project";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Link, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type EditButtonType = {
   projectId: any
@@ -26,10 +25,8 @@ const EditButton = ({ projectId, project, visible }: EditButtonType) => {
     setAnchorEl(null);
   };
 
-  const [confirmação, setconfirmação] = useState<boolean>(false)
-  const [status, setStatus] = useState<boolean>(false)
   const [editarProjeto, setEditarProjeto] = useState<boolean>(false)
-
+ 
 
   return (
     <>
@@ -127,8 +124,7 @@ const EditButton = ({ projectId, project, visible }: EditButtonType) => {
         </MenuItem>
       </Menu>
       <DeletarProjeto open={openModal} setOpen={setOpenModal} projectId={projectId} />
-      <EditarProjeto open={editarProjeto} setOpen={setEditarProjeto} project={project} />
-      <ConfirmacaoDeletarProjeto status={status} open={confirmação} setOpen={setconfirmação} />
+      <EditarProjeto open={editarProjeto} setOpen={setEditarProjeto} project={project} />      
     </>
   );
 };
