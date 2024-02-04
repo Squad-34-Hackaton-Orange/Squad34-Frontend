@@ -17,6 +17,7 @@ function PortifolioView() {
   const { user } = useContext(LoginContext);
   const [projects, setProjects] = useState<Project[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
 
@@ -77,59 +78,65 @@ function PortifolioView() {
           </Typography>
           <TagSearch />
           {
-            projects.length > 0 ? (
-              <ProjectsGrid>
-                {projects?.map((project) => (
-                  <div key={project.id}>
-                    <ProjectCard
-                      hasEditButton={true}
-                      project={project}
-                      hasTag={true}
+            projects.length === 0 && (
+              <>
+                <Button
+                  variant="text"
+                  onClick={() => setModalOpen(true)}
+                  sx={{
+                    marginBottom: 4,
+                    height: "250px",
+                    width: "280px",
+                    background: theme.colors.neutral70,
+                    marginTop: 4
+                  }}
+                >
+                  <Box>
+                    <CollectionsIcon
+                      sx={{
+                        fontSize: 40,
+                        color: theme.colors.neutral120,
+                        marginBottom: 2
+                      }}
                     />
-                  </div>
-                ))}
-              </ProjectsGrid>
-            ) : (
-              <Button
-                variant="text"
-                onClick={() => setModalOpen(true)}
-                sx={{
-                  height: "250px",
-                  width: "320px",
-                  background: theme.colors.neutral70,
-                  marginTop: 6
-                }}
-              >
-                <Box>
-                  <CollectionsIcon
-                    sx={{
-                      fontSize: 40,
-                      color: theme.colors.neutral120,
-                      marginBottom: 2
-                    }}
-                  />
 
-                  <Typography
-                    sx={{
-                      color: theme.colors.neutral120,
-                      marginBottom: 2,
-                      textTransform: "none"
-                    }}
-                  >
-                    Adicione seu primeiro projeto
-                  </Typography>
+                    <Typography
+                      sx={{
+                        color: theme.colors.neutral120,
+                        marginBottom: 2,
+                        textTransform: "none"
+                      }}
+                    >
+                      Adicione seu primeiro projeto
+                    </Typography>
 
-                  <Typography
-                    sx={{
-                      color: theme.colors.neutral120,
-                      textTransform: "none"
-                    }}
-                  >
-                    Compartilhe seu talento com milhares de pessoas
-                  </Typography>
-                </Box>
-              </Button>
+                    <Typography
+                      sx={{
+                        color: theme.colors.neutral120,
+                        textTransform: "none"
+                      }}
+                    >
+                      Compartilhe seu talento com milhares de pessoas
+                    </Typography>
+                  </Box>
+                </Button>
+              </>
             )
+          }
+
+          {projects.length > 0 && (
+            <ProjectsGrid>
+              {projects?.map((project) => (
+                <div key={project.id}>
+                  <ProjectCard
+                    hasEditButton={true}
+                    project={project}
+                    hasTag={true}
+                  />
+                </div>
+              ))}
+            </ProjectsGrid>
+          )
           }
         </Box>
       </Box>

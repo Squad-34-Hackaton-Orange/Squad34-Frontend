@@ -99,10 +99,8 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
 
 
 export default function SignUp() {
-  const { signup } = useContext(LoginContext);
+  const { signup, isLoading, setIsLoading } = useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [notification, setNotification] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const theme = useTheme();
@@ -130,21 +128,7 @@ export default function SignUp() {
     if (!data) {
       return;
     }
-
-    try {
-      setIsLoading(true);
-      await signup(data);
-      setNotification(true);
-
-      setTimeout(() => {
-        setNotification(false);
-        setIsLoading(false);
-        router.push("/login");
-      }, 6000);
-    } catch (error) {
-      console.error("Erro ao criar usuário:", error);
-      setIsLoading(false);
-    }
+    await signup(data);
   };
 
   return (
@@ -173,24 +157,6 @@ export default function SignUp() {
             margin: "0 auto",
           }}
         >
-
-          <Box sx={{
-            position: "absolute",
-            top: "6rem",
-            padding: "1rem",
-            gap: 1,
-          }}>
-            {notification ? (
-              <Alert variant="filled" severity="success"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                Cadastro feito com sucesso. Você será redirecionado para o login.
-              </Alert>
-            ) : null}
-          </Box>
 
           <Typography
             sx={{
