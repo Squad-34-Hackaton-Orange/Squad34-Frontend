@@ -64,6 +64,7 @@ export default function Login() {
 
   const handleSubmit = async (data: User) => {
     try {
+      // @ts-ignore
       formRef.current.setErrors({});
 
       await formValidationSchema.validate(data, {
@@ -76,9 +77,10 @@ export default function Login() {
       const validationErrors = {};
       if (err instanceof yup.ValidationError) {
         err.inner.forEach((error) => {
+          // @ts-ignore
           validationErrors[error.path] = error.message;
         });
-
+// @ts-ignore
         formRef.current.setErrors(validationErrors);
       }
     }

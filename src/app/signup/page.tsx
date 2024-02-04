@@ -2,7 +2,7 @@
 
 import React, { useContext, useState, useRef } from "react";
 import { useTheme } from "@mui/material/styles";
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Alert,
   Box,
@@ -17,7 +17,7 @@ import {
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Form } from "@unform/web";
-import * as yup from 'yup';
+import * as yup from "yup";
 import { LoginContext } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { User } from "@/lib/api/user";
@@ -25,40 +25,35 @@ import { VTextField } from "@/components/forms/VTextField";
 import { VOutlinedInput } from "@/components/forms/VOutlinedInput";
 
 const transformString = (originalValue: string) => {
-  return originalValue.trim() === '' ? null : originalValue;
+  return originalValue.trim() === "" ? null : originalValue;
 };
 
 const formValidationSchema: yup.Schema<any> = yup.object().shape({
   name: yup
-    .string().transform(transformString)
+    .string()
+    .transform(transformString)
     .required("O nome é obrigatório")
     .max(50, "O nome deve conter no máximo cinquenta caracteres")
     .min(2, "O nome deve conter no mínimo dois caracteres")
-    .matches(
-      /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/,
-      "Digite um nome válido"
-    ),
+    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/, "Digite um nome válido"),
   last_name: yup
-    .string().transform(transformString)
+    .string()
+    .transform(transformString)
     .required("O sobrenome é obrigatório")
     .min(2, "O sobrenome deve conter no mínimo dois caracteres")
     .max(50, "O sobrenome deve conter no máximo cinquenta caracteres")
-    .matches(
-      /^[A-Za-zÀ-ÖØ-öø-ÿ]+$/,
-      "Digite um nome válido"
-    ),
+    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/, "Digite um nome válido"),
   email: yup
-    .string().transform(transformString)
+    .string()
+    .transform(transformString)
     .required("O email é obrigatório")
     .email("Formato de email inválido")
-    .matches(
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      "Formato de email inválido"
-    )
+    .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Formato de email inválido")
     .max(180, "O email deve conter no máximo 180 caracteres")
     .min(5, "O email deve conter no mínimo 5 caracteres"),
   password: yup
-    .string().transform(transformString)
+    .string()
+    .transform(transformString)
     .required("A senha é obrigatória")
     .min(8, "A senha deve conter pelo menos 8 caracteres")
     .max(16, "A senha deve conter no máximo 16 caracteres")
@@ -67,23 +62,21 @@ const formValidationSchema: yup.Schema<any> = yup.object().shape({
       /[!@#$%^&*(),.?":{}|<>]/,
       "A senha deve conter pelo menos um caractere especial"
     )
-    .matches(
-      /[A-Z]/,
-      "A senha deve conter pelo menos uma letra maiúscula"
-    ),
+    .matches(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula"),
 });
 
 export default function SignUp() {
-  const { signup, setIsSignupLoading, isSignupLoading } = useContext(LoginContext);
+  const { signup, setIsSignupLoading, isSignupLoading } =
+    useContext(LoginContext);
   const [showPassword, setShowPassword] = useState(false);
 
   const theme = useTheme();
-  const formRef = useRef(null);
-
+  const formRef = useRef();
 
   const handleSubmit = async (data: User) => {
     try {
-      formRef.current.setErrors({});
+      // @ts-ignore
+      formRef?.current?.setErrors({});
 
       await formValidationSchema.validate(data, {
         abortEarly: false,
@@ -95,9 +88,10 @@ export default function SignUp() {
       const validationErrors = {};
       if (err instanceof yup.ValidationError) {
         err.inner.forEach((error) => {
+          // @ts-ignore
           validationErrors[error?.path] = error.message;
         });
-
+        // @ts-ignore
         formRef.current.setErrors(validationErrors);
       }
     }
@@ -116,7 +110,6 @@ export default function SignUp() {
         justifyContent: { md: "flex-end" },
       }}
     >
-
       <Grid item xs={16} md={8} xl={10}>
         <Box
           sx={{
@@ -129,7 +122,6 @@ export default function SignUp() {
             margin: "0 auto",
           }}
         >
-
           <Typography
             sx={{
               marginBottom: 2,
@@ -146,9 +138,11 @@ export default function SignUp() {
           </Typography>
 
           <Form
+          // @ts-ignore
             ref={formRef}
             onSubmit={(data) => handleSubmit(data)}
-            placeholder="Cadastro">
+            placeholder="Cadastro"
+          >
             <Box>
               <Box
                 display="flex"
@@ -167,8 +161,13 @@ export default function SignUp() {
                     Nome
                   </InputLabel>
 
-                  <VTextField required id="name" name="name" aria-label="name" label="Nome" />
-
+                  <VTextField
+                    required
+                    id="name"
+                    name="name"
+                    aria-label="name"
+                    label="Nome"
+                  />
                 </FormControl>
 
                 <FormControl
@@ -177,8 +176,10 @@ export default function SignUp() {
                   margin="normal"
                   sx={{ backgroundColor: "#fff" }}
                 >
-
-                  <InputLabel htmlFor="last_name" style={{ visibility: "hidden" }}>
+                  <InputLabel
+                    htmlFor="last_name"
+                    style={{ visibility: "hidden" }}
+                  >
                     Sobrenome
                   </InputLabel>
 
@@ -215,7 +216,6 @@ export default function SignUp() {
                 margin="normal"
                 sx={{ backgroundColor: "#fff" }}
               >
-
                 <VOutlinedInput
                   name="password"
                   label="Senha"
@@ -262,6 +262,6 @@ export default function SignUp() {
           </Form>
         </Box>
       </Grid>
-    </Grid >
+    </Grid>
   );
 }

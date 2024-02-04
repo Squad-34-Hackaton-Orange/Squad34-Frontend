@@ -33,12 +33,16 @@ const projectSchema = yup.object({
     .required("O título é obrigatório")
     .max(50, "O título deve conter no máximo cinquenta caracteres")
     .min(2, "O título deve conter no mínimo dois caracteres"),
-  description: yup.string().required("A descrição é obrigatória")
+  description: yup
+    .string()
+    .required("A descrição é obrigatória")
     .max(255, "A descrição deve conter no máximo 255 caracteres")
     .min(2, "A descrição deve conter no mínimo dois caracteres"),
-  link: yup.string().url("O link deve ser uma URL válida").required("O link é obrigatório"),
+  link: yup
+    .string()
+    .url("O link deve ser uma URL válida")
+    .required("O link é obrigatório"),
 });
-
 
 const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   const { user } = useContext(LoginContext);
@@ -94,7 +98,7 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
         const tags: Tag[] = await list({ id: user?.id });
         setTagOptions(tags);
       } catch (error) {
-        console.error('Erro ao obter opções de tags:', error);
+        console.error("Erro ao obter opções de tags:", error);
       }
     };
 
@@ -122,8 +126,8 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   };
 
   const handleSubmit = async (data: Project) => {
-
     try {
+      // @ts-ignore
       formRef.current.setErrors({});
 
       await projectSchema.validate(data, {
@@ -141,7 +145,6 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
 
       const resume = await create(formData);
 
-
       if (resume.status === 201) {
         setSucess(true);
 
@@ -158,9 +161,11 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
       const validationErrors = {};
       if (errors instanceof yup.ValidationError) {
         errors.inner.forEach((error) => {
+        // @ts-ignore
+
           validationErrors[error.path] = error.message;
         });
-
+        // @ts-ignore
         formRef.current.setErrors(validationErrors);
       }
     }
@@ -303,10 +308,11 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
                   <Box
                     style={{
                       objectFit: "cover",
-                      backgroundImage: `url('${imageUpload
-                        ? `${imageUpload}`
-                        : "/default-project-mobile.svg"
-                        }')`,
+                      backgroundImage: `url('${
+                        imageUpload
+                          ? `${imageUpload}`
+                          : "/default-project-mobile.svg"
+                      }')`,
                       backgroundSize: "cover",
                       width: "100%",
                       height: "100%",
@@ -416,22 +422,20 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
             </Box>
           </Box>
 
-          {
-            error && (
-              <Alert
-                variant="filled"
-                severity="error"
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  margin: 2,
-                }}
-              >
-                Erro ao cadastrar projeto. Confira os campos e tente novamente.
-              </Alert>
-            )
-          }
+          {error && (
+            <Alert
+              variant="filled"
+              severity="error"
+              sx={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                margin: 2,
+              }}
+            >
+              Erro ao cadastrar projeto. Confira os campos e tente novamente.
+            </Alert>
+          )}
         </CustomModal.Actions>
       </Form>
       {sucess ? (
