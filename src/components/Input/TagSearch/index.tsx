@@ -20,7 +20,7 @@ export default function TagSearch() {
     };
 
     fetchData();
-  }, [tagOptions]);
+  }, []);
 
   const handleSubmit = (data: any) => {
     console.log(data);
