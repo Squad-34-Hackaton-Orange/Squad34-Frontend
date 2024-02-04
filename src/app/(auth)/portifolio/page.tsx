@@ -17,6 +17,7 @@ function PortifolioView() {
   const { user } = useContext(LoginContext);
   const [projects, setProjects] = useState<Project[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
 
@@ -94,10 +95,11 @@ function PortifolioView() {
                 variant="text"
                 onClick={() => setModalOpen(true)}
                 sx={{
+                  marginBottom: 4,
                   height: "250px",
-                  width: "320px",
+                  width: "280px",
                   background: theme.colors.neutral70,
-                  marginTop: 6
+                  marginTop: 4
                 }}
               >
                 <Box>

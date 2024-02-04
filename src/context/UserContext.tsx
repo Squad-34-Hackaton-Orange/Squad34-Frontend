@@ -5,6 +5,7 @@ import { User, create, login } from "@/lib/api/user";
 import { jwtDecode } from "jwt-decode";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
+import { Alert } from "@mui/material";
 interface LoginContextProps {
   isLogged: boolean;
   user: User | null;
@@ -26,12 +27,15 @@ export const LoginContext = createContext<LoginContextProps>({
 });
 interface LoginProviderProps {
   children: ReactNode;
-}
+};
 
 export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoginError, setIsLoginError] = useState(false);
+  const [isSignupError, setIsSignupError] = useState(false);
+  const [notification, setNotification] = useState(false);
   const router = useRouter();
 
   const signin = async (data: User) => {
@@ -53,8 +57,11 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         }
       }
     } catch (error) {
-      console.error(error);
       setIsLoading(false);
+      setIsLoginError(true);
+      setTimeout(() => {
+        setIsLoginError(false);
+      }, 2000);
     }
   };
 
@@ -65,7 +72,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
       setIsLogged(false);
       router.push("/");
     } catch (error) {
-      console.error(error)
+      setIsSignupError(true);
     }
   };
 
@@ -80,12 +87,78 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   }, []);
 
   const signup = async (data: User) => {
-    await create(data);
+    try {
+      setIsLoading(true);
+      await create(data);
+      setIsLoading(false);
+      setNotification(true);
+
+      setTimeout(() => {
+        setNotification(false);
+        router.push("/login");
+      }, 3000);
+
+    } catch (error) {
+      setIsLoading(false);
+      setIsSignupError(true);
+      setTimeout(() => {
+        setIsSignupError(false);
+      }, 4000);
+    }
   };
 
   return (
-    <LoginContext.Provider value={{ user, signin, logout, isLogged, signup, isLoading, setIsLoading }}>
-      {children}
-    </LoginContext.Provider>
+    <>
+      {
+        isLoginError && (
+          <Alert
+            variant="filled"
+            severity="error"
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              margin: 2,
+            }}
+          >
+            Erro ao fazer login. Verifique seu e-mail e sua senha.
+          </Alert>
+        )
+      }
+
+      {
+        isSignupError && (
+          <Alert
+            variant="filled"
+            severity="error"
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              margin: 2,
+            }}
+          >
+            Erro ao fazer cadastro. Verifique os campos e tente novamente.
+          </Alert>
+        )
+      }
+
+      {notification && (
+        <Alert variant="filled" severity="success"
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            margin: 2,
+          }}
+        >
+          Cadastro feito com sucesso. Você será redirecionado para o login.
+        </Alert >
+      )}
+
+      <LoginContext.Provider value={{ user, signin, logout, isLogged, signup, isLoading, setIsLoading }}>
+        {children}
+      </LoginContext.Provider>
+    </>
   );
 };

@@ -40,13 +40,14 @@ const projectSchema = yup.object({
 
 const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const { user } = useContext(LoginContext);
+  const [error, setError] = useState(false);
 
   if (!user || !project) {
     return;
   }
 
   const theme = useTheme();
-  
+
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -78,7 +79,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   });*/
   }
 
-  const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null| undefined>(
+  const [imageUpload, setImageUpload] = useState<string | ArrayBuffer | null | undefined>(
     null
   );
 
@@ -100,9 +101,9 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
     return newUrl;
   };
 
-  
 
-  const [sucess, setSucess] = useState(false);
+
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (open === true) {
@@ -118,7 +119,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
         handleClose();
         window.location.reload();
         resolve();
-      }, 2000);
+      }, 3000);
     });
   }
 
@@ -139,33 +140,45 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   const handleSubmit = async (formData: any) => {
     if (formData === undefined) {
       return;
-    }
-
-    
+    };
 
     try {
       const data: Project = {
-        title: formData.title?formData.title:project.title,
-        description: formData.description?formData.description: project.description,
-        image: ImageUrl?ImageUrl:project.image,
+        title: formData.title ? formData.title : project.title,
+        description: formData.description ? formData.description : project.description,
+        image: ImageUrl ? ImageUrl : project.image,
         id_user: user.id,
-        link: formData.link?formData.link:project.link,
+        link: formData.link ? formData.link : project.link,
         date_post: new Date()
       };
+
+      if (data.title === undefined || data.description === undefined || data.image === undefined || data.link === undefined) {
+        setError(true);
+      };
+
+      if (data.title === "" || data.description === "" || data.image === "" || data.link === "") {
+        setError(true);
+      };
+
+      console.log(data);
 
 
       if (project.id === undefined) {
         return;
-      }      
+      }
 
       const id: string = String(project.id);
 
-      const resume = await update({id}, data);
+      await update({ id }, data);
 
-      setSucess(true);
-
-        contarDoisSegundos()
+      setSuccess(true);
+      contarDoisSegundos();
     } catch (errors) {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+
       if (errors instanceof yup.ValidationError) {
         const validationErrors: ProjectFormErrors = {
           title: "",
@@ -233,7 +246,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                     },
                   }}
                 />
-              </FormControl>              
+              </FormControl>
               <FormControl>
                 <VOutlinedInput
                   id="link"
@@ -301,11 +314,10 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                   <Box
                     style={{
                       objectFit: "cover",
-                      backgroundImage: `url('${
-                        imageUpload
-                          ? `${imageUpload}`
-                          : "/default-project-mobile.svg"
-                      }')`,
+                      backgroundImage: `url('${imageUpload
+                        ? `${imageUpload}`
+                        : "/default-project-mobile.svg"
+                        }')`,
                       backgroundSize: "cover",
                       width: "100%",
                       height: "100%",
@@ -368,6 +380,23 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
               </FormControl>
             </Box>
           </Box>
+
+          {
+            error && (
+              <Alert
+                variant="filled"
+                severity="error"
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  margin: 2,
+                }}
+              >
+                Erro ao editar projeto. Confira os campos e tente novamente.
+              </Alert>
+            )
+          }
         </CustomModal.Content>
         <CustomModal.Actions>
           <Box
@@ -388,7 +417,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
             >
               <Button
                 variant="contained"
-                size="large"                
+                size="large"
                 sx={{
                   color: theme.colors.neutral60,
                   backgroundColor: theme.colors.secondary100,
@@ -396,7 +425,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                 }}
                 type="submit"
               >
-                Cadastrar
+                Editar
               </Button>
               <Button
                 variant="contained"
@@ -415,17 +444,15 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
           </Box>
         </CustomModal.Actions>
       </Form>
-      {sucess ? (
+      {success ? (
         <Alert
           variant="filled"
           severity="success"
           sx={{
-            display: "flex",
-            alignItems: "center",
-            position: "fixed",
-            left: "50%",
-            top: "5%",
-            transform: "translate(-50%, -50%)",
+            position: "absolute",
+            top: 0,
+            right: 0,
+            margin: 2,
           }}
         >
           Projeto Atualizado com sucesso

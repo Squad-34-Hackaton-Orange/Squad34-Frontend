@@ -43,6 +43,10 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
   }
   const theme = useTheme();
 
+  const [SubmitFlag, setSubmitFlag] = useState(true);
+  const [sucess, setSucess] = useState(false);
+  const [error, setError] = useState(false);
+
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -92,10 +96,6 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
 
     return newUrl;
   };
-
-  const [SubmitFlag, setSubmitFlag] = useState(true);
-
-  const [sucess, setSucess] = useState(false);
 
   useEffect(() => {
     if (ImageUrl) setSubmitFlag(false);
@@ -151,6 +151,12 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
         // TODO: APENAS SE DER CERTO FAZER O TRYCATCH
       }
     } catch (errors) {
+      setError(true);
+
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+
       if (errors instanceof yup.ValidationError) {
         const validationErrors: ProjectFormErrors = {
           title: "",
@@ -417,6 +423,23 @@ const AddProjectModal = ({ open, setOpen }: AddprojectType) => {
               </Button>
             </Box>
           </Box>
+
+          {
+            error && (
+              <Alert
+                variant="filled"
+                severity="error"
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  margin: 2,
+                }}
+              >
+                Erro ao cadastrar projeto. Confira os campos e tente novamente.
+              </Alert>
+            )
+          }
         </CustomModal.Actions>
       </Form>
       {sucess ? (
