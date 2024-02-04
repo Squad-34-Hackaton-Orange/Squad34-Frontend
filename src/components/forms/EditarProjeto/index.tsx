@@ -107,7 +107,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
 
   useEffect(() => {
     if (open === true) {
-      console.log("setando imagem");
       setImageUpload(project?.image);
     }
   }, [open]);
@@ -159,8 +158,6 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
       if (data.title === "" || data.description === "" || data.image === "" || data.link === "") {
         setError(true);
       };
-
-      console.log(data);
 
 
       if (project.id === undefined) {

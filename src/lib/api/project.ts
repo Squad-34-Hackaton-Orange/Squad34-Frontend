@@ -70,10 +70,9 @@ export const create = async (data: Project): Promise<any> => {
  * @returns A promise of a project
  */
 export const update = async (
-  {id}: GetByIdParams,
+  { id }: GetByIdParams,
   data: Project
 ): Promise<any> => {
-  console.log(id)
   return (await api.put(`/project/${id}`, data)).data;
 };
 
