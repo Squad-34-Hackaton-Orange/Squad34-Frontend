@@ -18,6 +18,7 @@ export type Project = Partial<{
   user: User;
   token: Token;
   tags: ProjectTag[];
+  updateDate: boolean
 }>;
 
 /**

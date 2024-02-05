@@ -5,7 +5,9 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   Typography,
   styled,
   useTheme,
@@ -65,6 +67,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
   );
 
   const [ImageUrl, setImageUrl] = useState<string | undefined>("");
+  const [updateDate, setUpdateDate] = useState<boolean>(false)
 
   const uploadImage = async (file: File): Promise<string | undefined> => {
     if (!file) return "";
@@ -120,7 +123,7 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
         image: ImageUrl ? ImageUrl : project.image,
         id_user: user.id,
         link: formData.link ? formData.link : project.link,
-        date_post: new Date()
+        updateDate: updateDate
       };
 
       if (data.title === undefined || data.description === undefined || data.image === undefined || data.link === undefined) {
@@ -253,6 +256,15 @@ const EditarProjeto = ({ open, setOpen, project }: AtualizarProjetoType) => {
                     },
                   }}
                 />
+              </FormControl>
+              <FormControl>
+                <FormControlLabel control={
+                  <Checkbox                   
+                  id="updateDate"
+                  name="updateDate"            
+                  checked={updateDate}
+                  onChange={(e) => setUpdateDate(e.target.checked)}/>} 
+                  label="Atualizar data do post?" />
               </FormControl>
             </Box>
             <Box

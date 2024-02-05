@@ -71,6 +71,7 @@ export const HandleImage = ({ open, setOpen }: AtualizarImageType) => {
   }, [ImageUrl]);
 
   const uploadImage = async (file: File): Promise<string | undefined> => {
+    
     if (!file) return "";
 
     const maxSizeInBytes = 5 * 1024 * 1024; //5MB
@@ -82,6 +83,8 @@ export const HandleImage = ({ open, setOpen }: AtualizarImageType) => {
     const UploadConfirm = await uploadBytes(storageRef, file);
 
     const newUrl = await getDownloadURL(UploadConfirm.ref);
+
+    console.log(newUrl)
 
     return newUrl;
   };
