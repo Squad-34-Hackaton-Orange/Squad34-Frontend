@@ -27,11 +27,11 @@ export const LoginContext = createContext<LoginContextProps>({
   logout: () => {},
   signup: async () => {},
   isLoading: false,
-  setIsLoading: () => { },
+  setIsLoading: () => {},
   isSignupLoading: false,
-  setIsSignupLoading: () => { },
+  setIsSignupLoading: () => {},
   notification: false,
-  setNotification: () => { },
+  setNotification: () => {},
 });
 interface LoginProviderProps {
   children: ReactNode;
@@ -186,19 +186,21 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         </Alert>
       )}
 
-      <LoginContext.Provider value={{
-        user,
-        signin,
-        logout,
-        isLogged,
-        signup,
-        isLoading,
-        setIsLoading,
-        notification,
-        setNotification,
-        isSignupLoading,
-        setIsSignupLoading,
-      }}>
+      <LoginContext.Provider
+        value={{
+          user,
+          signin,
+          logout,
+          isLogged,
+          signup,
+          isLoading,
+          setIsLoading,
+          notification,
+          setNotification,
+          isSignupLoading,
+          setIsSignupLoading,
+        }}
+      >
         {children}
       </LoginContext.Provider>
     </>

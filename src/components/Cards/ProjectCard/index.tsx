@@ -248,11 +248,11 @@ const PreviewProject = ({ open, handleClose, project }: PreviewCardProps) => {
 
             <Box >
               <Box>
-                Download
+                Abrir Link
               </Box>
               <Box >
                 <Link
-                  href="/signup"
+                  href={project?.link}
                   target="_blank"
                   underline="none"
                   sx={{
