@@ -7,7 +7,7 @@ import { LoginProvider } from "@/context/UserContext";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Portifólio',
+  title: 'Portfólio',
   description:
     'Programa de Formação FCAMARA v5',
 };
