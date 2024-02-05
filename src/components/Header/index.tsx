@@ -53,7 +53,7 @@ export default function Header({ user }: HeaderProps) {
           >
             <Link
               variant="subtitle1"
-              href="/portifolio"
+              href="/portfolio"
               underline="none"
               sx={{
                 color:

@@ -72,7 +72,7 @@ const HamburguerMenu = () => {
 
             <Link
               variant="subtitle1"
-              href="/portifolio"
+              href="/portfolio"
               underline="none"
               sx={{ color: theme.colors.primary90 }}
             >
@@ -112,7 +112,7 @@ const HamburguerMenu = () => {
 
             <Link
               variant="subtitle1"
-              href="/portifolio"
+              href="/portfolio"
               underline="none"
               sx={{ color: theme.colors.primary90 }}
             >

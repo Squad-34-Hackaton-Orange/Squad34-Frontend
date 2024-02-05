@@ -89,7 +89,7 @@ export default function Login() {
   useEffect(() => {
     if (isLogged) {
       setIsLoading(false);
-      router.push("/portifolio");
+      router.push("/portfolio");
     }
   }, [isLogged]);
 

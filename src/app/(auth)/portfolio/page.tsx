@@ -13,7 +13,7 @@ import { Project, get } from "@/lib/api/project";
 import CollectionsIcon from '@mui/icons-material/Collections';
 import AddProjectModal from "@/components/forms/AdicionarProjeto";
 
-function PortifolioView() {
+function PortfolioView() {
   const { user } = useContext(LoginContext);
   const [projects, setProjects] = useState<Project[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -143,4 +143,4 @@ function PortifolioView() {
   );
 };
 
-export default isAuth(PortifolioView);
+export default isAuth(PortfolioView);
